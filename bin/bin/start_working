@@ -1,0 +1,10 @@
+#!/bin/bash
+
+/usr/bin/nautilus /media/DATA1/FACERAS/ &
+
+/usr/bin/eclipse &
+
+/opt/google/chrome/google-chrome %U &
+
+/home/maikel/bin/pomorizer &
+

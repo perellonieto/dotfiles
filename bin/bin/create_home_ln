@@ -1,0 +1,11 @@
+#!/bin/bash
+
+PATHDIR=/media/home/maikel/
+
+DIRS=(Documents Downloads Music Pictures Public Templates Videos)
+
+for item in ${DIRS[*]}
+do
+	printf "creating symbolic link for %s\n" $item
+	ln -s  $PATHDIR$item
+done

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ $# -gt 0 ] ; then
+    level=$1
+else
+    level=ff
+fi
+
+sudo setpci -s 00:02.0 f4.b=$level

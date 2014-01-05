@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [ $# -gt 0 ] ; then
+    filename=$1
+else
+    exit
+fi
+
+echo "Croping file $filename"
+pdfcrop $filename $filename
+

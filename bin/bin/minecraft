@@ -1,0 +1,8 @@
+#!/bin/sh
+
+MINECRAFTDIR=/usr/local/MINECRAFT
+
+#javasun -Xmx1024M -Xms512M -cp $MINECRAFTDIR/minecraft.jar net.minecraft.LauncherFrame
+java -Xmx1024M -Xms512M -cp $MINECRAFTDIR/minecraft.jar net.minecraft.LauncherFrame
+
+#javasun -jar $MINECRAFTDIR/minecraft.jar

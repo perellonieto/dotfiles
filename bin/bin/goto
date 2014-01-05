@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd /home/maikel/Dropbox/UNI/$1
+
+touch hola.txt

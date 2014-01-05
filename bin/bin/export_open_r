@@ -1,0 +1,18 @@
+#!/bin/bash
+
+MEMSTICK=/media/TRAVOLTA-1
+
+echo "Cleaning the workspace"
+make clean
+echo "Compiling the code"
+make
+echo "Installing to MS directory"
+make install
+
+echo "Cleaning the memory stick"
+rm -rf $MEMSTICK/*
+echo "Copying open_r to memory stick"
+cp -r /usr/local/OPEN_R_SDK/OPEN_R/MS_ERS7/BASIC/memprot/* $MEMSTICK
+echo "Copying the compiled code to memory stick"
+cp -r ./MS/* $MEMSTICK
+

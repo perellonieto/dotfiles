@@ -1,0 +1,8 @@
+#!/bin/sh
+
+for f in `ls ./*.png`
+do
+    echo "Croping file $f"
+    convert $f -trim $f
+done
+
