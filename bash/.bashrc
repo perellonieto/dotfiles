@@ -112,3 +112,4 @@ fi
 #TZ='Europe/Helsinki'
 #export TZ
 
+PATH=$PATH:~/bin
