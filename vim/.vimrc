@@ -1,5 +1,17 @@
+set encoding=utf-8
 " Automatic reloading of .vimrc
 autocmd! bufwritepost .vimrc source %
+" Setup Pathogen to manage your plugins
+" " mkdir -p ~/.vim/autoload ~/.vim/bundle
+" " curl -so ~/.vim/autoload/pathogen.vim
+" https://raw.github.com/tpope/vim-pathogen/HEAD/autoload/pathogen.vim
+" " Now you can install any plugin into a .vim/bundle/plugin-name/ folder
+call pathogen#infect()
+
+" indent : this enables automatic indentation as you type.
+" plugin : this makes vim invoke latex-suite when you open a tex file.
+filetype plugin indent on
+syntax on
 
 " Better copy paste
 " When you want to paste large blocks of code into vim, press F2 before you
@@ -9,59 +21,45 @@ set clipboard=unnamed
 
 " Mouse and backspace
 set mouse=a " on OSX press ALT and click
-"set bs=2    " make backspace behave like normal again
+set bs=2    " make backspace behave like normal again
 
 " Rebind <Leader> key
 " I like to have it here becuase it is easier to reach than the default and
 " it is next to ``m`` and ``n`` which I use for navigating between tabs.
 let mapleader = ","
 
+" bind ctrl+<movement> keys to move around the windows, instead of using
+" ctrl+w + <movement>
+" " every unnecessary keystroke that can be saved is good for your health :)
+map <c-h> <c-w>h
+map <c-j> <c-w>j
+map <c-k> <c-w>k
+map <c-l> <c-w>l
+
 " Bind nohl
 " Removes highlight of your last search
 " ``<C>`` stands for ``CTRL`` and therefore ``<C-n>`` stands for ``CTRL+n``
-noremap <C-n> :nohl<CR>
-vnoremap <C-n> :nohl<CR>
-inoremap <C-n> :nohl<CR>
+noremap <Leader>h :nohl<CR>
 
 " Quicksave command
-noremap <C-Z> :update<CR>
-vnoremap <C-Z> <C-C>:update<CR>
-inoremap <C-Z> <C-O>:update<CR>
+noremap <Leader>w :update<CR>
+vnoremap <Leader>w <C-C>:update<CR>
+inoremap <Leader>w <C-O>:update<CR>
 
-" bind Ctrl+<movement> keys to move around the windows, instead of using
-" Ctrl+w + <movement>
-" " Every unnecessary keystroke that can be saved is good for your health :)
-map <C-l> <esc>:tabn<CR>
-map <C-h> <esc>:tabp<CR>
-" map <Leader>m <esc>:tabn<CR>
-" map <Leader>n <esc>:tabp<CR>
-map <C-n> <esc>:tabnew<CR>
+" quickexit command
+noremap <Leader>e :quit<CR>
+
+" movement between tabs
+map <Leader>. <esc>:tabnext<CR>
+map <Leader>, <esc>:tabprevious<CR>
+map <Leader>n <esc>:tabnew<CR>
 
 " easier moving of code blocks
 " " Try to go into visual mode (v), thenselect several lines of code here and
 " " then press ``>`` several times.
 vnoremap < <gv  " better indentation
 vnoremap > >gv  " better indentation
-
-" REQUIRED. This makes vim invoke Latex-Suite when you open a tex file.
-filetype plugin on
-
-" IMPORTANT: win32 users will need to have 'shellslash' set so that latex
-" can be called correctly.
-set shellslash
-
-" IMPORTANT: grep will sometimes skip displaying the file name if you
-" search in a singe file. This will confuse Latex-Suite. Set your grep
-" program to always generate a file-name.
-set grepprg=grep\ -nH\ $*
-
-" OPTIONAL: This enables automatic indentation as you type.
-filetype indent on
-
-" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
-" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
-" The following changes the default filetype back to 'tex':
-let g:tex_flavor='latex'
+map <Leader>a ggVG " select all
 
 " Better copy & paste
 set pastetoggle=<F2>
@@ -73,11 +71,8 @@ autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 au InsertLeave * match ExtraWhitespace /\s\+$/
 
 " Color scheme
-" colorscheme desert
 set t_Co=256
 color wombat256mod
-
-syntax on
 
 " highlight the word to search
 set hlsearch
@@ -90,7 +85,6 @@ set colorcolumn=80
 highlight ColorColumn ctermbg=Black
 " show the filename on bottom
 set ls=2
-
 
 " easier formatting of pargraphs
 vmap Q gq
@@ -114,12 +108,19 @@ set incsearch
 set ignorecase
 set smartcase
 
-" Setup Pathogen to manage your plugins
-" " mkdir -p ~/.vim/autoload ~/.vim/bundle
-" " curl -so ~/.vim/autoload/pathogen.vim
-" https://raw.github.com/tpope/vim-pathogen/HEAD/autoload/pathogen.vim
-" " Now you can install any plugin into a .vim/bundle/plugin-name/ folder
-call pathogen#infect()
+" ============================================================================
+" VIM-LATEX Setup 
+" ============================================================================
+
+" IMPORTANT: grep will sometimes skip displaying the file name if you
+" search in a singe file. This will confuse Latex-Suite. Set your grep
+" program to always generate a file-name.
+set grepprg=grep\ -nH\ $*
+
+" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
+" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
+" The following changes the default filetype back to 'tex':
+let g:tex_flavor='latex'
 
 " ============================================================================
 " Python IDE Setup
@@ -140,26 +141,11 @@ set wildignore+=*.pyc
 set wildignore+=*_build/*
 set wildignore+=*/coverage/*
 
-
-" Settings for python-mode
-" Note: I'm no longer using this. Leave this commented out
-" and uncomment the part about jedi-vim instead
-" cd ~/.vim/bundle
-" git clone https://github.com/klen/python-mode
-"" map <Leader>g :call RopeGotoDefinition()<CR>
-"" let ropevim_enable_shortcuts = 1
-"" let g:pymode_rope_goto_def_newwin = "vnew"
-"" let g:pymode_rope_extended_complete = 1
-"" let g:pymode_breakpoint = 0
-"" let g:pymode_syntax = 1
-"" let g:pymode_syntax_builtin_objs = 0
-"" let g:pymode_syntax_builtin_funcs = 0
-"" map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
-
 " Settings for jedi-vim
 " cd ~/.vim/bundle
 " git clone git://github.com/davidhalter/jedi-vim.git
-let g:jedi#related_names_command = "<leader>z"
+" let g:jedi#related_names_command = "<leader>z"
+let g:jedi#usages_command = "<leader>z"
 let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
 map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
@@ -177,7 +163,6 @@ function! OmniPopup(action)
     endif
     return a:action
 endfunction
-
 inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
 inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
 
