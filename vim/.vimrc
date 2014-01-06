@@ -6,7 +6,21 @@ autocmd! bufwritepost .vimrc source %
 " " curl -so ~/.vim/autoload/pathogen.vim
 " https://raw.github.com/tpope/vim-pathogen/HEAD/autoload/pathogen.vim
 " " Now you can install any plugin into a .vim/bundle/plugin-name/ folder
+
+" Setup Bundle Support
+" next two lines ensure that ~/.vim/bundle system works
+runtime! autoload/pathogen.vim
+silent! call pathogen\#helptags()
+silent! call pathogen\#runtime_append_all_bundles()
 call pathogen#infect()
+
+" Vim UI
+set cursorline
+" if has('cmdline_info')
+"     set ruler
+"     set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
+"     set showcmd
+" endif
 
 " indent : this enables automatic indentation as you type.
 " plugin : this makes vim invoke latex-suite when you open a tex file.
@@ -30,21 +44,21 @@ let mapleader = ","
 
 " bind ctrl+<movement> keys to move around the windows, instead of using
 " ctrl+w + <movement>
-" " every unnecessary keystroke that can be saved is good for your health :)
-map <c-h> <c-w>h
-map <c-j> <c-w>j
-map <c-k> <c-w>k
-map <c-l> <c-w>l
+" remove <C-W>_ for not folding the other splits
+nnoremap <C-H> <C-W>h<C-W>_
+nnoremap <C-J> <C-W>j<C-W>_
+nnoremap <C-K> <C-W>k<C-W>_
+nnoremap <C-L> <C-W>l<C-W>_
 
 " Bind nohl
 " Removes highlight of your last search
-" ``<C>`` stands for ``CTRL`` and therefore ``<C-n>`` stands for ``CTRL+n``
+" ``<C>`` sCands for ``CTRL`` and therefore ``<C-n>`` stands for ``CTRL+n``
 noremap <Leader>h :nohl<CR>
 
 " Quicksave command
 noremap <Leader>w :update<CR>
 vnoremap <Leader>w <C-C>:update<CR>
-inoremap <Leader>w <C-O>:update<CR>
+" inoremap <Leader>w <C-O>:update<CR>
 
 " quickexit command
 noremap <Leader>e :quit<CR>
@@ -52,7 +66,7 @@ noremap <Leader>e :quit<CR>
 " movement between tabs
 map <Leader>. <esc>:tabnext<CR>
 map <Leader>, <esc>:tabprevious<CR>
-map <Leader>n <esc>:tabnew<CR>
+map <Leader>m <esc>:tabnew<CR>
 
 " easier moving of code blocks
 " " Try to go into visual mode (v), thenselect several lines of code here and
@@ -86,14 +100,15 @@ highlight ColorColumn ctermbg=Black
 " show the filename on bottom
 set ls=2
 
-" easier formatting of pargraphs
+" easier formatting of paragraphs
 vmap Q gq
 nmap Q gqap
 
 " Useful settings
-set history=700
-set undolevels=700
-
+set history=1000
+set undolevels=1000
+" Spell checking
+" set spell
 
 " Real programmers don't use TABs but spaces
 set tabstop=4
@@ -163,8 +178,8 @@ function! OmniPopup(action)
     endif
     return a:action
 endfunction
-inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
-inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
+inoremap <silent><C-K> <C-R>=OmniPopup('k')<CR>
+inoremap <silent><C-J> <C-R>=OmniPopup('j')<CR>
 
 
 " Python folding
