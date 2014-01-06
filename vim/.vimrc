@@ -88,8 +88,6 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 set t_Co=256
 color wombat256mod
 
-" highlight the word to search
-set hlsearch
 " line number
 set number
 set tw=79
@@ -117,11 +115,23 @@ set shiftwidth=4
 set shiftround
 set expandtab
 
+" highlight the word to search
 " Make search case insensitive
 set hlsearch
 set incsearch
 set ignorecase
 set smartcase
+
+set foldenable                  " Auto fold code
+
+" Settings for NerdTree 
+" cd ~/.vim/bundle
+" git clone https://github.com/scrooloose/nerdtree.git
+map <F2> :NERDTreeToggle<CR>
+
+" Settings for Fugitive
+" cd ~/.vim/bundle
+" git clone git://github.com/tpope/vim-fugitive.git
 
 " ============================================================================
 " VIM-LATEX Setup 
