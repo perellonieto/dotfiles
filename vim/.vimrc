@@ -10,9 +10,14 @@ autocmd! bufwritepost .vimrc source %
 " Setup Bundle Support
 " next two lines ensure that ~/.vim/bundle system works
 runtime! autoload/pathogen.vim
-silent! call pathogen\#helptags()
 silent! call pathogen\#runtime_append_all_bundles()
 call pathogen#infect()
+call pathogen#helptags()
+
+" indent : this enables automatic indentation as you type.
+" plugin : this makes vim invoke latex-suite when you open a tex file.
+filetype plugin indent on
+syntax on
 
 " Vim UI
 set cursorline
@@ -22,20 +27,23 @@ set cursorline
 "     set showcmd
 " endif
 
-" indent : this enables automatic indentation as you type.
-" plugin : this makes vim invoke latex-suite when you open a tex file.
-filetype plugin indent on
-syntax on
-
 " Better copy paste
 " When you want to paste large blocks of code into vim, press F2 before you
 " paste. At the bottom you should see ``-- INSERT (paste) --``.
 set pastetoggle=<F2>
 set clipboard=unnamed
+" Minimum lines to keep above and below cursor
+set scrolloff=3
+set splitright     " Puts new vsplit windows to the right of the current
+set splitbelow     " Puts new split windows to the bottom of the current
 
 " Mouse and backspace
 set mouse=a " on OSX press ALT and click
 set bs=2    " make backspace behave like normal again
+ 
+" Wrapped lines goes down/up to next row, rather than next line in file.
+noremap j gj
+noremap k gk
 
 " Rebind <Leader> key
 " I like to have it here becuase it is easier to reach than the default and
@@ -74,10 +82,6 @@ map <Leader>m <esc>:tabnew<CR>
 vnoremap < <gv  " better indentation
 vnoremap > >gv  " better indentation
 map <Leader>a ggVG " select all
-
-" Better copy & paste
-set pastetoggle=<F2>
-set clipboard=unnamed
 
 " Show whitespace
 " " MUST be inserted BEFORE the colorscheme command
