@@ -87,6 +87,8 @@ map <Leader>a ggVG " select all
 " " MUST be inserted BEFORE the colorscheme command
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 au InsertLeave * match ExtraWhitespace /\s\+$/
+map <Leader>s <esc>:%s/\s\+$//e<CR>
+
 
 " Color scheme
 set t_Co=256
