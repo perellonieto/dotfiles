@@ -36,6 +36,8 @@ set clipboard=unnamed
 set scrolloff=3
 set splitright     " Puts new vsplit windows to the right of the current
 set splitbelow     " Puts new split windows to the bottom of the current
+" Paste into the next line
+map <Leader>p o<ESC>p
 
 " Mouse and backspace
 set mouse=a " on OSX press ALT and click
@@ -202,3 +204,6 @@ inoremap <silent><C-J> <C-R>=OmniPopup('j')<CR>
 " mkdir -p ~/.vim/ftplugin
 " wget -O ~/.vim/ftplugin/python_editing.vim http://www.vim.org/scripts/download_script.php?src_id=5492
 set nofoldenable
+
+" Store swap files in fixed location, not current directory.
+set dir=~/.vimswap//,/var/tmp//,/tmp//,.
