@@ -1,5 +1,15 @@
 [gcalcli]
 user: perello.nieto
+
+# Password is saved in another file.
+# In that way it is possible to share the config
+# file without sharing the password.
+# pw:`cat ~/.gcalclirc-pw`
+
 cal: "UNI"#brightcyan, "Aalto"#brightmagenta, "RPICS"#green, "ML NN"#brightwhite, "IACMPE"#red, "ACA", "CCT", "IV", "MA", "SE MLA", "SAM"
+
+# Weeks starts on Monday
 mon:
+
+# Dates in 24hr format
 24hr:
