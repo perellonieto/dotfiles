@@ -1,0 +1,5 @@
+[gcalcli]
+user: perello.nieto
+cal: "UNI"#brightcyan, "Aalto"#brightmagenta, "RPICS"#green, "ML NN"#brightwhite, "IACMPE"#red, "ACA", "CCT", "IV", "MA", "SE MLA", "SAM"
+mon:
+24hr:

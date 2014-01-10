@@ -1,6 +1,6 @@
 #!/bin/sh
 
-gcalcli --conky calw 2 |
+gcalcli --pw=`cat ~/.gcalclirc-pw` --conky calw 2 |
     sed -e 's/(0\x71(B/─/g' \
         -e 's/(0\x78(B/│/g' \
         -e 's/(0\x6A(B/┘/g' \
@@ -12,5 +12,4 @@ gcalcli --conky calw 2 |
         -e 's/(0\x75(B/┤/g' \
         -e 's/(0\x76(B/┴/g' \
         -e 's/(0\x77(B/┬/g'
-
 

@@ -35,5 +35,5 @@ xftfont Bitstream Vera Sans Mono:size=10
 
 TEXT
 *** Google Calendar Agenda ***
-${execpi 300 gcalcli --conky agenda}
-${execpi 300 ~/bin/gcal.sh}
+${execpi 300 ~/bin/gcal-conky-agenda.sh}
+${execpi 300 ~/bin/gcal-conky-week.sh}
