@@ -6,7 +6,7 @@ user: perello.nieto
 # file without sharing the password.
 # pw:`cat ~/.gcalclirc-pw`
 
-cal: "UNI"#brightcyan, "Aalto"#brightmagenta, "RPICS"#green, "ML NN"#brightwhite, "IACMPE"#red, "ACA", "CCT", "IV", "MA", "SE MLA", "SAM"
+cal: "Important"#red, "UNI"#brightcyan, "Aalto"#brightmagenta, "RPICS"#green, "ML NN"#brightwhite, "IACMPE"#brightwhite, "ACA", "CCT", "IV", "MA", "SE MLA", "SAM"
 
 # Weeks starts on Monday
 mon:

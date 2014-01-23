@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# it depends on texlive-extra-utils
+# Install:
+# sudo apt-get install texlive-extra-utils
+
 for f in `ls ./*.pdf`
 do
     echo "Croping file $f"
