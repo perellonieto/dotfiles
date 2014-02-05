@@ -1,0 +1,36 @@
+#!/bin/sh
+
+EDITOR=vim
+DIARY_PATH="$HOME"/.diary
+FORMAT=`date +"%Y_%m_%d"`
+
+# First time using diary
+if ! [ -d "$DIARY_PATH" ]; then
+    mkdir "$DIARY_PATH"
+fi
+
+# Get parameters
+while getopts "h?o:" opt; do
+    case "$opt" in
+        h|\?)
+            show_help
+            exit 0
+            ;;
+        o)  DIARY=$OPTARG
+            ;;
+    esac
+done
+
+# Go to diaries path
+cd $DIARY_PATH
+
+# If the diary is new, create it
+if ! [ -d "$DIARY" ]; then
+    mkdir "$DIARY"
+fi
+
+cd $DIARY
+
+FILENAME=$DIARY\_$FORMAT.txt
+
+$EDITOR  $FILENAME
