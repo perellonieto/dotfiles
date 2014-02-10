@@ -5,41 +5,53 @@ DIARY_PATH="$HOME"/.diary
 FORMAT=`date +"%Y_%m_%d"`
 VALID_PROJECT_NAME='^0-9a-zA-Z+$'
 
-usage() { echo "Usage: $0 [<diary_name>]" 1>&2; exit 1; }
-show_help() { echo "Usage: $0 <diary_name>]" 1>&2; exit 1; }
+show_usage() { echo "Usage: $0 [<diary_name>]" 1>&2; exit 1; }
+show_help() { echo "Help usage: $0 <diary_name>]" 1>&2; exit 1; }
 
 # First time using diary
 if ! [ -d "$DIARY_PATH" ]; then
     mkdir "$DIARY_PATH"
 fi
 
-# Get parameters
-while getopts "h?o:" opt; do
+# Go to diaries path
+cd $DIARY_PATH
+
+while [[ $# -gt 0 ]]; do
+    opt="$1"
+    shift;
     case "$opt" in
-        h|\?)
+        "-ls")
+            ls
+            exit 0
+            ;;
+        "-lsl")
+            ls -l
+            exit 0
+            ;;
+        "-h"|"-?")
             show_help
             exit 0
             ;;
         *)
-            usage
+            if [[ $# -eq 0 ]]; then
+                DIARY=$opt
+            else
+                show_usage
+                exit 0
+            fi
             ;;
     esac
 done
 
-DIARY=$1
-
 # TODO: find correct regular expresion
 # for some reason I do not get + and ? to work
 if [[ $DIARY =~ [$VALID_PROJECT_NAME] ]]; then
-    echo "Project name can only contain :$VALID_PROJECT_NAME" 
+    echo "Project name can only contain :$VALID_PROJECT_NAME"
     exit 0
 elif [[ $DIARY == '' ]]; then
-    echo "Project name can only contain :$VALID_PROJECT_NAME" 
+    echo "Project name can only contain :$VALID_PROJECT_NAME"
     exit 0
 fi
-
-# Go to diaries path
-cd $DIARY_PATH
 
 # If the diary is new, create it
 if ! [ -d "$DIARY" ]; then
@@ -47,6 +59,10 @@ if ! [ -d "$DIARY" ]; then
 fi
 
 cd $DIARY
+
+#if [[ -z "$DAY" ]]; then
+#    FORMAT=$DAY
+#fi
 
 FILENAME=$DIARY\_$FORMAT.txt
 
