@@ -5,8 +5,26 @@ DIARY_PATH="$HOME"/.diary
 FORMAT=`date +"%Y_%m_%d"`
 VALID_PROJECT_NAME='^0-9a-zA-Z+$'
 
-show_usage() { echo "Usage: $0 [<diary_name>]" 1>&2; exit 1; }
-show_help() { echo "Help usage: $0 <diary_name>]" 1>&2; exit 1; }
+function show_usage() {
+    echo "Usage: $0 [<diary_name>]" 1>&2;
+    exit 1;
+}
+
+function show_help() {
+    echo "Help usage: $0 <diary_name>]" 1>&2;
+    exit 1;
+}
+
+# TODO: find correct regular expresion
+# for some reason I do not get + and ? to work
+function validate_project_name() {
+    if [[ $1 =~ [$VALID_PROJECT_NAME] ]]; then
+        return 1
+    elif [[ $1 == '' ]]; then
+        return 1
+    fi
+    return 0
+}
 
 # First time using diary
 if ! [ -d "$DIARY_PATH" ]; then
@@ -32,6 +50,10 @@ while [[ $# -gt 0 ]]; do
             show_help
             exit 0
             ;;
+        "-s"|"--search")
+            search_sentence=$1
+            shift;
+            ;;
         *)
             if [[ $# -eq 0 ]]; then
                 DIARY=$opt
@@ -43,12 +65,16 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# TODO: find correct regular expresion
-# for some reason I do not get + and ? to work
-if [[ $DIARY =~ [$VALID_PROJECT_NAME] ]]; then
-    echo "Project name can only contain :$VALID_PROJECT_NAME"
+if ! [[ -z "$search_sentence" ]]; then
+    if ! validate_project_name $DIARY; then
+        grep -r "$search_sentence" ./*
+    else
+        grep -r "$search_sentence" $DIARY
+    fi
     exit 0
-elif [[ $DIARY == '' ]]; then
+fi
+
+if ! validate_project_name $DIARY; then
     echo "Project name can only contain :$VALID_PROJECT_NAME"
     exit 0
 fi
