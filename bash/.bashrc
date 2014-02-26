@@ -121,3 +121,10 @@ alias gcalcli="/usr/bin/gcalcli --pw=`cat ~/.gcalclirc-pw`"
 PS1="[\t \u@\h:\W ] $ "
 
 PATH=$PATH:~/bin
+
+alias brute_connect="ssh perellm1@brute.aalto.fi"
+alias force_connect="ssh perellm1@force.aalto.fi"
+alias lyta_connect="ssh perellm1@lyta.aalto.fi"
+lyta_home="perellm1@lyta.aalto.fi:/u/57/perellm1/unix"
+
+source ~/.bashrc_private
