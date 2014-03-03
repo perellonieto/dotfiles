@@ -120,7 +120,8 @@ alias gcalcli="/usr/bin/gcalcli --pw=`cat ~/.gcalclirc-pw`"
 
 PS1="[\t \u@\h:\W ] $ "
 
-PATH=$PATH:~/bin
+PATH=$PATH:~/bin:/usr/local/cuda/bin
+LD_LIBRARY_PATH=/usr/local/cuda/lib64/:$LD_LIBRARY_PATH
 
 alias brute_connect="ssh perellm1@brute.aalto.fi"
 alias force_connect="ssh perellm1@force.aalto.fi"
