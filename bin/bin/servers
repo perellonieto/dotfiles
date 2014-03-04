@@ -1,0 +1,41 @@
+#!/bin/bash
+
+function show_usage() {
+    echo "Usage: $0 [<who> <users>]" 1>&2;
+    exit 1;
+}
+
+command=uptime
+
+while [[ $# -gt 0 ]]; do
+    opt="$1"
+    shift;
+    case "$opt" in
+        "who")
+            command=who
+            ;;
+        "users")
+            command=users
+            ;;
+        "uptime")
+            command=uptime
+            ;;
+        "w")
+            command=w
+            ;;
+        *)
+            show_usage
+            exit 0
+            ;;
+    esac
+done
+
+answer=`ssh james $command 2>&1`
+echo "james : $answer"
+
+for i in {0..8}
+do
+    answer=`ssh gpu$i $command 2>&1`
+    echo "gpu$i : $answer"
+done
+
