@@ -2,6 +2,8 @@
 
 EDITOR="vim + "
 PULL="git pull"
+ADD="git add *"
+COMMIT="git commit"
 PUSH="git push"
 DIARY_PATH="$HOME"/.diary
 FORMAT=`date +"%Y_%m_%d"`
@@ -53,6 +55,8 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         "-push")
+            $ADD
+            $COMMIT
             $PUSH
             exit 0
             ;;
