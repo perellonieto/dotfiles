@@ -1,6 +1,8 @@
 #!/bin/bash
 
 EDITOR="vim + "
+PULL="git pull"
+PUSH="git push"
 DIARY_PATH="$HOME"/.diary
 FORMAT=`date +"%Y_%m_%d"`
 VALID_PROJECT_NAME='^0-9a-zA-Z+$'
@@ -44,6 +46,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         "-lsl")
             ls -l
+            exit 0
+            ;;
+        "-pull")
+            $PULL
+            exit 0
+            ;;
+        "-push")
+            $PUSH
             exit 0
             ;;
         "-h"|"-?")
