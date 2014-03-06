@@ -9,6 +9,8 @@ DIARY_PATH="$HOME"/.diary
 FORMAT=`date +"%Y_%m_%d"`
 VALID_PROJECT_NAME='^0-9a-zA-Z+$'
 EXTENSION="md"
+TEMP_FILE="._tmp_file_markdown.html"
+EXPLORER="google-chrome"
 
 function show_usage() {
     echo "Usage: $0 [<diary_name>]" 1>&2;
@@ -29,6 +31,22 @@ function validate_project_name() {
         return 1
     fi
     return 0
+}
+
+function explore() {
+    diary=$1
+    cd $diary
+    rm "$TEMP_FILE"
+
+    for f in `ls ./*."$EXTENSION"`
+    do
+        echo "Extracting file $f"
+        echo "<h1>$f</h1>" >> "$TEMP_FILE"
+        markdown $f >> "$TEMP_FILE"
+    done
+
+    $EXPLORER "$TEMP_FILE"
+    rm "$TEMP_FILE"
 }
 
 # First time using diary
@@ -69,9 +87,14 @@ while [[ $# -gt 0 ]]; do
             search_sentence=$1
             shift;
             ;;
+        "-e"|"--explore")
+            explore $1
+            exit 0
+            ;;
+
         *)
             if [[ $# -eq 0 ]]; then
-                DIARY=$opt
+                diary=$opt
             else
                 show_usage
                 exit 0
@@ -81,30 +104,30 @@ while [[ $# -gt 0 ]]; do
 done
 
 if ! [[ -z "$search_sentence" ]]; then
-    if ! validate_project_name $DIARY; then
+    if ! validate_project_name $diary; then
         grep -r "$search_sentence" ./*
     else
-        grep -r "$search_sentence" $DIARY
+        grep -r "$search_sentence" $diary
     fi
     exit 0
 fi
 
-if ! validate_project_name $DIARY; then
+if ! validate_project_name $diary; then
     echo "Project name can only contain :$VALID_PROJECT_NAME"
     exit 0
 fi
 
 # If the diary is new, create it
-if ! [ -d "$DIARY" ]; then
-    mkdir "$DIARY"
+if ! [ -d "$diary" ]; then
+    mkdir "$diary"
 fi
 
-cd $DIARY
+cd $diary
 
 #if [[ -z "$DAY" ]]; then
 #    FORMAT=$DAY
 #fi
 
-FILENAME=$DIARY\_$FORMAT.$EXTENSION
+FILENAME=$diary\_$FORMAT.$EXTENSION
 
 $EDITOR  $FILENAME
