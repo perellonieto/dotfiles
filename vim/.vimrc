@@ -18,6 +18,7 @@ call pathogen#helptags()
 " plugin : this makes vim invoke latex-suite when you open a tex file.
 filetype plugin indent on
 syntax on
+autocmd BufRead,BufNewFile *.md set filetype=markdown
 
 " Vim UI
 set cursorline

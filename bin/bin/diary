@@ -8,6 +8,7 @@ PUSH="git push"
 DIARY_PATH="$HOME"/.diary
 FORMAT=`date +"%Y_%m_%d"`
 VALID_PROJECT_NAME='^0-9a-zA-Z+$'
+EXTENSION="md"
 
 function show_usage() {
     echo "Usage: $0 [<diary_name>]" 1>&2;
@@ -104,6 +105,6 @@ cd $DIARY
 #    FORMAT=$DAY
 #fi
 
-FILENAME=$DIARY\_$FORMAT.txt
+FILENAME=$DIARY\_$FORMAT.$EXTENSION
 
 $EDITOR  $FILENAME
