@@ -10,7 +10,7 @@ FORMAT=`date +"%Y_%m_%d"`
 VALID_PROJECT_NAME='^0-9a-zA-Z+$'
 EXTENSION="md"
 TEMP_FILE="._tmp_file_markdown.html"
-EXPLORER="google-chrome"
+EXPLORER="sensible-browser"
 
 function show_usage() {
     echo "Usage: $0 [<diary_name>]" 1>&2;
