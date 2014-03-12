@@ -120,7 +120,11 @@ alias gcalcli="/usr/bin/gcalcli --pw=`cat ~/.gcalclirc-pw`"
 
 PS1="[\t \u@\h:\W ] $ "
 
-PATH=$PATH:~/bin:/usr/local/cuda/bin
-LD_LIBRARY_PATH=/usr/local/cuda/lib64/:$LD_LIBRARY_PATH
+export PATH="$PATH:$HOME/bin:/usr/local/cuda/bin"
+export LD_LIBRARY_PATH="/usr/local/cuda/lib64/:/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib:/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib:/usr/local/lib:/usr/lib:/lib:/media/DATA2/opt/intel/mkl/lib/intel64"
+export LIBRARY_PATH="$LIBRARY_PATH:/usr/lib/openmi/lib:/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64/"
+export MKL_DIR="/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080"
+export DYLD_LIBRARY_PATH="$MKL_DIR/compiler/lib:$MKL_DIR/mkl/lib"
+export THEANO_FLAGS="floatX=float32,device=gpu"
 
 source ~/.bashrc_private
