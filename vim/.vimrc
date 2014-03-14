@@ -102,9 +102,11 @@ set number
 set tw=79
 set nowrap
 set fo-=t
-set colorcolumn=80
-highlight ColorColumn ctermbg=Black
-" show the filename on bottom
+if v:version >= 730
+    set colorcolumn=80
+    highlight ColorColumn ctermbg=Black
+    " show the filename on bottom
+endif
 set ls=2
 
 " easier formatting of paragraphs
