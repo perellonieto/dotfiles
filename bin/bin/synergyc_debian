@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#synergyc perellm1@james.ics.hut.fi
+synergyc localhost
+
+setxkbmap -layout es
+
+ssh -i /home/maikel/.ssh/id_rsa_nopass -L24800:localhost:24800 perellm1@james.ics.hut.fi
+
