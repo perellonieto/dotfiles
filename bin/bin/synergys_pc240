@@ -1,0 +1,6 @@
+#!/bin/bash
+
+synergy &
+
+ssh -R24800:localhost:24800 perellm1@james.ics.hut.fi
+
