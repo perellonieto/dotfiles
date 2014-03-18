@@ -1,0 +1,73 @@
+% This file contains macros that can be called up from connected TeX files
+% It helps to summarise repeated code, e.g. figure insertion (see below).
+
+% insert a centered figure with caption and description
+% parameters 1:filename, 2:title, 3:description and label
+\newcommand{\figuremacro}[3]{
+    \begin{figure}[t]
+    \centering
+    \includegraphics[width=1\linewidth]{#1}
+    \caption[#2]{\textbf{#2} #3}
+    \label{#1}
+    \end{figure}
+}
+
+\newcommand{\figuremacroW}[4]{
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=#4\linewidth]{#1}
+		\caption[#2]{\textbf{#2} - #3}
+		\label{#1}
+	\end{figure}
+}
+
+\newcommand{\figuremacroPos}[4]{
+    \begin{figure}[#4]
+    \centering
+    \includegraphics[width=.5\linewidth]{#1}
+    \caption[#2]{\textbf{#2} #3}
+    \label{#1}
+    \end{figure}
+}
+
+\newcommand{\figuremacroAll}[3]{
+    \begin{figure*}[!t]
+    \centering
+    \includegraphics[width=1\textwidth]{#1}
+    \caption[#2]{\textbf{#2} #3}
+    \label{#1}
+    \end{figure*}
+}
+
+\newcommand{\figuremacroWR}[5]{
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=#4\linewidth, angle=#5]{#1}
+		\caption[#2]{\textbf{#2} - #3}
+		\label{#1}
+	\end{figure}
+}
+
+\newcommand{\figuremacroAllWR}[5]{
+	\begin{figure*}[htbp]
+		\centering
+		\includegraphics[width=#4\textwidth, angle=#5]{#1}
+		\caption[#2]{\textbf{#2} - #3}
+		\label{#1}
+	\end{figure*}
+}
+
+%% Example of use of subfiguremacro:
+%\begin{figure}
+%  \subfiguremacro{figure_1}{}{.5}
+%  \subfiguremacro{figure_2}{}{.5}
+%  \caption{}
+%\end{figure}
+\newcommand{\subfiguremacro}[3] {
+    \begin{subfigure}[h]{#3\linewidth}
+        \centering
+        \includegraphics[width=1\linewidth]{#1}
+        \caption{#2}
+        \label{#1}
+    \end{subfigure}
+}

@@ -1,0 +1,17 @@
+%%
+%%  slidesPerello.sty
+%%
+%% Copyright (C) 2013 by Miquel Perello <miquel.perello.nieto@est.fib.upc.edu>
+%% 
+%% 
+\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+\ProvidesPackage{slides}
+    [2013/05/03 my own package for slides formatting]
+
+\let\oldemph\emph
+\renewcommand\emph[1]{{\textcolor{blue}{\oldemph{#1}}}}
+
+\useoutertheme{infolines}
+
+%%
+%% End of file `slidesPerello.sty'.
