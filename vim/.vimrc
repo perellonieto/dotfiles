@@ -41,9 +41,14 @@ set splitbelow     " Puts new split windows to the bottom of the current
 map <Leader>p o<ESC>p
 
 " Mouse and backspace
-set mouse=a " on OSX press ALT and click
+if has('mouse')
+    set mouse=a " on OSX press ALT and click
+endif
+" Copy to clipboard
+" With the mouse it is also possible holding Shift and dragging
+vmap <C-c> "+y
 set bs=2    " make backspace behave like normal again
- 
+
 " Wrapped lines goes down/up to next row, rather than next line in file.
 noremap j gj
 noremap k gk
@@ -135,7 +140,7 @@ set smartcase
 
 set foldenable                  " Auto fold code
 
-" Settings for NerdTree 
+" Settings for NerdTree
 " cd ~/.vim/bundle
 " git clone https://github.com/scrooloose/nerdtree.git
 map <F2> :NERDTreeToggle<CR>
@@ -145,7 +150,7 @@ map <F2> :NERDTreeToggle<CR>
 " git clone git://github.com/tpope/vim-fugitive.git
 
 " ============================================================================
-" VIM-LATEX Setup 
+" VIM-LATEX Setup
 " ============================================================================
 
 " IMPORTANT: grep will sometimes skip displaying the file name if you
