@@ -1,0 +1,5 @@
+#!/bin/bash
+
+/home/maikel/bin/send_summaries
+/home/maikel/bin/send_plots
+
