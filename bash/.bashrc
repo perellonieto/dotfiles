@@ -117,6 +117,7 @@ alias max_bright="sudo setpci -s 00:02.0 f4.b=ff"
 alias aisoy_connect="sudo ifconfig usb0 10.34.65.88 netmask 255.255.255.0"
 alias environment_ros="source ~/ros/setup.bash"
 alias gcalcli="/usr/bin/gcalcli --pw=`cat ~/.gcalclirc-pw`"
+alias tmux="TERM=screen-256color-bce tmux"
 
 PS1="[\t \u@\h:\W ] $ "
 
