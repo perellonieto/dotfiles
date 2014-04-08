@@ -1,6 +1,9 @@
 #!/bin/bash
 
-synergy &
+tmux new-session -d -n "runserver" -s synergy
 
-ssh -R24800:localhost:24800 perellm1@james.ics.hut.fi
+tmux new-window -t synergy:1 -n "synergys" 'synergy'
 
+tmux split-window -h -p 50 -t synergy:1 'ssh -R24800:localhost:24800 perellm1@james.ics.hut.fi'
+
+tmux attach -t synergy
