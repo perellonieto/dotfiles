@@ -1,9 +1,23 @@
 #!/bin/bash
 
+tmux kill-session -t synergy
+sp=$!
+wait $sp
+echo "Previous session killed"
+
 tmux new-session -d -n "runserver" -s synergy
+sp=$!
+wait $sp
+echo "Session created"
 
 tmux new-window -t synergy:1 -n "synergyc" 'setxkbmap -layout es; synergyc --no-daemon localhost'
+sp=$!
+wait $sp
+echo "New window created"
 
 tmux split-window -h -p 50 -t synergy:1 'ssh -i /home/maikel/.ssh/id_rsa_nopass -L24800:localhost:24800 perellm1@james.ics.hut.fi'
+sp=$!
+wait $sp
+echo "New window splited"
 
 tmux attach -t synergy
