@@ -47,8 +47,7 @@ function explore() {
         markdown $f >> "$TEMP_FILE"
     done
 
-    $EXPLORER "$TEMP_FILE"
-    rm "$TEMP_FILE"
+    $EXPLORER "$TEMP_FILE" && rm "$TEMP_FILE"
 }
 
 # First time using diary
