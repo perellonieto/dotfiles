@@ -1,9 +1,23 @@
 #!/bin/bash
 
-tmux new-session -d -n "runserver" -s synergy
+tmux kill-session -t synergy
+sp=$!
+wait $sp
+echo "Previous session killed"
 
-tmux new-window -t synergy:1 -n "synergys" 'synergy'
+tmux new-session -d -n "runserver" -s synergy
+sp=$!
+wait $sp
+echo "Session created"
+
+tmux new-window -t synergy:1 -n "synergys" synergy
+sp=$!
+wait $sp
+echo "New window created"
 
 tmux split-window -h -p 50 -t synergy:1 'ssh -R24800:localhost:24800 perellm1@james.ics.hut.fi'
+sp=$!
+wait $sp
+echo "New window splited"
 
 tmux attach -t synergy
