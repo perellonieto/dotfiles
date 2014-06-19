@@ -20,7 +20,9 @@ PROTOBUF=true
 GLOG=true
 SNAPPY=true
 
-mkdir -p ${PREFIX}
+mkdir -p ${PREFIX}/include
+mkdir -p ${PREFIX}/lib
+mkdir -p ${PREFIX}/bin
 
 #========================================#
 # LEVELDB
