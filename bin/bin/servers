@@ -1,7 +1,9 @@
 #!/bin/bash
 
+declare -a servers=("james" "gpu0" "gpu1" "gpu2" "gpu3" "gpu6" "gpu8")
+
 function show_usage() {
-    echo "Usage: $0 [<who> <users> <uptime> <w>]" 1>&2;
+    echo "Usage: $0 [<who> <users> <uptime> <w> <tmux>]" 1>&2;
     exit 1;
 }
 
@@ -12,16 +14,19 @@ while [[ $# -gt 0 ]]; do
     shift;
     case "$opt" in
         "who")
-            command=who
+            command="who"
             ;;
         "users")
-            command=users
+            command="users"
             ;;
         "uptime")
-            command=uptime
+            command="uptime"
             ;;
         "w")
-            command=w
+            command="w"
+            ;;
+        "tmux")
+            command="tmux ls"
             ;;
         *)
             show_usage
@@ -30,12 +35,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-answer=`ssh james $command 2>&1`
-echo "james : $answer"
-
-for i in {0..8}
+for server in "${servers[@]}"
 do
-    answer=`ssh gpu$i $command 2>&1`
-    echo "gpu$i : $answer"
+    answer=`ssh ${server} ${command} 2>&1`
+    echo "${server} : ${answer}"
 done
 
