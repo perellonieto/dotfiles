@@ -77,7 +77,7 @@ vnoremap <Leader>w <C-C>:update<CR>
 " inoremap <Leader>w <C-O>:update<CR>
 
 " quickexit command
-noremap <Leader>e :quit<CR>
+noremap <Leader>q :quit<CR>
 
 " movement between tabs
 map <Leader>. <esc>:tabnext<CR>
@@ -95,7 +95,7 @@ map <Leader>a ggVG " select all
 " " MUST be inserted BEFORE the colorscheme command
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 au InsertLeave * match ExtraWhitespace /\s\+$/
-map <Leader>s <esc>:%s/\s\+$//e<CR>
+map <Leader><Space> <esc>:%s/\s\+$//e<CR>
 
 
 " Color scheme
@@ -215,3 +215,28 @@ set nofoldenable
 
 " Store swap files in fixed location, not current directory.
 set dir=~/.vimswap//,/var/tmp//,/tmp//,.
+
+
+" Swap panes
+" http://stackoverflow.com/questions/2586984/how-can-i-swap-positions-of-two-open-files-in-splits-in-vim
+function! MarkWindowSwap()
+    let g:markedWinNum = winnr()
+endfunction
+
+function! DoWindowSwap()
+    "Mark destination
+    let curNum = winnr()
+    let curBuf = bufnr( "%" )
+    exe g:markedWinNum . "wincmd w"
+    "Switch to source and shuffle dest->source
+    let markedBuf = bufnr( "%" )
+    "Hide and open so that we aren't prompted and keep history
+    exe 'hide buf' curBuf
+    "Switch to dest and shuffle source->dest
+    exe curNum . "wincmd w"
+    "Hide and open so that we aren't prompted and keep history
+    exe 'hide buf' markedBuf
+endfunction
+
+nmap <silent> <leader>st :call MarkWindowSwap()<CR>
+nmap <silent> <leader>sh :call DoWindowSwap()<CR>
