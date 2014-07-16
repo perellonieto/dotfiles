@@ -58,14 +58,6 @@ noremap k gk
 " it is next to ``m`` and ``n`` which I use for navigating between tabs.
 let mapleader = ","
 
-" bind ctrl+<movement> keys to move around the windows, instead of using
-" ctrl+w + <movement>
-" remove <C-W>_ for not folding the other splits
-nnoremap <C-H> <C-W>h<C-W>_
-nnoremap <C-J> <C-W>j<C-W>_
-nnoremap <C-K> <C-W>k<C-W>_
-nnoremap <C-L> <C-W>l<C-W>_
-
 " Bind nohl
 " Removes highlight of your last search
 " ``<C>`` sCands for ``CTRL`` and therefore ``<C-n>`` stands for ``CTRL+n``
@@ -163,10 +155,13 @@ set grepprg=grep\ -nH\ $*
 " The following changes the default filetype back to 'tex':
 let g:tex_flavor='latex'
 
+" remap for <C-j> to jump to the next <++> symbol
+map <C-i> <Plug>IMAP_JumpForward
+nmap <C-i> <Plug>IMAP_JumpForward
+
 " ============================================================================
 " Python IDE Setup
 " ============================================================================
-
 
 " Settings for vim-powerline
 " cd ~/.vim/bundle
@@ -216,6 +211,20 @@ set nofoldenable
 " Store swap files in fixed location, not current directory.
 set dir=~/.vimswap//,/var/tmp//,/tmp//,.
 
+" My own maps
+" ===========
+" bind ctrl+<movement> keys to move around the windows, instead of using
+" ctrl+w + <movement>
+" remove <C-W>_ for not folding the other splits
+" example:     folding : nnoremap <C-H> <C-W>h<C-W>_
+"          not folding : nnoremap <C-H> <C-W>h<C-W>
+nnoremap <C-H> <C-W>h<C-W>
+nnoremap <C-J> <C-W>j<C-W>
+nnoremap <C-K> <C-W>k<C-W>
+nnoremap <C-L> <C-W>l<C-W>
+
+" Gitcommit help
+" autocmd Filetype gitcommit setlocal spell textwidth=72
 
 " Swap panes
 " http://stackoverflow.com/questions/2586984/how-can-i-swap-positions-of-two-open-files-in-splits-in-vim
