@@ -415,3 +415,9 @@ end)
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+-- Calendar
+-- source: http://awesome.naquadah.org/wiki/Calendar_widget
+
+require('calendar2')
+calendar2.addCalendarToWidget(mytextclock, "<span background='green' color='black'>%s</span>")
