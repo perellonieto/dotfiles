@@ -58,15 +58,15 @@ layouts =
 {
 --    awful.layout.suit.floating,
     awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
+--    awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
+--    awful.layout.suit.tile.top,
     awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal,
     awful.layout.suit.spiral,
     awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
---    awful.layout.suit.max.fullscreen,
+    awful.layout.suit.max.fullscreen,
 --    awful.layout.suit.magnifier
 }
 -- }}}
@@ -74,7 +74,7 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
-    names = {1, 2, 3, 4, 5, 6, 7, 8, 9},
+    names = {"main", 2, 3, 4, 5, 6, 7, "triton", "results"},
     layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1],
                layouts[1], layouts[1], layouts[1], layouts[1] }
 }
@@ -106,11 +106,16 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- {{{ Wibox
 -- Create Network usage widget
 -- awesome < 3.5
-netwidget = widget({ type = "textbox" })
+netwidget = widget({ type = "textbox", align = "right" })
+netwidget.width = 60
 -- awesome >= 3.5
 -- netwidget = wibox.widget.textbox()
 -- Register widget
 vicious.register(netwidget, vicious.widgets.net, '<span color="#CC9393">${eth0 down_kb}</span> <span color="#7F9F7F">${eth0 up_kb}</span>', 3)
+-- vicious.register(netwidget, vicious.widgets.net, "${eth0 carrier}", 120)
+-- uptimewidget = wibox.layout.constraint(uptimewidget, "exact", 50, nil)
+
+-- vicious.register(testget1, vicious.widgets.net, "${eth0 carrier}", 120)
 
 -- separator
 separator = widget({ type = "textbox" })
