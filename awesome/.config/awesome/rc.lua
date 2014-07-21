@@ -129,7 +129,7 @@ dnicon.text = "dn"
 
 -- Volume control
 volumewidget = widget({ type = "textbox" })
-vicious.register(volumewidget, vicious.widgets.volume, " $1% ", 2, "PCM")
+vicious.register(volumewidget, vicious.widgets.volume, "Vol: $1% ", 2, "PCM")
 
 volumewidget:buttons(awful.util.table.join(
     awful.button({ }, 1, function () awful.util.spawn("amixer -q -c 0 set Master toggle", false) end),
@@ -137,6 +137,11 @@ volumewidget:buttons(awful.util.table.join(
     awful.button({ }, 4, function () awful.util.spawn("amixer -q -c 0 set PCM 1dB+", false) end),
     awful.button({ }, 5, function () awful.util.spawn("amixer -q -c 0 set PCM 1dB-", false) end)
 ))
+
+-- cpu usage
+cpuwidget = widget({ type = "textbox" })
+cpuwidget.width = 200
+vicious.register(cpuwidget, vicious.widgets.cpu, "cpuX: $1% - $2% -  $3% - $4% - $5% ")
 
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
@@ -226,6 +231,9 @@ for s = 1, screen.count() do
         dnicon,
         separator,
         volumewidget,
+        separator,
+        cpuwidget,
+        separator,
         s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
