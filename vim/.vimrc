@@ -158,6 +158,7 @@ let g:tex_flavor='latex'
 " remap for <C-j> to jump to the next <++> symbol
 map <C-i> <Plug>IMAP_JumpForward
 nmap <C-i> <Plug>IMAP_JumpForward
+imap <C-i> <Plug>IMAP_JumpForward
 
 " ============================================================================
 " Python IDE Setup

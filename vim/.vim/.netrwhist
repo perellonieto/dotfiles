@@ -1,9 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/maikel'
-let g:netrw_dirhist_2='/home'
-let g:netrw_dirhist_3='/'
-let g:netrw_dirhist_4='/home'
-let g:netrw_dirhist_5='/'
-let g:netrw_dirhist_6='/home'
-let g:netrw_dirhist_7='/home/maikel'
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/fs/project/imagedb/perellm1/caffe/caffe-master/tools'
+let g:netrw_dirhist_2='/fs/project/imagedb/picsom/databases/kaggle_cifar10/models/test_model_19'
+let g:netrw_dirhist_3='/fs/project/imagedb/perellm1/caffe/caffe-data/examples/leveldb_test/leveldb'
+let g:netrw_dirhist_4='/home/perellm1/.gimp-2.6'
+let g:netrw_dirhist_5='/fs/project/imagedb/picsom/databases/kaggle_cifar10/models/lmdb_test_04'
+let g:netrw_dirhist_6='/m/www/public_html/perellm1/tutorial'
