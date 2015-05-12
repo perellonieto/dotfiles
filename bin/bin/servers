@@ -1,43 +1,95 @@
 #!/bin/bash
+#DESCRIPTION: This bash script connects by ssh to a
+#             list of servers and runs one of the
+#             desired command lines.
+#AUTHOR: Miquel Perello Nieto
 
-declare -a servers=("james" "gpu0" "gpu1" "gpu2" "gpu3" "gpu6" "gpu8")
+# list of servers to connect
+declare -a servers=("james" "gpu0" "gpu1" "gpu2" "gpu3" "gpu4" "gpu5" "gpu8" "gpu10" "gpu11" "gpu12")
 
 function show_usage() {
-    echo "Usage: $0 [<who> <users> <uptime> <w> <tmux>]" 1>&2;
+echo "Usage: $0 OPTION
+
+OPTIONs:
+
+    uptime: (default) Tell how long the system has been running.
+            Output example:
+
+            james :  16:33:12 up 133 days,  5:01, 17 users,  load average: 0.00, 0.01, 0.00
+            gpu0 :  16:33:12 up 48 days, 23:35,  2 users,  load average: 0.00, 0.00, 0.00
+            gpu1 :  16:33:13 up 55 days,  3:53,  1 user,  load average: 1.00, 1.00, 1.00
+
+
+    who:    show who is logged on.
+            Output example:
+
+            gpu1 : k84351   pts/1        2015-03-24 11:35 (james.ics.hut.fi)
+            gpu2 : k84351   pts/0        2015-03-24 11:35 (james.ics.hut.fi)
+            gpu3 : k84351   pts/0        2015-03-24 11:36 (james.ics.hut.fi)
+
+    users:  print the user names of users currently logged in to the current host.
+            Output example:
+
+            gpu0 : k84351 root
+            gpu1 : k84351
+            gpu2 : k84351
+
+    w:      Show who is logged on and what they are doing.
+            Output example:
+
+            gpu0 :  16:36:06 up 48 days, 23:38,  2 users,  load average: 0.00, 0.00, 0.00
+            USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+            k84351   pts/0    james.ics.hut.fi 03Apr15  6:46m  0.19s  0.19s bash
+            root     pts/3    davinci.ics.hut. 24Apr15 18days  0.01s  0.01s -bash
+            gpu1 :  16:36:06 up 55 days,  3:56,  1 user,  load average: 1.00, 1.00, 1.00
+            USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+            k84351   pts/1    james.ics.hut.fi 24Mar15  7days  0.46s  0.46s bash
+
+    tmux:   List all Tmux sessions managed by the server.
+            Output example:
+
+            gpu1 : rgb32: 2 windows (created Wed May  6 12:15:24 2015) [212x62]
+            gpu2 : y16uv16: 3 windows (created Mon May 11 14:51:23 2015) [212x62]
+            gpu3 : y32uv32: 2 windows (created Tue May  5 15:51:18 2015) [212x62]
+
+    ps:     Prints the highest cpu usage and its user
+            Output example:
+
+            james : 16.0 root
+            gpu0 :  0.0 zabbix
+            gpu1 :  100 perellm1
+
+    la:     Prints load average last 1-5-15 minutes
+            Output example:
+
+            james : 0.01 0.00 0.00
+            gpu0 : 0.00 0.00 0.00
+            gpu1 : 1.04 1.01 1.00
+            " 1>&2;
     exit 1;
 }
 
+# default command line
 command=uptime
 
 while [[ $# -gt 0 ]]; do
     opt="$1"
     shift;
     case "$opt" in
-        "who")
-            command="who"
-            ;;
-        "users")
-            command="users"
-            ;;
-        "uptime")
-            command="uptime"
-            ;;
-        "w")
-            command="w"
-            ;;
-        "tmux")
-            command="tmux ls"
-            ;;
-        *)
-            show_usage
-            exit 0
-            ;;
+    "who") command="who";;
+    "users") command="users";;
+    "uptime") command="uptime";;
+    "w") command="w";;
+    "tmux") command="tmux ls";;
+    "ps") command="ps -eo pcpu,user | tail --lines=+2 | sort | tail -1";;
+    "la") command="cat /proc/loadavg | cut -d' ' -f 1,2,3";;
+    *) show_usage; exit 0;;
     esac
 done
 
 for server in "${servers[@]}"
 do
-    answer=`ssh ${server} ${command} 2>&1`
+    answer=`ssh -o ConnectTimeout=1 ${server} ${command} 2>&1`
     echo "${server} : ${answer}"
 done
 
