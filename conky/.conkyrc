@@ -11,7 +11,7 @@ own_window_transparent yes
 own_window_argb_visual yes
 own_window_argb_value 0
 
-update_interval 300
+update_interval 3000
 background no
 
 border_width 1
@@ -35,5 +35,5 @@ xftfont Bitstream Vera Sans Mono:size=10
 
 TEXT
 *** Google Calendar Agenda ***
-${execpi 300 ~/bin/gcal-conky-agenda.sh}
-${execpi 300 ~/bin/gcal-conky-week.sh}
+# ${execpi 300 ~/bin/gcal-conky-agenda.sh}
+# ${execpi 300 ~/bin/gcal-conky-week.sh}

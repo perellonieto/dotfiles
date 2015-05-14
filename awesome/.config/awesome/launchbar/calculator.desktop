@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Calculator
+Exec=xcalc
+Icon=/usr/share/icons/gnome/24x24/apps/calc.png
+Position=1
+#and so on

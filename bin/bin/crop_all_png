@@ -3,6 +3,6 @@
 for f in `ls ./*.png`
 do
     echo "Croping file $f"
-    convert $f -trim $f
+    convert $f -trim +repage $f
 done
 

@@ -74,7 +74,7 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
-    names = {"main", 2, 3, 4, 5, 6, 7, "triton", "results"},
+    names = {"main", 2, 3, 4, 5, 6, 7, 8, 9},
     layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1],
                layouts[1], layouts[1], layouts[1], layouts[1] }
 }
@@ -95,12 +95,65 @@ myawesomemenu = {
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                                     { "Debian", debian.menu.Debian_menu.Debian },
+                                    { "Log out", '/home/maikel/bin/shutdown_dialog.sh'},
                                     { "open terminal", terminal }
                                   }
                         })
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
+-- }}}
+
+-- {{{ launchbar:
+-- source: http://awesome.naquadah.org/wiki/Quick_launch_bar
+local util = require('awful.util')
+
+ -- Quick launch bar widget BEGINS
+ function find_icon(icon_name, icon_dirs)
+    if string.sub(icon_name, 1, 1) == '/' then
+       if util.file_readable(icon_name) then
+          return icon_name
+       else
+          return nil
+       end
+    end
+    if icon_dirs then
+       for _, v in ipairs(icon_dirs) do
+          if util.file_readable(v .. "/" .. icon_name) then
+             return v .. '/' .. icon_name
+          end
+       end
+    end
+    return nil
+ end
+
+ function getValue(t, key)
+    _, _, res = string.find(t, key .. " *= *([^%c]+)%c")
+    return res
+ end
+
+ launchbar = { layout = awful.widget.layout.horizontal.leftright }
+ filedir = "/home/maikel/.config/awesome/launchbar/" -- Specify your folder with shortcuts here
+ local items = {}
+ local files = io.popen("ls " .. filedir .. "*.desktop")
+ for f in files:lines() do
+     local t = io.open(f):read("*all")
+     table.insert(items, { image = find_icon(getValue(t,"Icon"),
+                                             { "/usr/share/icons/hicolor/22x22/apps" }),
+                           command = getValue(t,"Exec"),
+                           tooltip = getValue(t,"Name"),
+                           position = tonumber(getValue(t,"Position")) or 255 })
+ end
+ table.sort(items, function(a,b) return a.position < b.position end)
+ for i = 1, table.getn(items) do
+ --     local txt = launchbar[i].tooltip
+    launchbar[i] = awful.widget.launcher(items[i])
+ --     local tt = awful.tooltip ({ objects = { launchbar[i] } })
+ --     tt:set_text (txt)
+ --     tt:set_timeout (0)
+ end
+
+ -- Quick launch bar widget ENDS
 -- }}}
 
 -- {{{ Wibox
@@ -142,6 +195,10 @@ volumewidget:buttons(awful.util.table.join(
 cpuwidget = widget({ type = "textbox" })
 cpuwidget.width = 200
 vicious.register(cpuwidget, vicious.widgets.cpu, "cpuX: $1% - $2% -  $3% - $4% - $5% ")
+
+tempwidget = widget({ type = "textbox" })
+tempwidget.width = 50
+vicious.register(tempwidget, vicious.widgets.thermal, "temp: $1% - $2% -  $3% ")
 
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
@@ -233,9 +290,12 @@ for s = 1, screen.count() do
         volumewidget,
         separator,
         cpuwidget,
-        separator,
+        --separator,
+        --tempwidget,
+        --separator,
         s == 1 and mysystray or nil,
         mytasklist[s],
+        launchbar,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
