@@ -1,0 +1,6 @@
+#!/bin/bash
+
+FOLDER=/home/maikel/screenshot
+FILENAME=screenshot_`date +%F_%H%M%S`
+
+import -window root ${FOLDER}/${FILENAME}.png
