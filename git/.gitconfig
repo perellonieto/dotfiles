@@ -1,5 +1,7 @@
 [user]
-	name = perellonieto
+	name = Miquel Perelló Nieto
 	email = perello.nieto@gmail.com
 [push]
 	default = matching
+[github]
+	user = perellonieto
