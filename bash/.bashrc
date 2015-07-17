@@ -117,7 +117,8 @@ alias max_bright="sudo setpci -s 00:02.0 f4.b=ff"
 alias aisoy_connect="sudo ifconfig usb0 10.34.65.88 netmask 255.255.255.0"
 alias environment_ros="source ~/ros/setup.bash"
 alias gcalcli="/usr/bin/gcalcli --pw=`cat ~/.gcalclirc-pw`"
-alias tmux="TERM=screen-256color-bce tmux"
+alias tmux="tmux -2"
+alias diskusage="du -sch .[!.]* * | sort -h"
 
 PS1="[\t \u@\h:\W ] $ "
 
@@ -127,5 +128,12 @@ export LIBRARY_PATH="$LIBRARY_PATH:/usr/lib/openmi/lib:/opt/intel/composer_xe_20
 export MKL_DIR="/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080"
 export DYLD_LIBRARY_PATH="$MKL_DIR/compiler/lib:$MKL_DIR/mkl/lib"
 export THEANO_FLAGS="floatX=float32,device=gpu"
+export PYLEARN2_DATA_PATH="${HOME}/data"
 
 source ~/.bashrc_private
+alias android-connect="mtpfs -o allow_other /media/jose_motorola"
+alias android-disconnect="fusermount -u /media/jose_motorola"
+alias android-connect="mtpfs -o allow_other /media/jose_motorola"
+alias android-disconnect="fusermount -u /media/jose_motorola"
+
+alias mount_james="sshfs perellm1@james.ics.hut.fi:/ ${HOME}/james"

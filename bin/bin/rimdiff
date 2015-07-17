@@ -1,0 +1,14 @@
+#!/bin/bash
+# rimdiff - Shows in vimdiff the difference between all the JPG and MOV files
+# inside a folder with their size and name
+#
+# Usage: rimdiff folder1 folder2
+
+echo "Comparing ${1} and ${2}"
+
+ls -Rlh ${1}/ | awk '/JPG|MOV/ {print $5 "\t" $9 }' | sort -k 2 > /tmp/_rimdiff_tmp_files1.csv
+ls -Rlh ${2}/ | awk '/JPG|MOV/ {print $5 "\t" $9 }' | sort -k 2 > /tmp/_rimdiff_tmp_files2.csv
+
+vimdiff /tmp/_rimdiff_tmp_files1.csv /tmp/_rimdiff_tmp_files2.csv
+
+rm /tmp/_rimdiff_tmp_files1.csv /tmp/_rimdiff_tmp_files2.csv

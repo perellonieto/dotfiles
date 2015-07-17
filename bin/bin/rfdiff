@@ -1,0 +1,14 @@
+#!/bin/bash
+# rfdiff - Shows in vimdiff the difference between all the files inside a
+# folder with their size and name
+#
+# Usage: rfdiff folder1 folder2
+
+echo "Comparing ${1} and ${2}"
+
+ls -Rlha ${1}/ | grep maikel | tr -s ' ' | cut -d\  -f 5,9 > /tmp/_rfdiff_tmp_files1.csv
+ls -Rlha ${2}/ | grep maikel | tr -s ' ' | cut -d\  -f 5,9 > /tmp/_rfdiff_tmp_files2.csv
+
+vimdiff /tmp/_rfdiff_tmp_files1.csv /tmp/_rfdiff_tmp_files2.csv
+
+rm /tmp/_rfdiff_tmp_files1.csv /tmp/_rfdiff_tmp_files2.csv

@@ -3,6 +3,7 @@
 MINECRAFTDIR=/usr/local/MINECRAFT
 
 #javasun -Xmx1024M -Xms512M -cp $MINECRAFTDIR/minecraft.jar net.minecraft.LauncherFrame
-java -Xmx1024M -Xms512M -cp $MINECRAFTDIR/minecraft.jar net.minecraft.LauncherFrame
+#java -Xmx1024M -Xms512M -cp $MINECRAFTDIR/Minecraft.jar net.minecraft.LauncherFrame
+java -jar $MINECRAFTDIR/Minecraft.jar
 
 #javasun -jar $MINECRAFTDIR/minecraft.jar

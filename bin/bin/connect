@@ -1,0 +1,48 @@
+#!/bin/bash
+
+function show_usage() {
+    echo "Usage: $0 [ server_name ]" 1>&2;
+}
+
+function show_help() {
+    echo "Usage: $0 [ server_name ]" 1>&2;
+}
+
+
+if [ $# -lt 1 ]
+then
+    show_usage
+    exit 1
+fi
+
+opt="$1"
+case ${opt} in
+    "triton")
+        ssh -X perellm1@triton.aalto.fi
+        exit 0
+        ;;
+    "james")
+        ssh -X -i /home/maikel/.ssh/id_rsa_nopass perellm1@james.ics.hut.fi
+        exit 0
+        ;;
+    "gpu1")
+        ssh -X -i /home/maikel/.ssh/id_rsa_nopass perellm1@gpu1.ics.hut.fi
+        exit 0
+        ;;
+    "lyta")
+        ssh -X perellm1@lyta.aalto.fi
+        exit 0
+        ;;
+    "brute")
+        ssh -X perellm1@brute.aalto.fi
+        exit 0
+        ;;
+    "force")
+        ssh -X perellm1@force.aalto.fi
+        exit 0
+        ;;
+    *)
+        show_help
+        exit 0
+        ;;
+esac
