@@ -39,7 +39,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+beautiful.init("./.config/awesome/themes/mine/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
@@ -63,8 +63,8 @@ layouts =
 --    awful.layout.suit.tile.top,
     awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
+--    awful.layout.suit.spiral,
+--    awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
 --    awful.layout.suit.magnifier
@@ -74,7 +74,7 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
-    names = {"main", 2, 3, 4, 5, 6, 7, "triton", "results"},
+    names = {"main", 2, 3, 4, 5, 6, 7, 8, 9},
     layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1],
                layouts[1], layouts[1], layouts[1], layouts[1] }
 }
@@ -138,7 +138,8 @@ volumewidget:buttons(awful.util.table.join(
     awful.button({ }, 5, function () awful.util.spawn("amixer -q -c 0 set PCM 1dB-", false) end)
 ))
 
--- cpu usage
+-- CPU usage
+-- improvement in : http://jasonmaur.com/awesome-wm-widgets-configuration/
 cpuwidget = widget({ type = "textbox" })
 cpuwidget.width = 200
 vicious.register(cpuwidget, vicious.widgets.cpu, "cpuX: $1% - $2% -  $3% - $4% - $5% ")
@@ -432,7 +433,8 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+--client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.add_signal("focus", function(c) c.border_color = '#DD7733' end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
