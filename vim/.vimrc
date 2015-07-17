@@ -1,5 +1,6 @@
 set nocompatible                      " No compatibility with legacy vi
 autocmd! bufwritepost .vimrc source % " Automatic reloading of .vimrc
+
 " =========================================================================="
 " NeoBundle Scripts                                                         "
 " =========================================================================="
@@ -21,14 +22,15 @@ call neobundle#begin(expand('~/.vim/bundle'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Add or remove your Bundles here:
-NeoBundle 'Shougo/neosnippet.vim'
-NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'Shougo/neosnippet.vim'               " Snippets implementation
+NeoBundle 'Shougo/neosnippet-snippets'          " Predefined snippets
+NeoBundle 'tpope/vim-fugitive'                  " Git calls
+NeoBundle 'scrooloose/nerdtree'                 " Left panel folder navigator
+NeoBundle 'beloglazov/vim-online-thesaurus'     " words from thesaurus.com
+NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
 "NeoBundle 'ctrlpvim/ctrlp.vim'
 "NeoBundle 'flazz/vim-colorschemes'
-" Colors
-NeoBundle 'solarized'
+NeoBundle 'solarized'                           " Color theme
 
 " You can specify revision/branch/tag.
 NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
@@ -64,14 +66,21 @@ if has('conceal')
 endif
 
 " =========================================================================="
-" scrooloose/nerdtree Configuration                                           "
+" scrooloose/nerdtree Configuration                                         "
 " =========================================================================="
 
 map <F2> :NERDTreeToggle<CR>
 
 " =========================================================================="
+"  beloglazov/vim-online-thesaurus Configuration                            "
+" =========================================================================="
+
+nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
+
+" =========================================================================="
 " My configuratios                                                          "
 " =========================================================================="
+set encoding=utf-8
 "" keymaps
 let mapleader = ","
 nmap <leader>w :w!<cr>
@@ -82,27 +91,33 @@ map <Leader>, <esc>:tabprevious<CR> " Previous tab
 map <Leader>m <esc>:tabnew<CR>      " New tab
 
 set number                      " Show line number
-set nowrap                      " Do not wrap lines
-set tabstop=4 shiftwidth=4      " Number of spaces to visualize a Tab
-set expandtab                   " use spaces instead of tabs
-set backspace=indent,eol,start  " backspace through everything in insert mode
 set tw=79                       " Maximum number of characters per row
 set laststatus=2                " Show a status line
 set scrolloff=2                 " Show n lines between border and cursor
 "set fo-=t
+set spell                       " Spell checking (z= to show proposed)
 
-"" Show whitespace at the end in red (before Color scheme)
+"" White spaces
+set nowrap                      " Do not wrap lines
+set tabstop=4 shiftwidth=4      " Number of spaces to visualize a Tab
+set expandtab                   " use spaces instead of tabs
+set backspace=indent,eol,start  " backspace through everything in insert mode
+" Highligh whitespaces at the end (before Color scheme)
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 au InsertLeave * match ExtraWhitespace /\s\+$/
 map <Leader><Space> <esc>:%s/\s\+$//e<CR>   " Remove ending whitespaces
+
 "" Color and Syntax
 set t_Co=256                    " Use 256 colors
-syntax enable                   " Enable syntax hightligh
+syntax enable                   " Enable syntax highlight
 set background=dark
 colorscheme solarized
 set colorcolumn=80              " Paint the column 80
+set matchtime=2                 " tenths of a second blink when matching ()
+
 "" Search
 set hlsearch                    " Highlight the word to search
 set incsearch                   " Searches while typing the word
-set ignorecase                  " Case insensitive
-set smartcase                   " Ignore ignorecase if word contains Upper case
+set ignorecase                  " Search is case insensitive...
+set smartcase                   " ... unless it contains a capital letter
+noremap <Leader>h :nohl<CR>     " Remove highligh of last search
