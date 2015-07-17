@@ -156,9 +156,12 @@ set grepprg=grep\ -nH\ $*
 let g:tex_flavor='latex'
 
 " remap for <C-j> to jump to the next <++> symbol
-map <C-i> <Plug>IMAP_JumpForward
-nmap <C-i> <Plug>IMAP_JumpForward
-imap <C-i> <Plug>IMAP_JumpForward
+" This lines conflicts with the imap of <Tab>
+" :verbose imap <Tab>
+" :iunmap <Tab>
+"map <C-i> <Plug>IMAP_JumpForward
+"nmap <C-i> <Plug>IMAP_JumpForward
+"imap <C-i> <Plug>IMAP_JumpForward
 
 " ============================================================================
 " Python IDE Setup
@@ -250,3 +253,9 @@ endfunction
 
 nmap <silent> <leader>st :call MarkWindowSwap()<CR>
 nmap <silent> <leader>sh :call DoWindowSwap()<CR>
+
+" Load a vim-online-thesaurus
+" that looks to the webpage thesaurus.com for synonims
+"Plugin 'beloglazov/vim-online-thesaurus'
+" Bundle 'vim-online-thesaurus'
+nnoremap <Leader>k :OnlineThesaurusCurrentWord<CR>
