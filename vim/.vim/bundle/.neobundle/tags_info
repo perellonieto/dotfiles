@@ -1,5 +1,7 @@
 neobundle.vim
 neosnippet-snippets
 neosnippet.vim
+nerdtree
+solarized
 vim-fugitive
 vimshell
