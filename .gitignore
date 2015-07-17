@@ -5,4 +5,4 @@ bin/bin/mendeleydesktop
 #Ignore Latex auxiliar files
 *.aux
 # Lock for NeoBundle
-*.lock
+vim/.vim/bundle/NeoBundle.lock
