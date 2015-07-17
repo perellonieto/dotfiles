@@ -78,6 +78,23 @@ map <F2> :NERDTreeToggle<CR>
 nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
 
 " =========================================================================="
+" vim-scripts/LaTeX-Suite-aka-Vim-LaTeX Configuration                       "
+" =========================================================================="
+
+set grepprg=grep\ -nH\ $*       " Grep always generates a file-name
+set iskeyword+=:                " auto-completion in references by <C-n>
+" Following configuration of LaTeX-Suite needs revision
+"set formatoptions=cqt
+"set spell spelllang=en
+"
+"set iskeyword+=:
+"
+"let g:Tex_DefaultTargetFormat = 'pdf'
+"let g:Tex_MultipleCompileFormats = 'pdf'
+"let g:Tex_FormatDependency_pdf = 'pdf'
+"let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
+
+" =========================================================================="
 " My configuratios                                                          "
 " =========================================================================="
 set encoding=utf-8
