@@ -8,5 +8,6 @@ bin/bin/mendeleydesktop
 vim/.vim/bundle/NeoBundle.lock
 
 # Remove automatic packages installed by NeoBundle
+vim/.vim/bundle/.neobundle/install_info
 vim/.vim/bundle/YouCompleteMe/
 vim/.vim/bundle/jedi-vim/

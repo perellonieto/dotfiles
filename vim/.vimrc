@@ -28,6 +28,8 @@ NeoBundle 'tpope/vim-fugitive'                  " Git calls
 NeoBundle 'scrooloose/nerdtree'                 " Left panel folder navigator
 NeoBundle 'beloglazov/vim-online-thesaurus'     " words from thesaurus.com
 NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
+"NeoBundle 'davidhalter/jedi-vim'                " Autocompletion library Jedi
+"NeoBundle 'Valloric/YouCompleteMe'
 "NeoBundle 'ctrlpvim/ctrlp.vim'
 "NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'solarized'                           " Color theme
