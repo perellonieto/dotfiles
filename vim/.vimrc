@@ -109,6 +109,12 @@ map <Leader>. <esc>:tabnext<CR>     " Next tab
 map <Leader>, <esc>:tabprevious<CR> " Previous tab
 map <Leader>m <esc>:tabnew<CR>      " New tab
 
+"" Split navigations
+nnoremap <C-j> <C-w><C-j>
+nnoremap <C-k> <C-w><C-k>
+nnoremap <C-l> <C-w><C-l>
+nnoremap <C-h> <C-w><C-h>
+
 set number                      " Show line number
 set tw=79                       " Maximum number of characters per row
 set laststatus=2                " Show a status line
