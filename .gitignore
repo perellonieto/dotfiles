@@ -1,0 +1,6 @@
+#This is only to remember the name of the binary
+bin/bin/convert_images_grey
+bin/bin/setxkbmap
+bin/bin/mendeleydesktop
+#Ignore Latex auxiliar files
+*.aux

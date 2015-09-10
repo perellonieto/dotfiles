@@ -1,3 +1,5 @@
 [user]
 	name = perellonieto
 	email = perello.nieto@gmail.com
+[push]
+	default = matching
