@@ -1,261 +1,148 @@
-set encoding=utf-8
-" Automatic reloading of .vimrc
-autocmd! bufwritepost .vimrc source %
-" Setup Pathogen to manage your plugins
-" " mkdir -p ~/.vim/autoload ~/.vim/bundle
-" " curl -so ~/.vim/autoload/pathogen.vim
-" https://raw.github.com/tpope/vim-pathogen/HEAD/autoload/pathogen.vim
-" " Now you can install any plugin into a .vim/bundle/plugin-name/ folder
+set nocompatible                      " No compatibility with legacy vi
+autocmd! bufwritepost .vimrc source % " Automatic reloading of .vimrc
 
-" Setup Bundle Support
-" next two lines ensure that ~/.vim/bundle system works
-runtime! autoload/pathogen.vim
-silent! call pathogen\#runtime_append_all_bundles()
-call pathogen#infect()
-call pathogen#helptags()
+" =========================================================================="
+" NeoBundle Scripts                                                         "
+" =========================================================================="
 
-" indent : this enables automatic indentation as you type.
-" plugin : this makes vim invoke latex-suite when you open a tex file.
+if has('vim_starting')
+  if &compatible
+    set nocompatible               " Be iMproved
+  endif
+
+  " Required:
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+" Required:
+call neobundle#begin(expand('~/.vim/bundle'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Add or remove your Bundles here:
+NeoBundle 'Shougo/neosnippet.vim'               " Snippets implementation
+NeoBundle 'Shougo/neosnippet-snippets'          " Predefined snippets
+NeoBundle 'tpope/vim-fugitive'                  " Git calls
+NeoBundle 'scrooloose/nerdtree'                 " Left panel folder navigator
+NeoBundle 'beloglazov/vim-online-thesaurus'     " words from thesaurus.com
+NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
+"NeoBundle 'davidhalter/jedi-vim'                " Autocompletion library Jedi
+"NeoBundle 'Valloric/YouCompleteMe'
+"NeoBundle 'ctrlpvim/ctrlp.vim'
+"NeoBundle 'flazz/vim-colorschemes'
+NeoBundle 'solarized'                           " Color theme
+
+" You can specify revision/branch/tag.
+NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
+
+" Required:
+call neobundle#end()
+
+" Required:
 filetype plugin indent on
-syntax on
-autocmd BufRead,BufNewFile *.md set filetype=markdown
 
-" Vim UI
-set cursorline
-" if has('cmdline_info')
-"     set ruler
-"     set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
-"     set showcmd
-" endif
+NeoBundleCheck
 
-" Better copy paste
-" When you want to paste large blocks of code into vim, press F2 before you
-" paste. At the bottom you should see ``-- INSERT (paste) --``.
-set pastetoggle=<F2>
-set clipboard=unnamed
-" Minimum lines to keep above and below cursor
-set scrolloff=3
-set splitright     " Puts new vsplit windows to the right of the current
-set splitbelow     " Puts new split windows to the bottom of the current
-" Paste into the next line
-map <Leader>p o<ESC>p
+" =========================================================================="
+" Shougo/neosnippet Configuration                                           "
+" =========================================================================="
 
-" Mouse and backspace
-if has('mouse')
-    set mouse=a " on OSX press ALT and click
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
 endif
-" Copy to clipboard
-" With the mouse it is also possible holding Shift and dragging
-vmap <C-c> "+y
-set bs=2    " make backspace behave like normal again
 
-" Wrapped lines goes down/up to next row, rather than next line in file.
-noremap j gj
-noremap k gk
+" =========================================================================="
+" scrooloose/nerdtree Configuration                                         "
+" =========================================================================="
 
-" Rebind <Leader> key
-" I like to have it here becuase it is easier to reach than the default and
-" it is next to ``m`` and ``n`` which I use for navigating between tabs.
-let mapleader = ","
-
-" Bind nohl
-" Removes highlight of your last search
-" ``<C>`` sCands for ``CTRL`` and therefore ``<C-n>`` stands for ``CTRL+n``
-noremap <Leader>h :nohl<CR>
-
-" Quicksave command
-noremap <Leader>w :update<CR>
-vnoremap <Leader>w <C-C>:update<CR>
-" inoremap <Leader>w <C-O>:update<CR>
-
-" quickexit command
-noremap <Leader>q :quit<CR>
-
-" movement between tabs
-map <Leader>. <esc>:tabnext<CR>
-map <Leader>, <esc>:tabprevious<CR>
-map <Leader>m <esc>:tabnew<CR>
-
-" easier moving of code blocks
-" " Try to go into visual mode (v), thenselect several lines of code here and
-" " then press ``>`` several times.
-vnoremap < <gv  " better indentation
-vnoremap > >gv  " better indentation
-map <Leader>a ggVG " select all
-
-" Show whitespace
-" " MUST be inserted BEFORE the colorscheme command
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-au InsertLeave * match ExtraWhitespace /\s\+$/
-map <Leader><Space> <esc>:%s/\s\+$//e<CR>
-
-
-" Color scheme
-set t_Co=256
-color wombat256mod
-
-" line number
-set number
-set tw=79
-set nowrap
-set fo-=t
-if v:version >= 730
-    set colorcolumn=80
-    highlight ColorColumn ctermbg=Black
-    " show the filename on bottom
-endif
-set ls=2
-
-" easier formatting of paragraphs
-vmap Q gq
-nmap Q gqap
-
-" Useful settings
-set history=1000
-set undolevels=1000
-" Spell checking
-" set spell
-
-" Real programmers don't use TABs but spaces
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set shiftround
-set expandtab
-
-" highlight the word to search
-" Make search case insensitive
-set hlsearch
-set incsearch
-set ignorecase
-set smartcase
-
-set foldenable                  " Auto fold code
-
-" Settings for NerdTree
-" cd ~/.vim/bundle
-" git clone https://github.com/scrooloose/nerdtree.git
 map <F2> :NERDTreeToggle<CR>
 
-" Settings for Fugitive
-" cd ~/.vim/bundle
-" git clone git://github.com/tpope/vim-fugitive.git
+" =========================================================================="
+"  beloglazov/vim-online-thesaurus Configuration                            "
+" =========================================================================="
 
-" ============================================================================
-" VIM-LATEX Setup
-" ============================================================================
+nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
 
-" IMPORTANT: grep will sometimes skip displaying the file name if you
-" search in a singe file. This will confuse Latex-Suite. Set your grep
-" program to always generate a file-name.
-set grepprg=grep\ -nH\ $*
+" =========================================================================="
+" vim-scripts/LaTeX-Suite-aka-Vim-LaTeX Configuration                       "
+" =========================================================================="
 
-" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
-" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
-" The following changes the default filetype back to 'tex':
-let g:tex_flavor='latex'
+set grepprg=grep\ -nH\ $*       " Grep always generates a file-name
+set iskeyword+=:                " auto-completion in references by <C-n>
+" Following configuration of LaTeX-Suite needs revision
+"set formatoptions=cqt
+"set spell spelllang=en
+"
+"set iskeyword+=:
+"
+"let g:Tex_DefaultTargetFormat = 'pdf'
+"let g:Tex_MultipleCompileFormats = 'pdf'
+"let g:Tex_FormatDependency_pdf = 'pdf'
+"let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
 
-" remap for <C-j> to jump to the next <++> symbol
-" This lines conflicts with the imap of <Tab>
-" :verbose imap <Tab>
-" :iunmap <Tab>
-"map <C-i> <Plug>IMAP_JumpForward
-"nmap <C-i> <Plug>IMAP_JumpForward
-"imap <C-i> <Plug>IMAP_JumpForward
+" =========================================================================="
+" My configuratios                                                          "
+" =========================================================================="
+set encoding=utf-8
+"" keymaps
+let mapleader = ","
+nmap <leader>w :w!<cr>
+nmap <leader>q :q<cr>
 
-" ============================================================================
-" Python IDE Setup
-" ============================================================================
+map <Leader>. <esc>:tabnext<CR>     " Next tab
+map <Leader>, <esc>:tabprevious<CR> " Previous tab
+map <Leader>m <esc>:tabnew<CR>      " New tab
 
-" Settings for vim-powerline
-" cd ~/.vim/bundle
-" git clone git://github.com/Lokaltog/vim-powerline.git
-set laststatus=2
+"" Split navigations
+nnoremap <C-j> <C-w><C-j>
+nnoremap <C-k> <C-w><C-k>
+nnoremap <C-l> <C-w><C-l>
+nnoremap <C-h> <C-w><C-h>
 
+set number                      " Show line number
+set tw=79                       " Maximum number of characters per row
+set laststatus=2                " Show a status line
+set scrolloff=2                 " Show n lines between border and cursor
+"set fo-=t
+set spell                       " Spell checking (z= to show proposed)
 
-" Settings for ctrlp
-" cd ~/.vim/bundle
-" git clone https://github.com/kien/ctrlp.vim.git
-let g:ctrlp_max_height = 30
-set wildignore+=*.pyc
-set wildignore+=*_build/*
-set wildignore+=*/coverage/*
+"" White spaces
+set nowrap                      " Do not wrap lines
+set tabstop=4 shiftwidth=4      " Number of spaces to visualize a Tab
+set expandtab                   " use spaces instead of tabs
+set backspace=indent,eol,start  " backspace through everything in insert mode
+" Highligh whitespaces at the end (before Color scheme)
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+au InsertLeave * match ExtraWhitespace /\s\+$/
+map <Leader><Space> <esc>:%s/\s\+$//e<CR>   " Remove ending whitespaces
 
-" Settings for jedi-vim
-" cd ~/.vim/bundle
-" git clone git://github.com/davidhalter/jedi-vim.git
-" let g:jedi#related_names_command = "<leader>z"
-let g:jedi#usages_command = "<leader>z"
-let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
-map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
+"" Color and Syntax
+set t_Co=256                    " Use 256 colors
+syntax enable                   " Enable syntax highlight
+set background=dark
+colorscheme solarized
+set colorcolumn=80              " Paint the column 80
+set matchtime=2                 " tenths of a second blink when matching ()
 
-" Better navigating through omnicomplete option list
-" See http://stackoverflow.com/questions/2170023/how-to-map-keys-for-popup-menu-in-vim
-set completeopt=longest,menuone
-function! OmniPopup(action)
-    if pumvisible()
-        if a:action == 'j'
-            return "\<C-N>"
-        elseif a:action == 'k'
-            return "\<C-P>"
-        endif
-    endif
-    return a:action
-endfunction
-inoremap <silent><C-K> <C-R>=OmniPopup('k')<CR>
-inoremap <silent><C-J> <C-R>=OmniPopup('j')<CR>
-
-
-" Python folding
-" mkdir -p ~/.vim/ftplugin
-" wget -O ~/.vim/ftplugin/python_editing.vim http://www.vim.org/scripts/download_script.php?src_id=5492
-set nofoldenable
-
-" Store swap files in fixed location, not current directory.
-set dir=~/.vimswap//,/var/tmp//,/tmp//,.
-
-" My own maps
-" ===========
-" bind ctrl+<movement> keys to move around the windows, instead of using
-" ctrl+w + <movement>
-" remove <C-W>_ for not folding the other splits
-" example:     folding : nnoremap <C-H> <C-W>h<C-W>_
-"          not folding : nnoremap <C-H> <C-W>h<C-W>
-nnoremap <C-H> <C-W>h<C-W>
-nnoremap <C-J> <C-W>j<C-W>
-nnoremap <C-K> <C-W>k<C-W>
-nnoremap <C-L> <C-W>l<C-W>
-
-" Gitcommit help
-" autocmd Filetype gitcommit setlocal spell textwidth=72
-
-" Swap panes
-" http://stackoverflow.com/questions/2586984/how-can-i-swap-positions-of-two-open-files-in-splits-in-vim
-function! MarkWindowSwap()
-    let g:markedWinNum = winnr()
-endfunction
-
-function! DoWindowSwap()
-    "Mark destination
-    let curNum = winnr()
-    let curBuf = bufnr( "%" )
-    exe g:markedWinNum . "wincmd w"
-    "Switch to source and shuffle dest->source
-    let markedBuf = bufnr( "%" )
-    "Hide and open so that we aren't prompted and keep history
-    exe 'hide buf' curBuf
-    "Switch to dest and shuffle source->dest
-    exe curNum . "wincmd w"
-    "Hide and open so that we aren't prompted and keep history
-    exe 'hide buf' markedBuf
-endfunction
-
-nmap <silent> <leader>st :call MarkWindowSwap()<CR>
-nmap <silent> <leader>sh :call DoWindowSwap()<CR>
-
-" Load a vim-online-thesaurus
-" that looks to the webpage thesaurus.com for synonims
-"Plugin 'beloglazov/vim-online-thesaurus'
-" Bundle 'vim-online-thesaurus'
-nnoremap <Leader>k :OnlineThesaurusCurrentWord<CR>
+"" Search
+set hlsearch                    " Highlight the word to search
+set incsearch                   " Searches while typing the word
+set ignorecase                  " Search is case insensitive...
+set smartcase                   " ... unless it contains a capital letter
+noremap <Leader>h :nohl<CR>     " Remove highligh of last search

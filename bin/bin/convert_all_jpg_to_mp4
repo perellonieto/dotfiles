@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# It depends on ffmpeg
+if ! hash ffmpeg 2>/dev/null; then
+    module load ffmpeg
+fi
+
+#{ for i in `seq 20`; do ls start.jpg; done ; ls -1 0*.jpg ; } | xargs cat | \
+#    ffmpeg -f image2pipe -r 20 -vcodec mjpeg -i - -vcodec libx264 out.mp4
+#mv out.mp4 paper_face_deep_dream.mp4
+
+cat ./*.jpg | ffmpeg -f image2pipe -r 20 -vcodec mjpeg -i - -vcodec libx264 out.mp4
