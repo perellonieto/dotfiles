@@ -5,6 +5,9 @@ autocmd! bufwritepost .vimrc source % " Automatic reloading of .vimrc
 " NeoBundle Scripts                                                         "
 " =========================================================================="
 
+" Note: Skip initialization for vim-tiny or vim-small.
+if 0 | endif
+
 if has('vim_starting')
   if &compatible
     set nocompatible               " Be iMproved
@@ -22,6 +25,7 @@ call neobundle#begin(expand('~/.vim/bundle'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Add or remove your Bundles here:
+" when writting the '<url>' it is possible to ommit the https://github.com/
 NeoBundle 'Shougo/neosnippet.vim'               " Snippets implementation
 NeoBundle 'Shougo/neosnippet-snippets'          " Predefined snippets
 NeoBundle 'tpope/vim-fugitive'                  " Git calls
@@ -32,7 +36,13 @@ NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
 "NeoBundle 'Valloric/YouCompleteMe'
 "NeoBundle 'ctrlpvim/ctrlp.vim'
 "NeoBundle 'flazz/vim-colorschemes'
-NeoBundle 'solarized'                           " Color theme
+"NeoBundle 'solarized'                           " Color theme
+"NeoBundle 'altercation/vim-colors-solarized'
+"NeoBundle 'solarized/vim-colors-solarized'
+"NeoBundle 'wellle/vim-colors-solarized'
+NeoBundle 'altercation/vim-colors-solarized'
+"NeoBundle 'akmassey/vim-codeschool'
+NeoBundle 'easymotion/vim-easymotion'            " easy motion <Leader>^2 s
 
 " You can specify revision/branch/tag.
 NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
@@ -106,8 +116,8 @@ nmap <leader>w :w!<cr>
 nmap <leader>q :q<cr>
 
 map <Leader>. <esc>:tabnext<CR>     " Next tab
-map <Leader>, <esc>:tabprevious<CR> " Previous tab
-map <Leader>m <esc>:tabnew<CR>      " New tab
+map <Leader>m <esc>:tabprevious<CR> " Previous tab
+map <Leader>n <esc>:tabnew<CR>      " New tab
 
 "" Split navigations
 nnoremap <C-j> <C-w><C-j>
@@ -136,7 +146,8 @@ map <Leader><Space> <esc>:%s/\s\+$//e<CR>   " Remove ending whitespaces
 set t_Co=256                    " Use 256 colors
 syntax enable                   " Enable syntax highlight
 set background=dark
-colorscheme solarized
+"let g:solarized_termcolors=256
+colorscheme solarized              " default, desert, murphy, peachpuff, solarized
 set colorcolumn=80              " Paint the column 80
 set matchtime=2                 " tenths of a second blink when matching ()
 
@@ -146,3 +157,6 @@ set incsearch                   " Searches while typing the word
 set ignorecase                  " Search is case insensitive...
 set smartcase                   " ... unless it contains a capital letter
 noremap <Leader>h :nohl<CR>     " Remove highligh of last search
+
+"" Scripts
+nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr> " Run with Python
