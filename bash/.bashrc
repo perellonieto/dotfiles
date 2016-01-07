@@ -28,7 +28,7 @@ shopt -s checkwinsize
 #shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
-#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
@@ -43,7 +43,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -57,20 +57,25 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\[\t \u\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\]\$ '
+    #PS2='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\[\t \u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\]\$ '
+    #PS1='\[\033[01;32m\]\[\t \u\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
+    #PS2='\[\033[01;32m\]\[\t \u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='[\t \u:\[\033[01;34m\]\W\[\033[00m\]]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='\u:\W\$ '
+    PS2='[\t \u@\h:\w]\$ '
 fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
+#case "$TERM" in
+#xterm*|rxvt*)
+#    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\]$PS1"
+#    ;;
+#*)
+#    ;;
+#esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -79,15 +84,19 @@ if [ -x /usr/bin/dircolors ]; then
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
 
-    #alias grep='grep --color=auto'
-    #alias fgrep='fgrep --color=auto'
-    #alias egrep='egrep --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
 fi
 
 # some more ls aliases
-#alias ll='ls -l'
-#alias la='ls -A'
-#alias l='ls -CF'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -109,6 +118,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# Load private modules
+. /etc/profile.d/modules.sh
+module use-append ${HOME}/privatemodules
+
 #TZ='Europe/Helsinki'
 #export TZ
 
@@ -117,25 +130,36 @@ alias max_bright="sudo setpci -s 00:02.0 f4.b=ff"
 alias aisoy_connect="sudo ifconfig usb0 10.34.65.88 netmask 255.255.255.0"
 alias environment_ros="source ~/ros/setup.bash"
 #alias gcalcli="/usr/bin/gcalcli --pw=`cat ~/.gcalclirc-pw`"
-alias tmux="tmux -2"
+#alias tmux="tmux -2"
+alias tmux="TERM=screen-256color-bce tmux"
 alias diskusage="du -sch .[!.]* * | sort -h"
 
-PS1="[\t \u@\h:\W ] $ "
 
-export PATH="$PATH:$HOME/bin:/usr/local/cuda/bin"
-export LD_LIBRARY_PATH="/usr/local/cuda/lib64/:/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib:/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib:/usr/local/lib:/usr/lib:/lib:/media/DATA2/opt/intel/mkl/lib/intel64"
-export LIBRARY_PATH="$LIBRARY_PATH:/usr/lib/openmi/lib:/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64/"
-export MKL_DIR="/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080"
-export DYLD_LIBRARY_PATH="$MKL_DIR/compiler/lib:$MKL_DIR/mkl/lib"
-export THEANO_FLAGS="floatX=float32,device=gpu"
-export PYLEARN2_DATA_PATH="${HOME}/data"
+#export PATH="$PATH:$HOME/bin:/usr/local/cuda/bin"
+#export LD_LIBRARY_PATH="/usr/local/cuda/lib64/:/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib:/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib:/usr/local/lib:/usr/lib:/lib:/media/DATA2/opt/intel/mkl/lib/intel64"
+#export LIBRARY_PATH="$LIBRARY_PATH:/usr/lib/openmi/lib:/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64/"
+#export MKL_DIR="/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080"
+#export DYLD_LIBRARY_PATH="$MKL_DIR/compiler/lib:$MKL_DIR/mkl/lib"
+#export THEANO_FLAGS="floatX=float32,device=gpu"
+#export PYLEARN2_DATA_PATH="${HOME}/data"
 
 #source ~/.bashrc_private
-alias android-connect="mtpfs -o allow_other /media/jose_motorola"
-alias android-disconnect="fusermount -u /media/jose_motorola"
-alias android-connect="mtpfs -o allow_other /media/jose_motorola"
-alias android-disconnect="fusermount -u /media/jose_motorola"
+#alias android-connect="mtpfs -o allow_other /media/jose_motorola"
+#alias android-disconnect="fusermount -u /media/jose_motorola"
+#alias android-connect="mtpfs -o allow_other /media/jose_motorola"
+#alias android-disconnect="fusermount -u /media/jose_motorola"
 
-alias mount_james="sshfs perellm1@james.ics.hut.fi:/ ${HOME}/james"
+#alias mount_james="sshfs perellm1@james.ics.hut.fi:/ ${HOME}/james"
 
 alias bristol_vpn="/bin/bash /home/maikel/bin/uobnet.sh"
+
+PROMPT_DIRTRIM=2
+
+set -o vi
+EDITOR=vim
+
+# Vim-R-plugin vim needs to be compiled with the +clientserver flag
+alias vim="vim --servername VIM"
+
+alias screen_off="xrandr --output LVDS-0 --off"
+alias screen_on="xrandr --output LVDS-0 --auto"
