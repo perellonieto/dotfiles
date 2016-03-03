@@ -1,5 +1,3 @@
-vicious = require("vicious")
-
 -- Standard awesome library
 require("awful")
 require("awful.autofocus")
@@ -21,6 +19,7 @@ if awesome.startup_errors then
                      text = awesome.startup_errors })
 end
 
+
 -- Handle runtime errors after startup
 do
     local in_error = false
@@ -37,13 +36,47 @@ do
 end
 -- }}}
 
+-- Volume widget:
+-- {{{
+ cardid  = 0
+ channel = "Master"
+ function volume (mode, widget)
+    if mode == "update" then
+              local fd = io.popen("amixer -c " .. cardid .. " -- sget " .. channel)
+              local status = fd:read("*all")
+              fd:close()
+
+        local volume = string.match(status, "(%d?%d?%d)%%")
+        volume = string.format("% 3d", volume)
+
+        status = string.match(status, "%[(o[^%]]*)%]")
+
+        if string.find(status, "on", 1, true) then
+            volume = volume .. "%"
+        else
+            volume = volume .. "M"
+        end
+        widget.text = volume
+    elseif mode == "up" then
+        io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%+"):read("*all")
+        volume("update", widget)
+    elseif mode == "down" then
+        io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%-"):read("*all")
+        volume("update", widget)
+    else
+        io.popen("amixer -c " .. cardid .. " sset " .. channel .. " toggle"):read("*all")
+        volume("update", widget)
+    end
+ end
+-- }}}
+
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("./.config/awesome/themes/mine/theme.lua")
+beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
-editor = os.getenv("EDITOR") or "vim"
+editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
@@ -56,31 +89,27 @@ modkey = "Mod4"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
 {
---    awful.layout.suit.floating,
-    awful.layout.suit.tile,
---    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
---    awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
---    awful.layout.suit.spiral,
---    awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
+    awful.layout.suit.tile,
+    awful.layout.suit.tile.left,
+    awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile.top,
+    awful.layout.suit.fair,
+    awful.layout.suit.fair.horizontal,
+    awful.layout.suit.spiral,
+    awful.layout.suit.spiral.dwindle,
 --    awful.layout.suit.magnifier
+    awful.layout.suit.floating,
 }
 -- }}}
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
-tags = {
-    names = {"main", 2, 3, 4, 5, 6, 7, 8, 9},
-    layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1],
-               layouts[1], layouts[1], layouts[1], layouts[1] }
-}
+tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag(tags.names, s, tags.layout)
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
 -- }}}
 
@@ -95,7 +124,6 @@ myawesomemenu = {
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                                     { "Debian", debian.menu.Debian_menu.Debian },
-                                    { "Log out", '/home/maikel/bin/shutdown_dialog.sh'},
                                     { "open terminal", terminal }
                                   }
                         })
@@ -104,108 +132,25 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
 -- }}}
 
--- {{{ launchbar:
--- source: http://awesome.naquadah.org/wiki/Quick_launch_bar
-local util = require('awful.util')
-
- -- Quick launch bar widget BEGINS
- function find_icon(icon_name, icon_dirs)
-    if string.sub(icon_name, 1, 1) == '/' then
-       if util.file_readable(icon_name) then
-          return icon_name
-       else
-          return nil
-       end
-    end
-    if icon_dirs then
-       for _, v in ipairs(icon_dirs) do
-          if util.file_readable(v .. "/" .. icon_name) then
-             return v .. '/' .. icon_name
-          end
-       end
-    end
-    return nil
- end
-
- function getValue(t, key)
-    _, _, res = string.find(t, key .. " *= *([^%c]+)%c")
-    return res
- end
-
- launchbar = { layout = awful.widget.layout.horizontal.leftright }
- filedir = "/home/maikel/.config/awesome/launchbar/" -- Specify your folder with shortcuts here
- local items = {}
- local files = io.popen("ls " .. filedir .. "*.desktop")
- for f in files:lines() do
-     local t = io.open(f):read("*all")
-     table.insert(items, { image = find_icon(getValue(t,"Icon"),
-                                             { "/usr/share/icons/hicolor/22x22/apps" }),
-                           command = getValue(t,"Exec"),
-                           tooltip = getValue(t,"Name"),
-                           position = tonumber(getValue(t,"Position")) or 255 })
- end
- table.sort(items, function(a,b) return a.position < b.position end)
- for i = 1, table.getn(items) do
- --     local txt = launchbar[i].tooltip
-    launchbar[i] = awful.widget.launcher(items[i])
- --     local tt = awful.tooltip ({ objects = { launchbar[i] } })
- --     tt:set_text (txt)
- --     tt:set_timeout (0)
- end
-
- -- Quick launch bar widget ENDS
--- }}}
-
 -- {{{ Wibox
--- Create Network usage widget
--- awesome < 3.5
-netwidget = widget({ type = "textbox", align = "right" })
-netwidget.width = 60
--- awesome >= 3.5
--- netwidget = wibox.widget.textbox()
--- Register widget
-vicious.register(netwidget, vicious.widgets.net, '<span color="#CC9393">${eth0 down_kb}</span> <span color="#7F9F7F">${eth0 up_kb}</span>', 3)
--- vicious.register(netwidget, vicious.widgets.net, "${eth0 carrier}", 120)
--- uptimewidget = wibox.layout.constraint(uptimewidget, "exact", 50, nil)
-
--- vicious.register(testget1, vicious.widgets.net, "${eth0 carrier}", 120)
-
--- separator
-separator = widget({ type = "textbox" })
-separator.text = " :: "
-
--- Upicon
-upicon = widget({ type = "textbox" })
-dnicon = widget({ type = "textbox" })
-upicon.text = "up"
-dnicon.text = "dn"
-
--- Volume control
-volumewidget = widget({ type = "textbox" })
-vicious.register(volumewidget, vicious.widgets.volume, "Vol: $1% ", 2, "PCM")
-
-volumewidget:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () awful.util.spawn("amixer -q -c 0 set Master toggle", false) end),
-    awful.button({ }, 3, function () awful.util.spawn("xterm -e alsamixer", true) end),
-    awful.button({ }, 4, function () awful.util.spawn("amixer -q -c 0 set PCM 1dB+", false) end),
-    awful.button({ }, 5, function () awful.util.spawn("amixer -q -c 0 set PCM 1dB-", false) end)
-))
-
--- CPU usage
--- improvement in : http://jasonmaur.com/awesome-wm-widgets-configuration/
-cpuwidget = widget({ type = "textbox" })
-cpuwidget.width = 200
-vicious.register(cpuwidget, vicious.widgets.cpu, "cpuX: $1% - $2% -  $3% - $4% - $5% ")
-
-tempwidget = widget({ type = "textbox" })
-tempwidget.width = 50
-vicious.register(tempwidget, vicious.widgets.thermal, "temp: $1% - $2% -  $3% ")
-
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
+
+-- separator
+myseparator = widget({ type = "textbox" })
+myseparator.text = " :: "
+
+-- Volume
+tb_volume = widget({ type = "textbox", name = "tb_volume", align = "right" })
+tb_volume:buttons({
+   button({ }, 4, function () volume("up", tb_volume) end),
+   button({ }, 5, function () volume("down", tb_volume) end),
+   button({ }, 1, function () volume("mute", tb_volume) end)
+})
+volume("update", tb_volume)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -283,20 +228,10 @@ for s = 1, screen.count() do
         },
         mylayoutbox[s],
         mytextclock,
-        separator,
-        upicon,
-        netwidget,
-        dnicon,
-        separator,
-        volumewidget,
-        separator,
-        cpuwidget,
-        --separator,
-        --tempwidget,
-        --separator,
         s == 1 and mysystray or nil,
+        myseparator,
+        tb_volume,
         mytasklist[s],
-        launchbar,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
@@ -312,9 +247,6 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
--- TODO (maikel): change left and right bindings
-    --awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
-    --awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "h",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "l",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -350,9 +282,6 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
-    -- TODO (maikel): change h and l
-    --awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
-    --awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
     awful.key({ modkey,           }, "Right",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "Left",     function () awful.tag.incmwfact(-0.05)    end),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
@@ -493,13 +422,25 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
---client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.add_signal("focus", function(c) c.border_color = '#DD7733' end)
+client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
+-- Volume update every 10 seconds
+awful.hooks.timer.register(10, function () volume("update", tb_volume) end)
+
 -- Calendar
 -- source: http://awesome.naquadah.org/wiki/Calendar_widget
-
 require('calendar2')
-calendar2.addCalendarToWidget(mytextclock, "<span background='green' color='black'>%s</span>")
+calendar2.addCalendarToWidget(mytextclock,
+          "<span background='green' color='black'>%s</span>")
+
+-- Wired and Wireless network connection tool
+-- FIXME: This is not working
+--awful.util.spawn("nm-applet")
+-- os.execute("nm-applet &")
+awful.util.spawn_with_shell(
+      "pgrep -u $USER -x nm-applet > /dev/null || (nm-applet &)")
+
+-- Start windows as slave
+-- { rule = { }, properties = { }, callback = awful.client.setslave }
