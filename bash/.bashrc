@@ -163,3 +163,6 @@ alias vim="vim --servername VIM"
 
 alias screen_off="xrandr --output LVDS-0 --off"
 alias screen_on="xrandr --output LVDS-0 --auto"
+
+# Set keyboard layout to Spanish
+setxkbmap es
