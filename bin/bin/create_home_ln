@@ -2,10 +2,17 @@
 
 PATHDIR=/media/home/maikel/
 
-DIRS=(Documents Downloads Music Pictures Public Templates Videos)
+DIRS=(Desktop Documents Downloads Music Pictures Public Templates Videos
+Programs "Mendeley Ltd." privatemodules Modules Dropbox datasets steam_games
+games)
 
-for item in ${DIRS[*]}
+cd ~/
+
+for ((i = 0; i < ${#DIRS[@]}; i++))
 do
-	printf "creating symbolic link for %s\n" $item
-	ln -s  $PATHDIR$item
+    rmdir "${DIRS[$i]}"
+
+    if [ ! -d "${DIRS[$i]}" ]; then
+        ln -s  "${PATHDIR}${DIRS[$i]}"
+    fi
 done

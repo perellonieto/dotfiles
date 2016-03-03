@@ -1,6 +1,10 @@
 #!/bin/bash
 
-FOLDER=/home/maikel/screenshot
+FOLDER=${HOME}/screenshot
 FILENAME=screenshot_`date +%F_%H%M%S`
 
+if [ ! -d "$FOLDER" ]; then
+    mkdir -p ${FOLDER}
+  # Control will enter here if $DIRECTORY exists.
+fi
 import -window root ${FOLDER}/${FILENAME}.png

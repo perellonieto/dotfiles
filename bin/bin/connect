@@ -41,6 +41,14 @@ case ${opt} in
         ssh -X perellm1@force.aalto.fi
         exit 0
         ;;
+    "bluecrystal2")
+        ssh mp15688@bluecrystalp2.bris.ac.uk
+        exit 0
+        ;;
+    "bluecrystal3")
+        ssh mp15688@bluecrystalp3.bris.ac.uk
+        exit 0
+        ;;
     *)
         show_help
         exit 0
