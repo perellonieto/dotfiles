@@ -26,8 +26,8 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Add or remove your Bundles here:
 " when writting the '<url>' it is possible to ommit the https://github.com/
-NeoBundle 'Shougo/neosnippet.vim'               " Snippets implementation
-NeoBundle 'Shougo/neosnippet-snippets'          " Predefined snippets
+"NeoBundle 'Shougo/neosnippet.vim'               " Snippets implementation
+"NeoBundle 'Shougo/neosnippet-snippets'          " Predefined snippets
 NeoBundle 'tpope/vim-fugitive'                  " Git calls
 NeoBundle 'scrooloose/nerdtree'                 " Left panel folder navigator
 NeoBundle 'beloglazov/vim-online-thesaurus'     " words from thesaurus.com
@@ -43,6 +43,13 @@ NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
 NeoBundle 'altercation/vim-colors-solarized'
 "NeoBundle 'akmassey/vim-codeschool'
 NeoBundle 'easymotion/vim-easymotion'            " easy motion <Leader>^2 s
+"NeoBundle 'vim-scripts/Vim-R-plugin'
+"NeoBundle 'jcfaria/Vim-R-plugin'
+"NeoBundle 'jalvesaq/VimCom'
+" For Python
+NeoBundle 'ervandew/screen'
+"NeoBundle 'vim-scripts/indentpython.vim'
+"NeoBundle 'Valloric/YouCompleteMe'
 
 " You can specify revision/branch/tag.
 NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
@@ -65,12 +72,12 @@ smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 " SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
+"imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+"\ "\<Plug>(neosnippet_expand_or_jump)"
+"\: pumvisible() ? "\<C-n>" : "\<TAB>"
+"smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+"\ "\<Plug>(neosnippet_expand_or_jump)"
+"\: "\<TAB>"
 
 " For conceal markers.
 if has('conceal')
@@ -101,10 +108,15 @@ set iskeyword+=:                " auto-completion in references by <C-n>
 "
 "set iskeyword+=:
 "
-"let g:Tex_DefaultTargetFormat = 'pdf'
+" Solve problem with Latex-suite and editing formulas
+let g:tex_conceal = ""
+
+let g:Tex_DefaultTargetFormat = 'pdf'
 "let g:Tex_MultipleCompileFormats = 'pdf'
 "let g:Tex_FormatDependency_pdf = 'pdf'
-"let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
+let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
+
+let g:Tex_ViewRule_pdf = 'evince'
 
 " =========================================================================="
 " My configuratios                                                          "
@@ -160,3 +172,80 @@ noremap <Leader>h :nohl<CR>     " Remove highligh of last search
 
 "" Scripts
 nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr> " Run with Python
+
+"" Vim-R-plugin
+"set runtimepath=~/.vim/bundle/Vim-R-plugin,~/.vim,$VIMRUNTIME,~/.vim/after
+" to insert <- you need to press _ twice
+let vimrplugin_assign = 0
+
+"" Solving problems with swap file:
+"" 1. Recover the file by pressing (R)
+"" 2. run :DiffAgainstFileOnDisk
+"" 3.a To remove the swapfile :e<Enter>
+"" 3.b To overwrite the file :w!
+command! DiffAgainstFileOnDisk call DiffAgainstFileOnDisk()
+
+function! DiffAgainstFileOnDisk()
+    :w! /tmp/working_copy
+    exec "!diff /tmp/working_copy %"
+endfunction
+
+"Python IDE
+" depends on 'ervandew/screen'
+let g:ScreenImpl = "Tmux"
+
+" Open an ipython2 shell.
+autocmd FileType python map <LocalLeader>pf :IPython<CR>
+
+" Close whichever shell is running.
+autocmd FileType python map <LocalLeader>pq :ScreenQuit<CR>
+
+" Send current line to python.
+autocmd FileType python map <LocalLeader>l V:ScreenSend<CR>
+
+" Send visual selection to python.
+autocmd FileType python map <LocalLeader>se :ScreenSend<CR>
+
+" Clear screen.
+autocmd FileType python map <LocalLeader>pc
+      \ :call g:ScreenShellSend('!clear')<CR>
+
+function! s:get_visual_selection()
+  " Why is this not a built-in Vim script function?!
+  let [lnum1, col1] = getpos("'<")[1:2]
+  let [lnum2, col2] = getpos("'>")[1:2]
+  let lines = getline(lnum1, lnum2)
+  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
+  let lines[0] = lines[0][col1 - 1:]
+  return join(lines, "\n")
+endfunction
+
+" TODO: Improve the Help function
+" Get ipython help for word under cursor. Complement it with Shift + K.
+function GetHelp()
+    if a:firstline==1 && a:lastline==line('$')
+        echo "selection"
+        let w = s:get_visual_selection() . "??"
+    else
+        echo "current position"
+        let w = expand("<cword>") . "??"
+    endif
+  :call g:ScreenShellSend(w)
+endfunction
+autocmd FileType python map <LocalLeader>ph :call GetHelp()<CR>
+
+" Get `dir` help for word under cursor.
+function GetDir()
+  let w = "dir(" . expand("<cword>") . ")"
+  :call g:ScreenShellSend(w)
+endfunction
+autocmd FileType python map <LocalLeader>pd :call GetDir()<CR>
+
+" Get `dir` help for word under cursor.
+function GetLen()
+  let w = "len(" . expand("<cword>") . ")"
+  :call g:ScreenShellSend(w)
+endfunction
+autocmd FileType python map <LocalLeader>le :call GetLen()<CR>
+
+
