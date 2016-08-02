@@ -47,7 +47,7 @@ end
               fd:close()
 
         local volume = string.match(status, "(%d?%d?%d)%%")
-        volume = string.format("% 3d", volume)
+        volume = string.format("V % 3d", volume)
 
         status = string.match(status, "%[(o[^%]]*)%]")
 
@@ -68,6 +68,30 @@ end
         volume("update", widget)
     end
  end
+-- }}}
+
+-- Battery widget:
+-- {{{
+function battery_text (widget)
+    fh = assert(io.popen("acpi -a | cut -d \" \" -f 3 -", "r"))
+    local adapter_status = fh:read("*all")
+    local color = "red"
+    if string.find(adapter_status, "on", 1, true) then
+        color = "green"
+    end
+    fh:close()
+
+    fh = assert(io.popen("acpi -b | cut -d,  -f 2,3 | cut -d \" \" -f 2,3 | tr -d ,", "r"))
+    -- battery_widget.text = " |" .. fh:read("*l") .. " | "
+    widget.text = "<b><span color=\"" .. color .. "\">|B " .. fh:read("*l") .. "|</span></b>"
+    fh:close()
+end
+
+battery_widget = widget({ type = "textbox" })
+battery_widget.text = "<b>| Battery |</b>"
+battery_widgettimer = timer({ timeout = 10 })
+battery_widgettimer:add_signal("timeout", function() battery_text(battery_widget) end)
+battery_widgettimer:start()
 -- }}}
 
 -- {{{ Variable definitions
@@ -109,7 +133,7 @@ layouts =
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 'email' }, s, layouts[1])
 end
 -- }}}
 
@@ -144,13 +168,16 @@ myseparator = widget({ type = "textbox" })
 myseparator.text = " :: "
 
 -- Volume
-tb_volume = widget({ type = "textbox", name = "tb_volume", align = "right" })
-tb_volume:buttons({
-   button({ }, 4, function () volume("up", tb_volume) end),
-   button({ }, 5, function () volume("down", tb_volume) end),
-   button({ }, 1, function () volume("mute", tb_volume) end)
+volume_widget = widget({ type = "textbox", name = "volume_widget", align = "right" })
+volume_widget:buttons({
+   button({ }, 4, function () volume("up", volume_widget) end),
+   button({ }, 5, function () volume("down", volume_widget) end),
+   button({ }, 1, function () volume("mute", volume_widget) end)
 })
-volume("update", tb_volume)
+volume("update", volume_widget)
+
+-- Battery
+
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -230,7 +257,9 @@ for s = 1, screen.count() do
         mytextclock,
         s == 1 and mysystray or nil,
         myseparator,
-        tb_volume,
+        battery_widget,
+        myseparator,
+        volume_widget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -247,6 +276,20 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    -- Screensaver lock
+    -- TODO revise that next line works properly
+    -- awful.key({ modkey, "Control" }, "l", function () awful.util.spawn("xscreensaver-command -lock") end),
+    awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("xscreensaver-command -lock") end),
+    -- Start windows as slave
+    -- { rule = { }, properties = { }, callback = awful.client.setslave }
+    --
+    -- Thinkpad volume keys
+    awful.key({ }, "XF86AudioRaiseVolume", function() awful.util.spawn("amixer set Master 2dB+") end),
+    awful.key({ }, "XF86AudioLowerVolume", function() awful.util.spawn("amixer set Master 2dB-") end),
+    awful.key({ }, "XF86AudioMute", function() awful.util.spawn("amixer -D pulse set Master 1+ toggle") end),
+    awful.key({ }, "XF86AudioMicMute", function() awful.util.spawn("amixer set Capture toggle") end),
+    awful.key({ }, "XF86Launch1", function() awful.util.spawn("XF86Launch1.sh") end),
+
     awful.key({ modkey,           }, "h",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "l",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -303,6 +346,7 @@ globalkeys = awful.util.table.join(
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end)
+
 )
 
 clientkeys = awful.util.table.join(
@@ -389,6 +433,8 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
+    { rule = { class = "Thunderbird" },
+      properties = { tag = tags[1][9] } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -427,7 +473,7 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 -- }}}
 
 -- Volume update every 10 seconds
-awful.hooks.timer.register(10, function () volume("update", tb_volume) end)
+awful.hooks.timer.register(10, function () volume("update", volume_widget) end)
 
 -- Calendar
 -- source: http://awesome.naquadah.org/wiki/Calendar_widget
@@ -441,6 +487,9 @@ calendar2.addCalendarToWidget(mytextclock,
 -- os.execute("nm-applet &")
 awful.util.spawn_with_shell(
       "pgrep -u $USER -x nm-applet > /dev/null || (nm-applet &)")
+awful.util.spawn_with_shell("thunderbird")
+-- Set keyboard layout to Spanish
+awful.util.spawn_with_shell("setxkbmap es")
 
--- Start windows as slave
--- { rule = { }, properties = { }, callback = awful.client.setslave }
+awful.util.spawn_with_shell("xscreensaver -no-splash")
+
