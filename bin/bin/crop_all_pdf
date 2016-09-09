@@ -4,9 +4,9 @@
 # Install:
 # sudo apt-get install texlive-extra-utils
 
-for f in `ls ./*.pdf`
+for f in ./*.pdf
 do
     echo "Croping file $f"
-    pdfcrop $f $f
+    pdfcrop "${f}" "${f}"
 done
 
