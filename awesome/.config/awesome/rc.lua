@@ -38,9 +38,9 @@ end
 
 -- Volume widget:
 -- {{{
- cardid  = 0
- channel = "Master"
- function volume (mode, widget)
+cardid  = 0
+channel = "Master"
+function volume (mode, widget)
     if mode == "update" then
               local fd = io.popen("amixer -c " .. cardid .. " -- sget " .. channel)
               local status = fd:read("*all")
@@ -58,16 +58,16 @@ end
         end
         widget.text = volume
     elseif mode == "up" then
-        io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%+"):read("*all")
+        io.popen("amixer -c " .. cardid .. " set " .. channel .. " 2dB+"):read("*all")
         volume("update", widget)
     elseif mode == "down" then
-        io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%-"):read("*all")
+        io.popen("amixer -c " .. cardid .. " set " .. channel .. " 2dB-"):read("*all")
         volume("update", widget)
     else
-        io.popen("amixer -c " .. cardid .. " sset " .. channel .. " toggle"):read("*all")
+        io.popen("amixer -c " .. cardid .. " -D pulse set " .. channel .. " 1+ toggle"):read("*all")
         volume("update", widget)
     end
- end
+end
 -- }}}
 
 -- Battery widget:
@@ -75,9 +75,9 @@ end
 function battery_text (widget)
     fh = assert(io.popen("acpi -a | cut -d \" \" -f 3 -", "r"))
     local adapter_status = fh:read("*all")
-    local color = "red"
+    local color = '#FF2222' -- "red":'#FF2222'
     if string.find(adapter_status, "on", 1, true) then
-        color = "green"
+        color = '#00CC00' -- "green":'#00CC00'
     end
     fh:close()
 
@@ -275,20 +275,22 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Key bindings
+-- Use the command line xev to monitor the keys
 globalkeys = awful.util.table.join(
     -- Screensaver lock
     -- TODO revise that next line works properly
-    -- awful.key({ modkey, "Control" }, "l", function () awful.util.spawn("xscreensaver-command -lock") end),
     awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("xscreensaver-command -lock") end),
     -- Start windows as slave
     -- { rule = { }, properties = { }, callback = awful.client.setslave }
     --
     -- Thinkpad volume keys
-    awful.key({ }, "XF86AudioRaiseVolume", function() awful.util.spawn("amixer set Master 2dB+") end),
-    awful.key({ }, "XF86AudioLowerVolume", function() awful.util.spawn("amixer set Master 2dB-") end),
-    awful.key({ }, "XF86AudioMute", function() awful.util.spawn("amixer -D pulse set Master 1+ toggle") end),
+    awful.key({ }, "XF86AudioRaiseVolume", function () volume("up", volume_widget) end),
+    awful.key({ }, "XF86AudioLowerVolume", function () volume("down", volume_widget) end),
+    awful.key({ }, "XF86AudioMute", function () volume("mute", volume_widget) end),
     awful.key({ }, "XF86AudioMicMute", function() awful.util.spawn("amixer set Capture toggle") end),
     awful.key({ }, "XF86Launch1", function() awful.util.spawn("XF86Launch1.sh") end),
+    -- Display, projector, monitor
+    awful.key({ }, "XF86Display", function() awful.util.spawn("XF86Display.sh") end),
 
     awful.key({ modkey,           }, "h",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "l",  awful.tag.viewnext       ),
