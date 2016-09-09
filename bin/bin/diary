@@ -24,6 +24,15 @@ TEMP_FILE="._tmp_file_markdown.html"
 CSS_STYLE="style.css"
 EXPLORER="sensible-browser"
 
+HEAD="<head><link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\">
+      <script type=\"text/x-mathjax-config\">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});
+      </script>
+      <script type=\"text/javascript\" async src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML\">
+      </script>
+      </head>
+      "
+
 function show_usage() {
     echo "Usage: $0 [<diary_name>]" 1>&2;
     exit 1;
@@ -56,7 +65,8 @@ function explore() {
     diary=$1
     cd $diary
     rm "$TEMP_FILE"
-    cp "../$CSS_STYLE" $TEMP_FILE
+    echo ${HEAD} > $TEMP_FILE
+    #cp "../$CSS_STYLE" $TEMP_FILE
 
     for f in `ls ./*."$EXTENSION"`
     do
