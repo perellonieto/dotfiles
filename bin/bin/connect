@@ -42,11 +42,15 @@ case ${opt} in
         exit 0
         ;;
     "bluecrystal2")
-        ssh mp15688@bluecrystalp2.bris.ac.uk
+        ssh -X mp15688@bluecrystalp2.bris.ac.uk
         exit 0
         ;;
     "bluecrystal3")
-        ssh mp15688@bluecrystalp3.bris.ac.uk
+        ssh -X mp15688@bluecrystalp3.bris.ac.uk
+        exit 0
+        ;;
+    "bluecrystal4")
+        ssh -X mp15688@bluecrystalp4.bris.ac.uk
         exit 0
         ;;
     *)
