@@ -53,6 +53,10 @@ case ${opt} in
         ssh -X mp15688@bluecrystalp4.bris.ac.uk
         exit 0
         ;;
+    "perellonieto")
+        ssh maikel@perellonieto.com
+        exit 0
+        ;;
     *)
         show_help
         exit 0
