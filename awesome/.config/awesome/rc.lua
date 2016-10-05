@@ -70,6 +70,13 @@ function volume (mode, widget)
 end
 -- }}}
 
+-- Screen rotation:
+-- {{{
+function screen_rotation (screen_name, direction)
+    io.popen("xrandr --output " .. screen_name .. " --rotate " .. direction):read("*all")
+end
+-- }}}
+
 -- Battery widget:
 -- {{{
 function battery_text (widget)
@@ -291,6 +298,12 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86Launch1", function() awful.util.spawn("XF86Launch1.sh") end),
     -- Display, projector, monitor
     awful.key({ }, "XF86Display", function() awful.util.spawn("XF86Display.sh") end),
+
+    -- Laptop Screen rotation
+    awful.key({ modkey, "Control", "Shift"}, "Up", function () screen_rotation("LVDS1", "normal") end),
+    awful.key({ modkey, "Control", "Shift"}, "Left", function () screen_rotation("LVDS1", "left") end),
+    awful.key({ modkey, "Control", "Shift"}, "Right", function () screen_rotation("LVDS1", "right") end),
+    awful.key({ modkey, "Control", "Shift"}, "Down", function () screen_rotation("LVDS1", "inverted") end),
 
     awful.key({ modkey,           }, "h",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "l",  awful.tag.viewnext       ),
