@@ -33,7 +33,7 @@ NeoBundle 'scrooloose/nerdtree'                 " Left panel folder navigator
 NeoBundle 'beloglazov/vim-online-thesaurus'     " words from thesaurus.com
 NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
 "NeoBundle 'davidhalter/jedi-vim'                " Autocompletion library Jedi
-"NeoBundle 'Valloric/YouCompleteMe'
+NeoBundle 'Valloric/YouCompleteMe'
 "NeoBundle 'ctrlpvim/ctrlp.vim'
 "NeoBundle 'flazz/vim-colorschemes'
 "NeoBundle 'solarized'                           " Color theme
@@ -124,6 +124,7 @@ let g:Tex_ViewRule_pdf = 'evince'
 set encoding=utf-8
 "" keymaps
 let mapleader = ","
+let maplocalleader = ","
 nmap <leader>w :w!<cr>
 nmap <leader>q :q<cr>
 
@@ -146,9 +147,14 @@ set spell                       " Spell checking (z= to show proposed)
 
 "" White spaces
 set nowrap                      " Do not wrap lines
-set tabstop=4 shiftwidth=4      " Number of spaces to visualize a Tab
+set tabstop=4                   " Number of spaces to visualize a Tab
+set shiftwidth=4                " Number of spaces to visualize when indent
 set expandtab                   " use spaces instead of tabs
 set backspace=indent,eol,start  " backspace through everything in insert mode
+" set smartindent                 " Smart autoindenting
+" smartindent: Solve problem with indentation of hash #
+" inoremap # X^H#
+set smarttab
 " Highligh whitespaces at the end (before Color scheme)
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 au InsertLeave * match ExtraWhitespace /\s\+$/
@@ -174,9 +180,9 @@ noremap <Leader>h :nohl<CR>     " Remove highligh of last search
 nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr> " Run with Python
 
 "" Vim-R-plugin
-"set runtimepath=~/.vim/bundle/Vim-R-plugin,~/.vim,$VIMRUNTIME,~/.vim/after
-" to insert <- you need to press _ twice
-let vimrplugin_assign = 0
+""set runtimepath=~/.vim/bundle/Vim-R-plugin,~/.vim,$VIMRUNTIME,~/.vim/after
+"" to insert <- you need to press _ twice
+"let vimrplugin_assign = 0
 
 "" Solving problems with swap file:
 "" 1. Recover the file by pressing (R)
@@ -193,9 +199,23 @@ endfunction
 "Python IDE
 " depends on 'ervandew/screen'
 let g:ScreenImpl = "Tmux"
+" Tags navigation
+" <C-]> goes to definition
+" <C-t> jump back from definition
+" <C-w> <C-]> Open definition in horizontal split
+" Change tags file location
+"set tags=~/mytags
+" Create tags with f12
+map <f12> :! ctags -R .<CR>
+" Open the definition in a new vertical split
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+" Open the definition in a new tab
+" map <C-[> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 " Open an ipython2 shell.
-autocmd FileType python map <LocalLeader>pf :IPython<CR>
+" :IPython for horizontal split
+" :IPython! for vertical split
+autocmd FileType python map <LocalLeader>pf :IPython!<CR>
 
 " Close whichever shell is running.
 autocmd FileType python map <LocalLeader>pq :ScreenQuit<CR>
