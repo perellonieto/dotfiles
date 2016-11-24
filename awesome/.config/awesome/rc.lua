@@ -496,19 +496,29 @@ require('calendar2')
 calendar2.addCalendarToWidget(mytextclock,
           "<span background='green' color='black'>%s</span>")
 
--- Wired and Wireless network connection tool
--- FIXME: This is not working
---awful.util.spawn("nm-applet")
--- os.execute("nm-applet &")
-awful.util.spawn_with_shell(
-      "pgrep -u $USER -x nm-applet > /dev/null || (nm-applet &)")
-awful.util.spawn_with_shell("thunderbird")
--- Set keyboard layout to Spanish
-awful.util.spawn_with_shell("setxkbmap es")
+-- Autorun programs
 
--- Screensaver
-awful.util.spawn_with_shell("xscreensaver -no-splash")
+function run_once(prg,arg_string,pname,screen)
+    if not prg then
+        do return nil end
+    end
+
+    if not pname then
+       pname = prg
+    end
+
+    if not arg_string then
+        awful.util.spawn_with_shell("pgrep -f -u $USER -x '" .. pname .. "' || (" .. prg .. ")",screen)
+    else
+        awful.util.spawn_with_shell("pgrep -f -u $USER -x '" .. pname .. " ".. arg_string .."' || (" .. prg .. " " .. arg_string .. ")",screen)
+    end
+end
+
+--previous version was "pgrep -u $USER -x nm-applet > /dev/null || (nm-applet &)"
+run_once("nm-applet")                   -- Network connection tool
+run_once("thunderbird")                 -- e-mail client
+run_once("dropbox", "start")            -- Dropbox daemon
+run_once("setxkbmap", "es")             -- Set the keyboard in Spanish
+run_once("xscreensaver", "-no-splash")  -- screensaver
 -- Time tracker tool
-awful.util.spawn_with_shell("hamster-indicator")
--- Dropbox
-awful.util.spawn_with_shell("dropbox start")
+run_once("hamster-indicator", nil, "/usr/bin/python /usr/bin/hamster-indicator")
