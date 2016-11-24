@@ -11,7 +11,7 @@
 #notes          :Install Vim or modify the text editor
 #bash_version   :4.1.5(1)-release
 
-EDITOR="vim + "
+EDITOR='vim + '
 PULL="git pull"
 ADD="git add *"
 COMMIT="git commit"
@@ -19,7 +19,7 @@ PUSH="git push"
 DIARY_PATH="${HOME}/diary"
 FORMAT=`date +"%Y_%m_%d"`
 VALID_PROJECT_NAME='^0-9a-zA-Z+$'
-EXTENSION="md"
+EXTENSION="markdown"
 TEMP_FILE="._tmp_file_markdown.html"
 CSS_STYLE="style.css"
 EXPLORER="sensible-browser"
@@ -73,13 +73,15 @@ function explore() {
     echo ${HEAD} > $TEMP_FILE
     #cp "../$CSS_STYLE" $TEMP_FILE
 
-    for f in `ls ./*."$EXTENSION"`
+    for FILENAME in `ls ./*."$EXTENSION"`
     do
-        echo "Extracting file $f"
-        echo "<h1>$f</h1>" >> "$TEMP_FILE"
-        markdown $f >> "$TEMP_FILE"
+        echo "Extracting file $FILENAME"
+        echo "<h1>$FILENAME</h1>" >> "$TEMP_FILE"
+        # TODO look into pandoc
+        markdown $FILENAME >> "$TEMP_FILE"
     done
 
+    #pandoc --to='html5' --output="$TEMP_FILE" $FILENAME
     $EXPLORER "$TEMP_FILE"
 }
 
@@ -164,4 +166,4 @@ cd $diary
 
 FILENAME=${diary}\_${FORMAT}.${EXTENSION}
 
-${EDITOR}  ${FILENAME}
+${EDITOR} ${FILENAME}
