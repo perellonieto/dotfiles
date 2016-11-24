@@ -300,10 +300,10 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86Display", function() awful.util.spawn("XF86Display.sh") end),
 
     -- Laptop Screen rotation
-    awful.key({ modkey, "Control", "Shift"}, "Up", function () screen_rotation("LVDS1", "normal") end),
-    awful.key({ modkey, "Control", "Shift"}, "Left", function () screen_rotation("LVDS1", "left") end),
-    awful.key({ modkey, "Control", "Shift"}, "Right", function () screen_rotation("LVDS1", "right") end),
-    awful.key({ modkey, "Control", "Shift"}, "Down", function () screen_rotation("LVDS1", "inverted") end),
+    awful.key({ modkey, "Control", "Shift"}, "Up", function () screen_rotation("VGA1", "normal") end),
+    awful.key({ modkey, "Control", "Shift"}, "Left", function () screen_rotation("VGA1", "left") end),
+    awful.key({ modkey, "Control", "Shift"}, "Right", function () screen_rotation("VGA1", "right") end),
+    awful.key({ modkey, "Control", "Shift"}, "Down", function () screen_rotation("VGA1", "inverted") end),
 
     awful.key({ modkey,           }, "h",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "l",  awful.tag.viewnext       ),
@@ -506,5 +506,9 @@ awful.util.spawn_with_shell("thunderbird")
 -- Set keyboard layout to Spanish
 awful.util.spawn_with_shell("setxkbmap es")
 
+-- Screensaver
 awful.util.spawn_with_shell("xscreensaver -no-splash")
-
+-- Time tracker tool
+awful.util.spawn_with_shell("hamster-indicator")
+-- Dropbox
+awful.util.spawn_with_shell("dropbox start")
