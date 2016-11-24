@@ -33,7 +33,7 @@ NeoBundle 'scrooloose/nerdtree'                 " Left panel folder navigator
 NeoBundle 'beloglazov/vim-online-thesaurus'     " words from thesaurus.com
 NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
 "NeoBundle 'davidhalter/jedi-vim'                " Autocompletion library Jedi
-NeoBundle 'Valloric/YouCompleteMe'
+"NeoBundle 'Valloric/YouCompleteMe'
 "NeoBundle 'ctrlpvim/ctrlp.vim'
 "NeoBundle 'flazz/vim-colorschemes'
 "NeoBundle 'solarized'                           " Color theme
@@ -99,6 +99,8 @@ nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
 " =========================================================================="
 " vim-scripts/LaTeX-Suite-aka-Vim-LaTeX Configuration                       "
 " =========================================================================="
+"  remember to add a main.latexmain file next to the main.tex file
+"  in this way it is possible to compile from other .tex files
 
 set grepprg=grep\ -nH\ $*       " Grep always generates a file-name
 set iskeyword+=:                " auto-completion in references by <C-n>
@@ -114,12 +116,16 @@ let g:tex_conceal = ""
 let g:Tex_DefaultTargetFormat = 'pdf'
 "let g:Tex_MultipleCompileFormats = 'pdf'
 "let g:Tex_FormatDependency_pdf = 'pdf'
-let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
+let g:Tex_CompileRule_pdf = 'latexmk --bibtex --pdf'
 
 let g:Tex_ViewRule_pdf = 'evince'
 
+" TODO Remap the JumpForward from <C-j> to <C-space>
+" e.g. \chapter{_}<++>
+imap <C-g> <Plug>IMAP_JumpForward
+
 " =========================================================================="
-" My configuratios                                                          "
+" My configurations                                                          "
 " =========================================================================="
 set encoding=utf-8
 "" keymaps
@@ -175,9 +181,6 @@ set incsearch                   " Searches while typing the word
 set ignorecase                  " Search is case insensitive...
 set smartcase                   " ... unless it contains a capital letter
 noremap <Leader>h :nohl<CR>     " Remove highligh of last search
-
-"" Scripts
-nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr> " Run with Python
 
 "" Vim-R-plugin
 ""set runtimepath=~/.vim/bundle/Vim-R-plugin,~/.vim,$VIMRUNTIME,~/.vim/after
@@ -268,4 +271,5 @@ function GetLen()
 endfunction
 autocmd FileType python map <LocalLeader>le :call GetLen()<CR>
 
-
+" Command to explore actual diary
+map <LocalLeader>de :!diary -e ${PWD\#\#*/}<CR>
