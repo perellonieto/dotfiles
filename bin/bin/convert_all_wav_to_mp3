@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# depends on lame
+# sudo apt-get install lame
+
+for f in *.wav
+do
+    y=${f%.wav}
+    echo "Converting file $f to $y.mp3"
+    lame -V2 $f $y.mp3
+done
+

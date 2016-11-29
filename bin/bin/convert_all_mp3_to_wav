@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# depends on mpg123
+# sudo apt-get install mpg123
+
+for f in *.mp3
+do
+    y=${f%.mp3}
+    echo "Converting file $f to $y.wav"
+    mpg123 -w $y.wav $f
+done
+
