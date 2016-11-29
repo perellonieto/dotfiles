@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 from matplotlib import mlab
 from scipy.io import wavfile
 
-plt.ion()
-
 import argparse
 
 def parse_arguments():
