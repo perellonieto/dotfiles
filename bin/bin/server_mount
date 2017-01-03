@@ -1,0 +1,54 @@
+#!/bin/bash
+
+function show_usage() {
+    echo "Usage: $0 [ server_name ]" 1>&2;
+}
+
+function show_help() {
+    echo "Usage: $0 [ server_name ]" 1>&2;
+}
+
+
+if [ $# -lt 1 ]
+then
+    show_usage
+    exit 1
+fi
+
+opt="$1"
+case ${opt} in
+    "bluecrystal2")
+        mountpoint="${HOME}/remoteservers/bluecrystal2/"
+        user='mp15688'
+        host='bluecrystalp2.bris.ac.uk'
+        remote_dir=''
+        ;;
+    "bluecrystal3")
+        mountpoint="${HOME}/remoteservers/bluecrystal3/"
+        user='mp15688'
+        host='bluecrystalp3.bris.ac.uk'
+        remote_dir=''
+        ;;
+    "bluecrystal4")
+        mountpoint="${HOME}/remoteservers/bluecrystal4/"
+        user='mp15688'
+        host='bluecrystalp4.bris.ac.uk'
+        remote_dir=''
+        ;;
+    "perellonieto")
+        mountpoint="${HOME}/remoteservers/perellonieto/"
+        user='maikel'
+        host='perellonieto.com'
+        remote_dir=''
+        ;;
+    *)
+        show_help
+        exit 0
+        ;;
+esac
+
+echo "Creating mountpoint ${mountpoint}"
+mkdir -p ${mountpoint}
+
+echo "Mounting to remote folder ${user}@${host}:${remote_dir}"
+sshfs "${user}@${host}:${remote_dir}" ${mountpoint}
