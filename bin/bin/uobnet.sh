@@ -5,10 +5,15 @@ vpn_host=uobnet.bris.ac.uk
 vpn_port=443
 vpn_realm=UoB-Users
 
+# Generate temporary files:
+uobnet_out=$(mktemp --suffix=.out) || { echo "Failed to create temp file" ; exit 1; }
+uobnet_err=$(mktemp --suffix=.err) || { echo "Failed to create temp file" ; exit 1; }
+uobnet_crt=$(mktemp --suffix=.crt) || { echo "Failed to create temp file" ; exit 1; }
+
 # Function for cleanup tasks when script exits in any way
 cleanup() {
 	# Remove temporary files
-	rm -f /tmp/uobnet.{out,err,crt} >/dev/null 2>&1
+	rm -f ${uobnet_out} ${uobnet_err} ${uobnet_crt} >/dev/null 2>&1
 	# Enable console echo (VPN client disables it for password prompt)
 	stty echo
 }
@@ -72,22 +77,23 @@ if [ -z ${ssl_arg} ]; then
 fi
 
 # Get the certificate from the VPN service. Exit on failure.
-if ! openssl s_client -connect ${vpn_host}:${vpn_port} ${ca_arg} </dev/null 1>/tmp/uobnet.out 2>/tmp/uobnet.err; then
+if ! openssl s_client -connect ${vpn_host}:${vpn_port} ${ca_arg} </dev/null 1>${uobnet_out} 2>${uobnet_err}; then
 	echo "Cannot retrieve certificate."
 	exit 3
 fi
 
 # Check there were no verification issues. Exit on failure.
-if grep "verify return:[^1]" /tmp/uobnet.err >/dev/null 2>&1; then
+if grep "verify return:[^1]" ${uobnet_err} >/dev/null 2>&1; then
 	echo "Cannot verify certificate."
 	exit 4
 fi
 
 # Convert certificate to der format for the VPN client. Exit on failure.
-if ! openssl x509 -in /tmp/uobnet.out -outform der -out /tmp/uobnet.crt >/dev/null 2>&1; then
+if ! openssl x509 -in ${uobnet_out} -outform der -out ${uobnet_crt} >/dev/null 2>&1; then
 	echo "Cannot convert certificate."
 	exit 5
 fi
 
 # Start the VPN client.
-/usr/local/nc/ncsvc -h ${vpn_host} -f /tmp/uobnet.crt -r ${vpn_realm} -u ${vpn_user}
+echo "Starting the VPN client"
+/usr/local/nc/ncsvc -h ${vpn_host} -f ${uobnet_crt} -r ${vpn_realm} -u ${vpn_user}
