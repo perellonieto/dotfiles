@@ -15,40 +15,54 @@ then
     exit 1
 fi
 
-opt="$1"
-case ${opt} in
-    "bluecrystal2")
-        mountpoint="${HOME}/remoteservers/bluecrystal2/"
-        user='mp15688'
-        host='bluecrystalp2.bris.ac.uk'
-        remote_dir=''
-        ;;
-    "bluecrystal3")
-        mountpoint="${HOME}/remoteservers/bluecrystal3/"
-        user='mp15688'
-        host='bluecrystalp3.bris.ac.uk'
-        remote_dir=''
-        ;;
-    "bluecrystal4")
-        mountpoint="${HOME}/remoteservers/bluecrystal4/"
-        user='mp15688'
-        host='bluecrystalp4.bris.ac.uk'
-        remote_dir=''
-        ;;
-    "perellonieto")
-        mountpoint="${HOME}/remoteservers/perellonieto/"
-        user='maikel'
-        host='perellonieto.com'
-        remote_dir=''
-        ;;
-    *)
-        show_help
-        exit 0
-        ;;
-esac
+unmount=false
 
-echo "Creating mountpoint ${mountpoint}"
-mkdir -p ${mountpoint}
+while [[ $# -gt 0 ]]; do
+    opt="$1"
+    shift;
+    case ${opt} in
+        "bluecrystal2" | "bc2")
+            mountpoint="${HOME}/remoteservers/bluecrystal2/"
+            user='mp15688'
+            host='bluecrystalp2.bris.ac.uk'
+            remote_dir=''
+            ;;
+        "bluecrystal3" | "bc3")
+            mountpoint="${HOME}/remoteservers/bluecrystal3/"
+            user='mp15688'
+            host='bluecrystalp3.bris.ac.uk'
+            remote_dir=''
+            ;;
+        "bluecrystal4" | "bc4")
+            mountpoint="${HOME}/remoteservers/bluecrystal4/"
+            user='mp15688'
+            host='bluecrystalp4.bris.ac.uk'
+            remote_dir=''
+            ;;
+        "perellonieto")
+            mountpoint="${HOME}/remoteservers/perellonieto/"
+            user='maikel'
+            host='perellonieto.com'
+            remote_dir=''
+            ;;
+        "-u"|"--unmount")
+            unmount=true
+            ;;
+        *)
+            show_help
+            exit 0
+            ;;
+    esac
+done
 
-echo "Mounting to remote folder ${user}@${host}:${remote_dir}"
-sshfs "${user}@${host}:${remote_dir}" ${mountpoint}
+if [ "${unmount}" = false ] ; then
+    echo "Creating mountpoint ${mountpoint}"
+    mkdir -p ${mountpoint}
+
+    echo "Mounting to remote folder ${user}@${host}:${remote_dir}"
+    sshfs "${user}@${host}:${remote_dir}" ${mountpoint}
+else
+    echo "Unmounting folder ${mountpoint}"
+    fusermount -u ${mountpoint}
+fi
+
