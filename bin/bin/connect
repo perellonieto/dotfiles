@@ -41,19 +41,20 @@ case ${opt} in
         ssh -X perellm1@force.aalto.fi
         exit 0
         ;;
-    "bluecrystal2")
+    "bluecrystal2" | "bc2")
         ssh -X mp15688@bluecrystalp2.bris.ac.uk
         exit 0
         ;;
-    "bluecrystal3")
+    "bluecrystal3" | "bc3")
         ssh -X mp15688@bluecrystalp3.bris.ac.uk
         exit 0
         ;;
-    "bluecrystal4")
+    "bluecrystal4" | "bc4")
         ssh -X mp15688@bluecrystalp4.bris.ac.uk
         exit 0
         ;;
     "perellonieto")
+        # Password has some restrictions
         ssh maikel@perellonieto.com
         exit 0
         ;;
