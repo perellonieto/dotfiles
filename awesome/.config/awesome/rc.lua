@@ -517,8 +517,10 @@ end
 --previous version was "pgrep -u $USER -x nm-applet > /dev/null || (nm-applet &)"
 run_once("nm-applet")                   -- Network connection tool
 run_once("thunderbird")                 -- e-mail client
-run_once("dropbox", "start")            -- Dropbox daemon
 run_once("setxkbmap", "es")             -- Set the keyboard in Spanish
+run_once("wmname", "LG3D")              -- Allows opening JVM GUIs
 run_once("xscreensaver", "-no-splash")  -- screensaver
 -- Time tracker tool
 run_once("hamster-indicator", nil, "/usr/bin/python /usr/bin/hamster-indicator")
+-- Dropbox daemon
+run_once("dropbox", "start", "/home/maikel/.dropbox-dist/dropbox-lnx.x86_64-19.4.13/dropbox")
