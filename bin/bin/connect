@@ -15,51 +15,90 @@ then
     exit 1
 fi
 
-opt="$1"
-case ${opt} in
-    "triton")
-        ssh -X perellm1@triton.aalto.fi
-        exit 0
-        ;;
-    "james")
-        ssh -X -i /home/maikel/.ssh/id_rsa_nopass perellm1@james.ics.hut.fi
-        exit 0
-        ;;
-    "gpu1")
-        ssh -X -i /home/maikel/.ssh/id_rsa_nopass perellm1@gpu1.ics.hut.fi
-        exit 0
-        ;;
-    "lyta")
-        ssh -X perellm1@lyta.aalto.fi
-        exit 0
-        ;;
-    "brute")
-        ssh -X perellm1@brute.aalto.fi
-        exit 0
-        ;;
-    "force")
-        ssh -X perellm1@force.aalto.fi
-        exit 0
-        ;;
-    "bluecrystal2" | "bc2")
-        ssh -X mp15688@bluecrystalp2.bris.ac.uk
-        exit 0
-        ;;
-    "bluecrystal3" | "bc3")
-        ssh -X mp15688@bluecrystalp3.bris.ac.uk
-        exit 0
-        ;;
-    "bluecrystal4" | "bc4")
-        ssh -X mp15688@bluecrystalp4.bris.ac.uk
-        exit 0
-        ;;
-    "perellonieto")
-        # Password has some restrictions
-        ssh maikel@perellonieto.com
-        exit 0
-        ;;
-    *)
-        show_help
-        exit 0
-        ;;
-esac
+# Default options
+ssh_options='-X'
+remote_dir=''
+mount=false
+unmount=false
+
+while [[ $# -gt 0 ]]; do
+    opt="$1"
+    shift;
+    case ${opt} in
+        "triton")
+            user='perellm1'
+            host='triton.aalto.fi'
+            ;;
+        "james")
+            user='perellm1'
+            host='james.ics.hut.fi'
+            ssh_options='-X -i /home/maikel/.ssh/id_rsa_nopass'
+            ;;
+        "gpu1")
+            user='perellm1'
+            host='gpu1.ics.hut.fi'
+            ssh_options='-X -i /home/maikel/.ssh/id_rsa_nopass'
+            ;;
+        "lyta")
+            user='perellm1'
+            host='lyta.aalto.fi'
+            ;;
+        "brute")
+            user='perellm1'
+            host='brute.aalto.fi'
+            ;;
+        "force")
+            user='perellm1'
+            host='force.aalto.fi'
+            ;;
+        "bluecrystal2" | "bc2")
+            mountpoint="${HOME}/remoteservers/bluecrystal2/"
+            user='mp15688'
+            host='bluecrystalp2.bris.ac.uk'
+            ;;
+        "bluecrystal3" | "bc3")
+            mountpoint="${HOME}/remoteservers/bluecrystal3/"
+            user='mp15688'
+            host='bluecrystalp3.bris.ac.uk'
+            ;;
+        "bluecrystal4" | "bc4")
+            mountpoint="${HOME}/remoteservers/bluecrystal4/"
+            user='mp15688'
+            host='bluecrystalp4.bris.ac.uk'
+            ;;
+        "perellonieto")
+            mountpoint="${HOME}/remoteservers/perellonieto/"
+            user='maikel'
+            host='perellonieto.com'
+            ;;
+        "-u"|"--unmount")
+            unmount=true
+            ;;
+        "-m"|"--mount")
+            mount=true
+            ;;
+        *)
+            show_help
+            exit 0
+            ;;
+    esac
+done
+
+if [ "${mount}" = true ] && [ "${unmount}" = true ] ; then
+    echo "Warning: Mount and unmount options are mutually exclusive"
+fi
+
+if [ "${mount}" = true ] ; then
+    echo "Creating mountpoint ${mountpoint}"
+    mkdir -p ${mountpoint}
+
+    echo "Mounting to remote folder ${user}@${host}:${remote_dir}"
+    sshfs "${user}@${host}:${remote_dir}" ${mountpoint}
+elif [ "${unmount}" = true ] ; then
+    echo "Unmounting folder ${mountpoint}"
+    fusermount -u ${mountpoint}
+else
+    echo "Connecting to ${host}"
+    ssh "${ssh_options}" "${user}@${host}"
+fi
+
