@@ -48,6 +48,7 @@ NeoBundle 'easymotion/vim-easymotion'            " easy motion <Leader>^2 s
 "NeoBundle 'jalvesaq/VimCom'
 " For Python
 NeoBundle 'ervandew/screen'
+NeoBundle 'nvie/vim-flake8'
 "NeoBundle 'vim-scripts/indentpython.vim'
 "NeoBundle 'Valloric/YouCompleteMe'
 
@@ -273,3 +274,10 @@ autocmd FileType python map <LocalLeader>le :call GetLen()<CR>
 
 " Command to explore actual diary
 map <LocalLeader>de :!diary -e ${PWD\#\#*/}<CR>
+
+" Search in Google the selected text
+function! GoogleSearch()
+     let searchterm = getreg("g")
+     silent! exec "silent! !chromium-browser \"http://google.com/search?q=" . searchterm . "\" &"
+endfunction
+vnoremap <F6> "gy<Esc>:call GoogleSearch()<CR>

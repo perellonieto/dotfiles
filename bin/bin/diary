@@ -24,19 +24,47 @@ TEMP_FILE="._tmp_file_markdown.html"
 CSS_STYLE="style.css"
 EXPLORER="sensible-browser"
 
-HEAD="<head><link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\">
-      <script type=\"text/x-mathjax-config\">
-      MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [['$','$'], ['\\\\(','\\\\)']],
-            processEscapes: true
-        }
-      });
-      </script>
-      <script type=\"text/javascript\" async src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML\">
-      </script>
-      </head>
-      "
+read -r -d '' HEAD <<-'EOF'
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//E " "http://www.w3.org/TR/html4/strict.dt ">
+<html>
+<head>
+    <title>Diary</title>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <script src="../jquery-3.1.1.min.js"></script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+    }
+    });
+    </script>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script type="text/javascript" async src="../functions.js">
+    </script>
+</head>
+<body>
+
+<nav role="navigation" class="table-of-contents">
+  <h2>Table of Contents:</h2>
+  <ul>
+    <li><a href="#TODOs">TODOs</a></li>
+  </ul>
+</nav>
+EOF
+
+# With an internet connection is possible to use the mathjax library online.
+# Just substitute the upper line for this one
+#    <script type="text/javascript" async src="../MathJax.js?config=TeX-MML-AM_CHTML">
+#   <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+
+FOOTER="
+</body>
+</html>
+"
 
 function show_usage() {
     echo "Usage: $0 [<diary_name>]" 1>&2;
@@ -68,21 +96,26 @@ function validate_project_name() {
 
 function explore() {
     diary=$1
-    cd $diary
-    rm "$TEMP_FILE"
-    echo ${HEAD} > $TEMP_FILE
+    cd ${diary}
+    rm ${TEMP_FILE}
+    echo "${HEAD}" > ${TEMP_FILE}
+
+    echo "<h1 id=\"TODOs\">TODOs</h1>" >> "$TEMP_FILE"
+    grep --no-filename "\*\*TODO\*\*" ./*.${EXTENSION} | markdown >> ${TEMP_FILE}
     #cp "../$CSS_STYLE" $TEMP_FILE
 
-    for FILENAME in `ls ./*."$EXTENSION"`
+    for FILENAME in `ls ./*.${EXTENSION}`
     do
         echo "Extracting file $FILENAME"
-        echo "<h1>$FILENAME</h1>" >> "$TEMP_FILE"
-        # TODO look into pandoc
-        markdown $FILENAME >> "$TEMP_FILE"
+        H1TITLE=$(basename $FILENAME)
+        echo "<h1 class='filename' id=\"${H1TITLE}\">${H1TITLE}</h1>" >> ${TEMP_FILE}
+        markdown $FILENAME >> ${TEMP_FILE}
     done
 
+    echo "${FOOTER}" >> ${TEMP_FILE}
+    # TODO look into pandoc
     #pandoc --to='html5' --output="$TEMP_FILE" $FILENAME
-    $EXPLORER "$TEMP_FILE"
+    $EXPLORER ${TEMP_FILE}
 }
 
 # First time using diary
