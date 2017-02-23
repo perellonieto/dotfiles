@@ -96,27 +96,22 @@ map <F2> :NERDTreeToggle<CR>
 "  remember to add a main.latexmain file next to the main.tex file
 "  in this way it is possible to compile from other .tex files
 
-set grepprg=grep\ -nH\ $*       " Grep always generates a file-name
-set iskeyword+=:                " auto-completion in references by <C-n>
+autocmd FileType tex set grepprg=grep\ -nH\ $*       " Grep always generates a file-name
+autocmd FileType tex set iskeyword+=:                " auto-completion in references by <C-n>
 " Following configuration of LaTeX-Suite needs revision
 "set formatoptions=cqt
-"set spell spelllang=en
-"
 "set iskeyword+=:
 "
 " Solve problem with Latex-suite and editing formulas
-let g:tex_conceal = ""
-
-let g:Tex_DefaultTargetFormat = 'pdf'
-"let g:Tex_MultipleCompileFormats = 'pdf'
-"let g:Tex_FormatDependency_pdf = 'pdf'
-let g:Tex_CompileRule_pdf = 'latexmk --bibtex --pdf'
-
-let g:Tex_ViewRule_pdf = 'evince'
-
+autocmd FileType tex let g:tex_conceal = ""
+autocmd FileType tex let g:Tex_DefaultTargetFormat = 'pdf'
+"autocmd FileType tex let g:Tex_MultipleCompileFormats = 'pdf'
+"autocmd FileType tex let g:Tex_FormatDependency_pdf = 'pdf'
+autocmd FileType tex let g:Tex_CompileRule_pdf = 'latexmk --bibtex --pdf'
+autocmd FileType tex let g:Tex_ViewRule_pdf = 'evince'
 " TODO Remap the JumpForward from <C-j> to <C-space>
 " e.g. \chapter{_}<++>
-imap <C-g> <Plug>IMAP_JumpForward
+autocmd FileType tex imap <C-g> <Plug>IMAP_JumpForward
 
 " =========================================================================="
 " My configurations                                                          "
@@ -124,7 +119,7 @@ imap <C-g> <Plug>IMAP_JumpForward
 set encoding=utf-8
 "" keymaps
 let mapleader = ","
-let maplocalleader = ","
+let maplocalleader = "m"
 nmap <leader>w :w!<cr>
 nmap <leader>q :q<cr>
 
@@ -143,7 +138,7 @@ set tw=79                       " Maximum number of characters per row
 set laststatus=2                " Show a status line
 set scrolloff=2                 " Show n lines between border and cursor
 "set fo-=t
-set spell                       " Spell checking (z= to show proposed)
+set spell                       " Spell checking (z= to show proposed words)
 
 "" White spaces
 set nowrap                      " Do not wrap lines
@@ -151,7 +146,7 @@ set tabstop=4                   " Number of spaces to visualize a Tab
 set shiftwidth=4                " Number of spaces to visualize when indent
 set expandtab                   " use spaces instead of tabs
 set backspace=indent,eol,start  " backspace through everything in insert mode
-" set smartindent                 " Smart autoindenting
+" set smartindent               " Smart autoindenting
 " smartindent: Solve problem with indentation of hash #
 " inoremap # X^H#
 set smarttab
@@ -165,7 +160,7 @@ set t_Co=256                    " Use 256 colors
 syntax enable                   " Enable syntax highlight
 set background=dark
 "let g:solarized_termcolors=256
-colorscheme solarized              " default, desert, murphy, peachpuff, solarized
+colorscheme solarized           " default, desert, murphy, peachpuff, solarized
 set colorcolumn=80              " Paint the column 80
 set matchtime=2                 " tenths of a second blink when matching ()
 
@@ -193,7 +188,9 @@ function! DiffAgainstFileOnDisk()
     exec "!diff /tmp/working_copy %"
 endfunction
 
-"Python IDE
+" =========================================================================="
+" Python files
+" =========================================================================="
 " depends on 'ervandew/screen'
 let g:ScreenImpl = "Tmux"
 " Tags navigation
@@ -203,30 +200,26 @@ let g:ScreenImpl = "Tmux"
 " Change tags file location
 "set tags=~/mytags
 " Create tags with f12
-map <f12> :! ctags -R .<CR>
+autocmd FileType python map <f12> :! ctags -R .<CR>
 " Open the definition in a new vertical split
-map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+autocmd FileType python map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 " Open the definition in a new tab
 " map <C-[> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
-
 " Open an ipython2 shell.
 " :IPython for horizontal split
 " :IPython! for vertical split
 autocmd FileType python map <LocalLeader>pf :IPython!<CR>
-
 " Close whichever shell is running.
 autocmd FileType python map <LocalLeader>pq :ScreenQuit<CR>
-
 " Send current line to python.
 autocmd FileType python map <LocalLeader>l V:ScreenSend<CR>
-
 " Send visual selection to python.
 autocmd FileType python map <LocalLeader>se :ScreenSend<CR>
-
 " Clear screen.
 autocmd FileType python map <LocalLeader>pc
       \ :call g:ScreenShellSend('!clear')<CR>
 
+" Help function for IPython
 function! s:get_visual_selection()
   " Why is this not a built-in Vim script function?!
   let [lnum1, col1] = getpos("'<")[1:2]
@@ -236,7 +229,6 @@ function! s:get_visual_selection()
   let lines[0] = lines[0][col1 - 1:]
   return join(lines, "\n")
 endfunction
-
 " TODO: Improve the Help function
 " Get ipython help for word under cursor. Complement it with Shift + K.
 function GetHelp()
@@ -265,9 +257,6 @@ function GetLen()
 endfunction
 autocmd FileType python map <LocalLeader>le :call GetLen()<CR>
 
-" Command to explore actual diary
-map <LocalLeader>de :!diary -e ${PWD\#\#*/}<CR>
-
 " Search in Google the selected text
 function! GoogleSearch()
      let searchterm = getreg("g")
@@ -276,6 +265,7 @@ endfunction
 vnoremap <F6> "gy<Esc>:call GoogleSearch()<CR>
 
 
+"" Yank to clipboard
 "" This code needs a vim version compiled with the option +clipboard
 if has('clipboard')
     if has('unnamedplus')  " When possible use + register for copy-paste
@@ -294,6 +284,9 @@ nnoremap <leader>k :onlinethesauruscurrentword<cr>
 imap <Alt><Space> <Esc>
 
 " =========================================================================="
-"  Abbreviations (:ab or :abbreviate)                                                            "
+" MARKDOWN files
 " =========================================================================="
+" Abbreviations (:ab or :abbreviate)                                                            "
 autocmd FileType markdown :ab todo - [ ] **TODO**
+" Command to explore actual diary
+autocmd FileType markdown map <LocalLeader>de :!diary -e ${PWD\#\#*/}<CR>
