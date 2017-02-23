@@ -88,14 +88,7 @@ endif
 " =========================================================================="
 " scrooloose/nerdtree Configuration                                         "
 " =========================================================================="
-
 map <F2> :NERDTreeToggle<CR>
-
-" =========================================================================="
-"  beloglazov/vim-online-thesaurus Configuration                            "
-" =========================================================================="
-
-nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
 
 " =========================================================================="
 " vim-scripts/LaTeX-Suite-aka-Vim-LaTeX Configuration                       "
@@ -281,3 +274,26 @@ function! GoogleSearch()
      silent! exec "silent! !chromium-browser \"http://google.com/search?q=" . searchterm . "\" &"
 endfunction
 vnoremap <F6> "gy<Esc>:call GoogleSearch()<CR>
+
+
+"" This code needs a vim version compiled with the option +clipboard
+if has('clipboard')
+    if has('unnamedplus')  " When possible use + register for copy-paste
+        set clipboard=unnamed,unnamedplus
+    else         " On mac and Windows, use * register for copy-paste
+        set clipboard=unnamed
+    endif
+endif
+
+" =========================================================================="
+"  beloglazov/vim-online-thesaurus Configuration                            "
+" =========================================================================="
+nnoremap <leader>k :onlinethesauruscurrentword<cr>
+
+" Remap Alt-Space to ESC
+imap <Alt><Space> <Esc>
+
+" =========================================================================="
+"  Abbreviations (:ab or :abbreviate)                                                            "
+" =========================================================================="
+autocmd FileType markdown :ab todo - [ ] **TODO**
