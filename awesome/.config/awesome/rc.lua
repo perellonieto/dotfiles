@@ -105,6 +105,9 @@ battery_widgettimer:start()
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
+-- Pomodoro widget
+require('pomodoro')
+
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
 editor = os.getenv("EDITOR") or "editor"
@@ -264,9 +267,11 @@ for s = 1, screen.count() do
         mytextclock,
         s == 1 and mysystray or nil,
         myseparator,
-        battery_widget,
-        myseparator,
         volume_widget,
+        myseparator,
+        pomodoro.widget,
+        myseparator,
+        battery_widget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -284,6 +289,8 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 -- Use the command line xev to monitor the keys
 globalkeys = awful.util.table.join(
+    -- Open Time Tracker
+    awful.key({modkey, }, "t", function () awful.util.spawn("hamster-time-tracker") end),
     -- Screensaver lock
     -- TODO revise that next line works properly
     awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("xscreensaver-command -lock") end),
@@ -522,5 +529,7 @@ run_once("wmname", "LG3D")              -- Allows opening JVM GUIs
 run_once("xscreensaver", "-no-splash")  -- screensaver
 -- Time tracker tool
 run_once("hamster-indicator", nil, "/usr/bin/python /usr/bin/hamster-indicator")
+-- Different screen color during day
+run_once("fluxgui", nil, "/usr/bin/python /usr/bin/fluxgui")
 -- Dropbox daemon
 run_once("dropbox", "start", "/home/maikel/.dropbox-dist/dropbox-lnx.x86_64-19.4.13/dropbox")
