@@ -530,6 +530,9 @@ run_once("xscreensaver", "-no-splash")  -- screensaver
 -- Time tracker tool
 run_once("hamster-indicator", nil, "/usr/bin/python /usr/bin/hamster-indicator")
 -- Different screen color during day
+-- In Ubuntu install redshift and redshift-gtk
+-- run_once("redshift-gtk", nil, "/usr/bin/python /usr/bin/redshift-gtk")
+-- In Ubuntu need to install fluxgui
 run_once("fluxgui", nil, "/usr/bin/python /usr/bin/fluxgui")
 -- Dropbox daemon
 run_once("dropbox", "start", "/home/maikel/.dropbox-dist/dropbox-lnx.x86_64-19.4.13/dropbox")

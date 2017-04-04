@@ -119,8 +119,8 @@ if ! shopt -oq posix; then
 fi
 
 # Load private modules
-. /etc/profile.d/modules.sh
-module use-append ${HOME}/privatemodules
+#. /etc/profile.d/modules.sh
+#module use-append ${HOME}/privatemodules
 
 #TZ='Europe/Helsinki'
 #export TZ
@@ -159,10 +159,29 @@ set -o vi
 EDITOR=vim
 
 # Vim-R-plugin vim needs to be compiled with the +clientserver flag
-alias vim="vim --servername VIM"
+#alias vim="vim --servername VIM"
 
 alias screen_off="xrandr --output LVDS-0 --off"
 alias screen_on="xrandr --output LVDS-0 --auto"
 
-# Set keyboard layout to Spanish
-setxkbmap es
+alias info="info --vi-keys"
+
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
+alias matlab_no_gui="matlab -nodesktop -nosplash -nodisplay -nojvm -r"
+
+# Print json files in a nice format
+# source http://stackoverflow.com/questions/352098/how-can-i-pretty-print-json?page=1&tab=votes#tab-top
+alias prettyjson='python -m json.tool'
+
+# Needs a function and an export in order to create dynamic functions
+function echo_time() {
+  echo `date +%H:%M:%S`
+}
+export -f echo_time
+
+function cd_last() {
+    cd `ls -td ./*/ | head -1`
+}
+export -f cd_last

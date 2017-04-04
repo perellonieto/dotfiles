@@ -1,0 +1,23 @@
+#!/bin/bash
+
+function show_usage() {
+    echo "Usage: $0 [ file.csv ]" 1>&2;
+}
+
+function show_help() {
+    echo "Usage: $0 [ file.csv ]" 1>&2;
+}
+
+
+if [ $# -lt 1 ]
+then
+    show_usage
+    exit 1
+fi
+
+filename=${1}
+
+echo "Cleaning HSBC transactions csv file ${filename}"
+sed 's/ VIS//g' ${filename} | sed 's/ ATM//g' | sed 's/ DD//g' | \
+    sed 's/ )))//g' | tr -d '"' | tr -s ' ' | sed 's/ UK BRI,/ UK BRI/g' | \
+    sed 's/ ,/,/g' > "clean${filename}"

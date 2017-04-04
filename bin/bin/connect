@@ -71,6 +71,11 @@ while [[ $# -gt 0 ]]; do
             user='maikel'
             host='perellonieto.com'
             ;;
+        "ul50vt")
+            mountpoint="${HOME}/remoteservers/ul50vt/"
+            user='maikel'
+            host='ul50vt.local'
+            ;;
         "-u"|"--unmount")
             unmount=true
             ;;

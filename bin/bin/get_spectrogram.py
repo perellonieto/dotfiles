@@ -74,6 +74,7 @@ def main(audio_file, NFFT=4096, overlap=0.5, extension='svg'):
     maxfreq = 15000
 
     fig = plt.figure()
+    print Fs
     Pxx, freqs, t, plot = my_plot_specgram(channels, NFFT=NFFT, Fs=Fs,
                                            noverlap=noverlap, minfreq=minfreq,
                                            maxfreq=maxfreq)
