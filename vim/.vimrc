@@ -48,7 +48,9 @@ NeoBundle 'easymotion/vim-easymotion'            " easy motion <Leader>^2 s
 "NeoBundle 'jcfaria/Vim-R-plugin'
 "NeoBundle 'jalvesaq/VimCom'
 " For Python
-NeoBundle 'ervandew/screen'
+" TODO need to remove this package
+NeoBundle 'ervandew/screen'                " Not working in IPython >= 5
+NeoBundle 'jpalardy/vim-slime'
 NeoBundle 'nvie/vim-flake8'
 "NeoBundle 'vim-scripts/indentpython.vim'
 "NeoBundle 'Valloric/YouCompleteMe'
@@ -202,7 +204,31 @@ endfunction
 " Python files
 " =========================================================================="
 " depends on 'ervandew/screen'
-let g:ScreenImpl = "Tmux"
+" TODO create my own code
+" tmux display-message -p
+" [test] 1:screenshell, current pane 0 - (11:27 06-Apr-17)
+" !tmux split-window -h -t test -d
+"function! Newfunction()
+"    exec "tmux split-window -h -d"
+"endfunction
+"let g:ScreenImpl = "Tmux"
+" Slime configuration
+let g:slime_target = "tmux"
+let g:slime_python_ipython=1
+let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
+let g:slime_dont_ask_default = 1
+"" function! TmuxIPython()
+""     echom "Tmux split"
+""     silent! exec "!tmux split-window -h"
+""     echom "Tmux IPython"
+""     silent! exec "!tmux send-keys ipython C-m &"
+"" endfunction
+"" autocmd FileType python map <LocalLeader>pf:call TmuxIPython()<CR>
+autocmd FileType python map <LocalLeader>l <Plug>SlimeParagraphSend
+" Send visual selection to python.
+ autocmd FileType python map <LocalLeader>se <Plug>SlimeRegionSend
+
+"autocmd FileType python map <LocalLeader>f :Newfunction()<CR>
 " Tags navigation
 " <C-]> goes to definition
 " <C-t> jump back from definition
@@ -218,18 +244,19 @@ autocmd FileType python map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<
 " Open an ipython2 shell.
 " :IPython for horizontal split
 " :IPython! for vertical split
-autocmd FileType python let g:ScreenShellSendPrefix = '%cpaste'
-autocmd FileType python let g:ScreenShellSendSuffix = '--'
-autocmd FileType python map <LocalLeader>pf :IPython!<CR>
+"" autocmd FileType python let g:ScreenShellSendPrefix = '%cpaste -q'
+"" autocmd FileType python let g:ScreenShellSendSuffix = '--'
+" TODO need to implement my versions
+ autocmd FileType python map <LocalLeader>pf :IPython!<CR>
 " Close whichever shell is running.
-autocmd FileType python map <LocalLeader>pq :ScreenQuit<CR>
-" Send current line to python.
-autocmd FileType python map <LocalLeader>l V:ScreenSend<CR>
-" Send visual selection to python.
-autocmd FileType python map <LocalLeader>se :ScreenSend<CR>
-" Clear screen.
-autocmd FileType python map <LocalLeader>pc
-      \ :call g:ScreenShellSend('!clear')<CR>
+ autocmd FileType python map <LocalLeader>pq :ScreenQuit<CR>
+"" " Send current line to python.
+"" autocmd FileType python map <LocalLeader>l V:ScreenSend<CR>
+"" " Send visual selection to python.
+"" autocmd FileType python map <LocalLeader>se :ScreenSend<CR>
+"" " Clear screen.
+"" autocmd FileType python map <LocalLeader>pc
+""       \ :call g:ScreenShellSend('!clear')<CR>
 
 " Help function for IPython
 function! s:get_visual_selection()
@@ -243,7 +270,7 @@ function! s:get_visual_selection()
 endfunction
 " TODO: Improve the Help function
 " Get ipython help for word under cursor. Complement it with Shift + K.
-function GetHelp()
+function! GetHelp()
     if a:firstline==1 && a:lastline==line('$')
         echo "selection"
         let w = s:get_visual_selection() . "??"
@@ -256,14 +283,14 @@ endfunction
 autocmd FileType python map <LocalLeader>ph :call GetHelp()<CR>
 
 " Get `dir` help for word under cursor.
-function GetDir()
+function! GetDir()
   let w = "dir(" . expand("<cword>") . ")"
   :call g:ScreenShellSend(w)
 endfunction
 autocmd FileType python map <LocalLeader>pd :call GetDir()<CR>
 
 " Get `dir` help for word under cursor.
-function GetLen()
+function! GetLen()
   let w = "len(" . expand("<cword>") . ")"
   :call g:ScreenShellSend(w)
 endfunction
