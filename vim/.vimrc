@@ -217,16 +217,29 @@ let g:slime_target = "tmux"
 let g:slime_python_ipython=1
 let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
 let g:slime_dont_ask_default = 1
-"" function! TmuxIPython()
-""     echom "Tmux split"
-""     silent! exec "!tmux split-window -h"
-""     echom "Tmux IPython"
-""     silent! exec "!tmux send-keys ipython C-m &"
-"" endfunction
-"" autocmd FileType python map <LocalLeader>pf:call TmuxIPython()<CR>
-autocmd FileType python map <LocalLeader>l <Plug>SlimeParagraphSend
+
+function! TmuxIPython(...)
+    """ Creates a new split and starts ipython
+    silent! exec "!tmux split-window -h"
+    silent! exec "!tmux last-pane"
+    if !empty($VIRTUAL_ENV)
+        silent! exec "!tmux send-keys -t :.1  \"source $VIRTUAL_ENV/bin/activate\" C-m"
+    endif
+    silent! exec "!tmux send-keys -t :.1 ipython C-m"
+endfunction
+
+command! TmuxIPython :call TmuxIPython()
+
+autocmd FileType python map <LocalLeader>pf :TmuxIPython<CR>
+
+" Send pharagraph
+autocmd FileType python map <LocalLeader>sp <Plug>SlimeParagraphSend
+" Send line
+autocmd FileType python map <LocalLeader>sl V<Plug>SlimeRegionSend
 " Send visual selection to python.
- autocmd FileType python map <LocalLeader>se <Plug>SlimeRegionSend
+autocmd FileType python map <LocalLeader>se <Plug>SlimeRegionSend
+" Send all file
+autocmd FileType python map <LocalLeader>sa ggVG<Plug>SlimeRegionSend
 
 "autocmd FileType python map <LocalLeader>f :Newfunction()<CR>
 " Tags navigation
@@ -247,7 +260,7 @@ autocmd FileType python map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<
 "" autocmd FileType python let g:ScreenShellSendPrefix = '%cpaste -q'
 "" autocmd FileType python let g:ScreenShellSendSuffix = '--'
 " TODO need to implement my versions
- autocmd FileType python map <LocalLeader>pf :IPython!<CR>
+" autocmd FileType python map <LocalLeader>pf :IPython!<CR>
 " Close whichever shell is running.
  autocmd FileType python map <LocalLeader>pq :ScreenQuit<CR>
 "" " Send current line to python.
