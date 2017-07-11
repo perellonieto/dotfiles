@@ -100,7 +100,11 @@ battery_widgettimer = timer({ timeout = 10 })
 battery_widgettimer:add_signal("timeout", function() battery_text(battery_widget) end)
 battery_widgettimer:start()
 -- }}}
-
+-- Temperature widget:
+temp = require("temperature")
+myTempWidget = widget({type = "textbox", align = "right"})
+awful.hooks.timer.register(10, function() myTempWidget.text = temp.getTemp(60, 70) end)
+-- }}}
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/usr/share/awesome/themes/default/theme.lua")
@@ -272,6 +276,8 @@ for s = 1, screen.count() do
         pomodoro.widget,
         myseparator,
         battery_widget,
+        myseparator,
+        myTempWidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
