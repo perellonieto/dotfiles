@@ -3,7 +3,7 @@
 This repository contains my personal Linux dotfiles to mantain the
 same configuration in all my instalations.
 
-It uses [Unix stow](http://www.gnu.org/software/stow/) to load all 
+It uses [Unix stow](http://www.gnu.org/software/stow/) to load all
 the files in their original location.
 
 ## Example
@@ -18,4 +18,14 @@ $ stow vim
 ```
 
 ## References
+
 http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html
+
+## Vim
+
+Needs NeoBundle to be installed. Run the following
+
+```Bash
+curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh > install.sh
+sh ./install.sh
+```
