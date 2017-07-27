@@ -103,7 +103,7 @@ battery_widgettimer:start()
 -- Temperature widget:
 temp = require("temperature")
 myTempWidget = widget({type = "textbox", align = "right"})
-awful.hooks.timer.register(10, function() myTempWidget.text = temp.getTemp(60, 70) end)
+awful.hooks.timer.register(10, function() myTempWidget.text = temp.getTemp(60, 80) end)
 -- }}}
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
@@ -296,7 +296,7 @@ root.buttons(awful.util.table.join(
 -- Use the command line xev to monitor the keys
 globalkeys = awful.util.table.join(
     -- Open Time Tracker
-    awful.key({modkey, }, "t", function () awful.util.spawn("hamster-time-tracker") end),
+    awful.key({modkey, }, "t", function () awful.util.spawn("hamster-time-tracker overview") end),
     -- Screensaver lock
     -- TODO revise that next line works properly
     awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("xscreensaver-command -lock") end),
@@ -466,6 +466,8 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
+    { rule = { class = "hamster-time-tracker" },
+      properties = { tag = tags[1][8] } },
     { rule = { class = "Thunderbird" },
       properties = { tag = tags[1][9] } },
     -- Set Firefox to always map on tags number 2 of screen 1.
@@ -540,10 +542,13 @@ run_once("wmname", "LG3D")              -- Allows opening JVM GUIs
 run_once("xscreensaver", "-no-splash")  -- screensaver
 -- Time tracker tool
 run_once("hamster-indicator", nil, "/usr/bin/python /usr/bin/hamster-indicator")
+-- run_once("hamster-time-tracker", "overview", "/usr/bin/python /usr/bin/hamster-time-tracker overview")
 -- Different screen color during day
 -- In Ubuntu install redshift and redshift-gtk
 -- run_once("redshift-gtk", nil, "/usr/bin/python /usr/bin/redshift-gtk")
 -- In Ubuntu need to install fluxgui
 run_once("fluxgui", nil, "/usr/bin/python /usr/bin/fluxgui")
 -- Dropbox daemon
-run_once("dropbox", "start", "/home/maikel/.dropbox-dist/dropbox-lnx.x86_64-19.4.13/dropbox")
+run_once("dropbox", "start", "/home/maikel/.dropbox-dist/dropbox-lnx.x86_64-30.4.22/dropbox")
+-- Devmail (synchronization between Microsoft Exchange and Thunderbird)
+run_once("/bin/sh", "/home/maikel/Modules/davmail/4.8.0/davmail.sh /home/maikel/Modules/davmail/4.8.0/davmail.properties")

@@ -17,14 +17,14 @@ function M.getTemp(mid, high)
         sensor_num = string.match(line, "Thermal (%d)")
         sensor_temp = string.match(line, "Thermal %d*:.* (%d*\.%d)")
         if tonumber(sensor_temp)>high then
-            color = "<span color='red'>"
+            color = "<b><span color='red'>"
         elseif tonumber(sensor_temp)>mid then
-            color = "<span color='orange'>"
+            color = "<b><span color='orange'>"
         else
-            color = "<span color='cyan'>"
+            color = "<b><span color='cyan'>"
         end
 
-        table.insert(temp_out, "#" .. sensor_num .. ": " .. color .. sensor_temp .. "C</span>")
+        table.insert(temp_out, "#" .. sensor_num .. ": " .. color .. sensor_temp .. "C</span></b>")
 
         line = fd:read()
     end
