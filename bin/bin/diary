@@ -33,6 +33,7 @@ options.
      -s, --search     Searches the following sentence in the specified diary
                       (or in all the diaries if the diary name is ommited)
      -t, --todo       Show all the TODO tags
+     -m, --template   Appends a template to the current day
      -push            Push all the changes to a repository
      -pull            Pull all the changes from a repository
 
@@ -43,7 +44,7 @@ Report bugs to <bugs-diary@perellonieto.com>."
 #=============================
 # CONFIGURATION VARIABLES
 #
-DIARY_PATH="${HOME}/diary"
+DIARY_PATH="${HOME}/Dropbox/diary"
 EDITOR="vim + "
 EXPLORER="sensible-browser"
 
@@ -59,6 +60,9 @@ TEMP_FILE="._tmp_file_markdown.html"
 CSS_STYLE="style.css"
 MDTOHTML='pandoc'
 
+NOTEBOOK=''
+TEMPLATE=''
+
 read -r -d '' HTML_HEAD <<-'EOF'
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//E " "http://www.w3.org/TR/html4/strict.dt ">
 <html>
@@ -66,8 +70,8 @@ read -r -d '' HTML_HEAD <<-'EOF'
     <title>Diary</title>
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
 
-    <link rel="stylesheet" type="text/css" href="../style.css">
-    <script src="../jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_html/style.css">
+    <script src="../_html/jquery-3.1.1.min.js"></script>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
     tex2jax: {
@@ -78,7 +82,7 @@ read -r -d '' HTML_HEAD <<-'EOF'
     </script>
     <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
-    <script type="text/javascript" async src="../functions.js">
+    <script type="text/javascript" async src="../_html/functions.js">
     </script>
 </head>
 <body>
@@ -93,7 +97,7 @@ EOF
 
 # With an internet connection is possible to use the mathjax library online.
 # Just substitute the upper line for this one
-#    <script type="text/javascript" async src="../MathJax.js?config=TeX-MML-AM_CHTML">
+#    <script type="text/javascript" async src="../_html/MathJax.js?config=TeX-MML-AM_CHTML">
 #   <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
 
 read -r -d '' HTML_FOOTER <<-'EOF'
@@ -126,7 +130,7 @@ function explore() {
     grep "\[ \] \*\*TODO\*\*" ./*.${EXTENSION} | \
          awk -F':' '{print $2, "[#](#"$1")";}' | \
          $MDTOHTML >> ${TEMP_FILE}
-    #cp "../$CSS_STYLE" $TEMP_FILE
+    #cp "../_html/$CSS_STYLE" $TEMP_FILE
 
     for FILENAME in `ls ./*.${EXTENSION}`
     do
@@ -140,7 +144,6 @@ function explore() {
     echo "${HTML_FOOTER}" >> ${TEMP_FILE}
     # TODO look into pandoc
     #pandoc --to='html5' --output="$TEMP_FILE" $FILENAME
-    $EXPLORER ${TEMP_FILE} &
     # TODO solve problem ? is changed by %3F
     #TEMP_FILE=`pwd`"/${TEMP_FILE}?refresh=5"
     #echo ${TEMP_FILE}
@@ -169,11 +172,12 @@ while [[ $# -gt 0 ]]; do
     case "$opt" in
     -h|-\?|--help) printf '%s\n' "${usage}" || exit 2; exit;;
     -v|--version) printf '%s\n' "$version" || exit 2; exit;;
-    -ls) ls || exit 2; exit;;
-    -lsl) ls -l || exit 2; exit;;
+    -ls) ls | grep -v ^_ || exit 2; exit;;
+    -lsl) ls | grep -v ^_ || exit 2; exit;;
     -s|--search) search_sentence=$1; shift;;
-    -e|--explore) explore $1; exit;;
+    -e|--explore) NOTEBOOK=$1; shift;;
     -t|--todo) echo_todos; exit;;
+    -m|--template) TEMPLATE=$1; shift;;
     -pull) $PULL || exit 2; exit;;
     -push) $ADD; $COMMIT; $PUSH; exit;;
     *)
@@ -185,6 +189,13 @@ while [[ $# -gt 0 ]]; do
       ;;
     esac
 done
+
+if ! [[ -z "$NOTEBOOK" ]]; then
+    explore $NOTEBOOK
+    $EXPLORER ${TEMP_FILE} &
+    exit 2; exit;
+fi
+
 
 if ! [[ -z "$search_sentence" ]]; then
     if ! validate_project_name $diary; then
@@ -212,5 +223,16 @@ cd $diary
 #fi
 
 FILENAME=${diary}\_${FORMAT}.${EXTENSION}
+
+if ! [[ -z "$TEMPLATE" ]]; then
+    TEMPLATE_FILE="../_templates/$TEMPLATE.markdown"
+    if [ -f "$TEMPLATE_FILE" ]; then
+        cat "../_templates/$TEMPLATE.markdown" >> $FILENAME
+    else
+        echo "Template $TEMPLATE does not exist. Choose one of the following:"
+        ls "../_templates/" | sed 's/.markdown//'
+        exit 2; exit;
+    fi
+fi
 
 ${EDITOR} ${FILENAME}
