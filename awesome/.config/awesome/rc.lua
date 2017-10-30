@@ -318,10 +318,11 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86Display", function() awful.util.spawn("XF86Display.sh") end),
 
     -- Laptop Screen rotation
-    awful.key({ modkey, "Control", "Shift"}, "Up", function () screen_rotation("VGA1", "normal") end),
-    awful.key({ modkey, "Control", "Shift"}, "Left", function () screen_rotation("VGA1", "left") end),
-    awful.key({ modkey, "Control", "Shift"}, "Right", function () screen_rotation("VGA1", "right") end),
-    awful.key({ modkey, "Control", "Shift"}, "Down", function () screen_rotation("VGA1", "inverted") end),
+    -- TODO change or add position instead of rotation
+    awful.key({ modkey, "Control", "Shift"}, "Up", function () screen_rotation("HDMI1", "normal") end),
+    awful.key({ modkey, "Control", "Shift"}, "Left", function () screen_rotation("HDMI1", "left") end),
+    awful.key({ modkey, "Control", "Shift"}, "Right", function () screen_rotation("HDMI1", "right") end),
+    awful.key({ modkey, "Control", "Shift"}, "Down", function () screen_rotation("HDMI1", "inverted") end),
 
     awful.key({ modkey,           }, "h",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "l",  awful.tag.viewnext       ),
@@ -552,3 +553,4 @@ run_once("fluxgui", nil, "/usr/bin/python /usr/bin/fluxgui")
 run_once("dropbox", "start", "/home/maikel/.dropbox-dist/dropbox-lnx.x86_64-30.4.22/dropbox")
 -- Devmail (synchronization between Microsoft Exchange and Thunderbird)
 run_once("/bin/sh", "/home/maikel/Modules/davmail/4.8.0/davmail.sh /home/maikel/Modules/davmail/4.8.0/davmail.properties")
+run_once("/home/maikel/bin/system-low-battery-autostart")

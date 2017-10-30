@@ -1,0 +1,85 @@
+#!/bin/sh
+
+###########################################################################
+#
+# Usage: system-low-battery
+#
+# Checks if the battery level is low. If “low_threshold” is exceeded
+# a system notification is displayed, if “critical_threshold” is exceeded
+# a popup window is displayed as well. If “OK” is pressed, the system
+# shuts down after “timeout” seconds. If “Cancel” is pressed the script
+# does nothing.
+#
+# This script is supposed to be called from a cron job.
+#
+# source: https://unix.stackexchange.com/questions/84437/how-do-i-make-my-laptop-sleep-when-it-reaches-some-low-battery-threshold
+###########################################################################
+
+# This is required because the script is invoked by cron. Dbus information
+# is stored in a file by the following script when a user logs in. Connect
+# it to your autostart mechanism of choice.
+#
+# #!/bin/sh
+# touch $HOME/.dbus/Xdbus
+# chmod 600 $HOME/.dbus/Xdbus
+# env | grep DBUS_SESSION_BUS_ADDRESS > $HOME/.dbus/Xdbus
+# echo 'export DBUS_SESSION_BUS_ADDRESS' >> $HOME/.dbus/Xdbus
+# exit 0
+#
+
+# The cron version needs the DISPLAY to be set
+export USER="maikel"
+
+if [ -r "/home/$USER/.dbus/Xdbus" ]; then
+  . "/home/$USER/.dbus/Xdbus"
+fi
+
+low_threshold=15
+critical_threshold=10
+timeout=59
+shutdown_cmd='/usr/sbin/pm-suspend' # '/usr/sbin/pm-hibernate'
+
+#level=$(cat /sys/devices/platform/smapi/BAT0/remaining_percent)
+#state=$(cat /sys/devices/platform/smapi/BAT0/state)
+level=$(acpi -b | cut -d, -f 2 | tr -d ' '%)
+state=$(acpi -b | cut -d' ' -f 3 | tr -d ,)
+
+if [ x"$state" != x'Discharging' ]; then
+  exit 0
+fi
+
+do_shutdown() {
+  sleep $timeout && kill $zenity_pid 2>/dev/null
+
+  if [ x"$state" != x'Discharging' ]; then
+    exit 0
+  else
+    $shutdown_cmd
+  fi
+}
+
+if [ [ "$level" -lt $low_threshold ]; then
+  su $USER -c "notify-send -t 5000 \"Battery level is low: $level%\""
+fi
+
+if [ "$level" -lt $critical_threshold ]; then
+
+  su $USER -c "notify-send -u critical -t 10000 \"Battery level is low: $level%.\" \"The system is going to shut down in ${timeout} seconds.\""
+
+  zenity --question --ok-label 'OK' --cancel-label 'Cancel' \
+    --text "Battery level is low: $level%.\n\n The system is going to shut down in ${timeout} seconds." \
+    --display=:0.0 &
+  zenity_pid=$!
+
+  do_shutdown &
+  shutdown_pid=$!
+
+  trap 'kill $shutdown_pid' 1
+
+  if ! wait $zenity_pid; then
+    kill $shutdown_pid 2>/dev/null
+  fi
+
+fi
+
+exit 0
