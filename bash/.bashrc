@@ -1,3 +1,11 @@
+case "$0" in
+          -sh|sh|*/sh)	modules_shell=sh ;;
+       -ksh|ksh|*/ksh)	modules_shell=ksh ;;
+       -zsh|zsh|*/zsh)	modules_shell=zsh ;;
+    -bash|bash|*/bash)	modules_shell=bash ;;
+esac
+#module() { eval `/usr/Modules/$MODULE_VERSION/bin/modulecmd $modules_shell $*`; }
+module() { eval `/usr/bin/modulecmd $modules_shell $*`; }
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -125,16 +133,6 @@ fi
 #TZ='Europe/Helsinki'
 #export TZ
 
-alias R_gui="/usr/local/lib/R/site-library/JGR/scripts/run"
-alias max_bright="sudo setpci -s 00:02.0 f4.b=ff"
-alias aisoy_connect="sudo ifconfig usb0 10.34.65.88 netmask 255.255.255.0"
-alias environment_ros="source ~/ros/setup.bash"
-#alias gcalcli="/usr/bin/gcalcli --pw=`cat ~/.gcalclirc-pw`"
-#alias tmux="tmux -2"
-alias tmux="TERM=screen-256color-bce tmux"
-alias diskusage="du -sch .[!.]* * | sort -h"
-
-
 #export PATH="$PATH:$HOME/bin:/usr/local/cuda/bin"
 #export LD_LIBRARY_PATH="/usr/local/cuda/lib64/:/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080/compiler/lib:/media/DATA2/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib:/usr/local/lib:/usr/lib:/lib:/media/DATA2/opt/intel/mkl/lib/intel64"
 #export LIBRARY_PATH="$LIBRARY_PATH:/usr/lib/openmi/lib:/opt/intel/composer_xe_2013_sp1.0.080/mkl/lib/intel64/"
@@ -143,26 +141,12 @@ alias diskusage="du -sch .[!.]* * | sort -h"
 #export THEANO_FLAGS="floatX=float32,device=gpu"
 #export PYLEARN2_DATA_PATH="${HOME}/data"
 
-#source ~/.bashrc_private
-#alias android-connect="mtpfs -o allow_other /media/jose_motorola"
-#alias android-disconnect="fusermount -u /media/jose_motorola"
-#alias android-connect="mtpfs -o allow_other /media/jose_motorola"
-#alias android-disconnect="fusermount -u /media/jose_motorola"
-
-#alias mount_james="sshfs perellm1@james.ics.hut.fi:/ ${HOME}/james"
-
-alias bristol_vpn="/bin/bash /home/maikel/bin/uobnet.sh"
-
 PROMPT_DIRTRIM=2
 
 set -o vi
-EDITOR=vim
 
 # Vim-R-plugin vim needs to be compiled with the +clientserver flag
 #alias vim="vim --servername VIM"
-
-alias screen_off="xrandr --output LVDS-0 --off"
-alias screen_on="xrandr --output LVDS-0 --auto"
 
 alias info="info --vi-keys"
 
@@ -186,5 +170,6 @@ function cd_last() {
 }
 export -f cd_last
 
-alias webserver="python -m SimpleHTTPServer 8080"
-alias tunnel_shg_mongo="ssh -N -C -f -L 27021:localhost:27017 shg"
+if [ -f ".bashrc_${HOSTNAME}" ]; then
+    source ".bashrc_${HOSTNAME}"
+fi
