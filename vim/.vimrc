@@ -32,7 +32,8 @@ NeoBundle 'mhinz/vim-signify'                   " Add git diffs
 NeoBundle 'tpope/vim-fugitive'                  " Git calls
 NeoBundle 'scrooloose/nerdtree'                 " Left panel folder navigator
 NeoBundle 'beloglazov/vim-online-thesaurus'     " words from thesaurus.com
-NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
+NeoBundle 'vim-latex/vim-latex' " LaTeX-Suite
+"NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
 "NeoBundle 'davidhalter/jedi-vim'                " Autocompletion library Jedi
 "NeoBundle 'Valloric/YouCompleteMe'
 "NeoBundle 'ctrlpvim/ctrlp.vim'
@@ -56,11 +57,11 @@ NeoBundle 'nvie/vim-flake8'
 "NeoBundle 'Valloric/YouCompleteMe'
 " You can specify revision/branch/tag.
 "NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
-NeoBundle 'Shougo/neocomplete.vim'      " Autocomplete
+"NeoBundle 'Shougo/neocomplete.vim'      " Autocomplete
 " Necessary snipets for neocomplete
-NeoBundle 'Shougo/neocomplete'
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neosnippet-snippets'
+"NeoBundle 'Shougo/neocomplete'
+"NeoBundle 'Shougo/neosnippet'
+"NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'honza/vim-snippets'  " Snippets for several programming languages
 NeoBundle 'davidhalter/jedi-vim' " Snippets for Python
 NeoBundle 'powerline/powerline'     " Better statusline
@@ -101,29 +102,6 @@ endif
 " scrooloose/nerdtree Configuration                                         "
 " =========================================================================="
 map <F2> :NERDTreeToggle<CR>
-
-" =========================================================================="
-" vim-scripts/LaTeX-Suite-aka-Vim-LaTeX Configuration                       "
-" =========================================================================="
-"  remember to add a main.latexmain file next to the main.tex file
-"  in this way it is possible to compile from other .tex files
-
-autocmd FileType tex set grepprg=grep\ -nH\ $*       " Grep always generates a file-name
-autocmd FileType tex set iskeyword+=:                " auto-completion in references by <C-n>
-" Following configuration of LaTeX-Suite needs revision
-"set formatoptions=cqt
-"set iskeyword+=:
-"
-" Solve problem with Latex-suite and editing formulas
-autocmd FileType tex let g:tex_conceal = ""
-autocmd FileType tex let g:Tex_DefaultTargetFormat = 'pdf'
-"autocmd FileType tex let g:Tex_MultipleCompileFormats = 'pdf'
-"autocmd FileType tex let g:Tex_FormatDependency_pdf = 'pdf'
-autocmd FileType tex let g:Tex_CompileRule_pdf = 'latexmk --bibtex --pdf'
-autocmd FileType tex let g:Tex_ViewRule_pdf = 'evince'
-" TODO Remap the JumpForward from <C-j> to <C-space>
-" e.g. \chapter{_}<++>
-autocmd FileType tex imap <C-g> <Plug>IMAP_JumpForward
 
 " =========================================================================="
 " My configurations                                                          "
@@ -220,17 +198,38 @@ let g:slime_dont_ask_default = 1
 
 function! TmuxIPython(...)
     """ Creates a new split and starts ipython
-    silent! exec "!tmux split-window -h"
-    silent! exec "!tmux last-pane"
-    if !empty($VIRTUAL_ENV)
-        silent! exec "!tmux send-keys -t :.1  \"source $VIRTUAL_ENV/bin/activate\" C-m"
+    if !exists("g:TmuxIPythonPane")
+        let g:TmuxIPythonPane = 0
     endif
-    silent! exec "!tmux send-keys -t :.1 ipython C-m"
+    if g:TmuxIPythonPane == 0
+        let g:TmuxIPythonPane = 1
+        silent! exec "!tmux split-window -h"
+        silent! exec "!tmux last-pane"
+        if !empty($VIRTUAL_ENV)
+            silent! exec "!tmux send-keys -t :.1  \"source $VIRTUAL_ENV/bin/activate\" C-m"
+        endif
+        silent! exec "!tmux send-keys -t :.1 ipython C-m"
+    else
+        echoerr "TmuxIPythonPane already exists"
+    endif
+endfunction
+
+function! TmuxIPythonQuit(...)
+    """ Closes a previously opened Tmux split pane with IPython
+    if exists("g:TmuxIPythonPane")
+        if g:TmuxIPythonPane == 1
+            silent! exec "!tmux send-keys -t :.1 exit C-m"
+            silent! exec "!tmux send-keys -t :.1 exit C-m"
+            let g:TmuxIPythonPane = 0
+        endif
+    endif
 endfunction
 
 command! TmuxIPython :call TmuxIPython()
+command! TmuxIPythonQuit :call TmuxIPythonQuit()
 
 autocmd FileType python map <LocalLeader>pf :TmuxIPython<CR>
+autocmd FileType python map <LocalLeader>pq :TmuxIPythonQuit<CR>
 
 " Send pharagraph
 autocmd FileType python map <LocalLeader>sp <Plug>SlimeParagraphSend
@@ -262,7 +261,7 @@ autocmd FileType python map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<
 " TODO need to implement my versions
 " autocmd FileType python map <LocalLeader>pf :IPython!<CR>
 " Close whichever shell is running.
- autocmd FileType python map <LocalLeader>pq :ScreenQuit<CR>
+" autocmd FileType python map <LocalLeader>pq :ScreenQuit<CR>
 "" " Send current line to python.
 "" autocmd FileType python map <LocalLeader>l V:ScreenSend<CR>
 "" " Send visual selection to python.
@@ -335,108 +334,108 @@ nnoremap <leader>k :OnlineThesaurusCurrentWord<cr>
 " Remap Alt-Space to ESC
 imap <Alt><Space> <Esc>
 
-" =========================================================================="
-" Shougo/neocomplite.vim Configuration
-" =========================================================================="
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-  " For no inserting <CR> key.
-  "return pumvisible() ? "\<C-y>" : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
-
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-" For perlomni.vim setting.
-" https://github.com/c9s/perlomni.vim
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-
-" Use other snippets
-" Enable snipMate compatibility feature.
-let g:neosnippet#enable_snipmate_compatibility = 1
-" Tell Neosnippet about the other snippets
-let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
-
-" =========================================================================="
-" Shougo/neocomplite.vim Configuration
-" =========================================================================="
-" Plugin key-mappings.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" SuperTab like snippets behavior.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-"imap <expr><TAB>
-" \ pumvisible() ? "\<C-n>" :
-" \ neosnippet#expandable_or_jumpable() ?
-" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-" For conceal markers.
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
+"" " =========================================================================="
+"" " Shougo/neocomplite.vim Configuration
+"" " =========================================================================="
+"" " Disable AutoComplPop.
+"" let g:acp_enableAtStartup = 0
+"" " Use neocomplete.
+"" let g:neocomplete#enable_at_startup = 1
+"" " Use smartcase.
+"" let g:neocomplete#enable_smart_case = 1
+"" " Set minimum syntax keyword length.
+"" let g:neocomplete#sources#syntax#min_keyword_length = 3
+"" 
+"" " Define dictionary.
+"" let g:neocomplete#sources#dictionary#dictionaries = {
+""     \ 'default' : '',
+""     \ 'vimshell' : $HOME.'/.vimshell_hist',
+""     \ 'scheme' : $HOME.'/.gosh_completions'
+""         \ }
+"" 
+"" " Define keyword.
+"" if !exists('g:neocomplete#keyword_patterns')
+""     let g:neocomplete#keyword_patterns = {}
+"" endif
+"" let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+"" 
+"" " Plugin key-mappings.
+"" inoremap <expr><C-g>     neocomplete#undo_completion()
+"" inoremap <expr><C-l>     neocomplete#complete_common_string()
+"" 
+"" " Recommended key-mappings.
+"" " <CR>: close popup and save indent.
+"" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+"" function! s:my_cr_function()
+""   return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+""   " For no inserting <CR> key.
+""   "return pumvisible() ? "\<C-y>" : "\<CR>"
+"" endfunction
+"" " <TAB>: completion.
+"" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+"" " <C-h>, <BS>: close popup and delete backword char.
+"" inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+"" inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+"" " Close popup by <Space>.
+"" "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+"" 
+"" " AutoComplPop like behavior.
+"" "let g:neocomplete#enable_auto_select = 1
+"" 
+"" " Shell like behavior(not recommended).
+"" "set completeopt+=longest
+"" "let g:neocomplete#enable_auto_select = 1
+"" "let g:neocomplete#disable_auto_complete = 1
+"" "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+"" 
+"" " Enable omni completion.
+"" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+"" autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+"" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+"" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+"" autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+"" 
+"" " Enable heavy omni completion.
+"" if !exists('g:neocomplete#sources#omni#input_patterns')
+""   let g:neocomplete#sources#omni#input_patterns = {}
+"" endif
+"" "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"" "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"" "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+"" 
+"" " For perlomni.vim setting.
+"" " https://github.com/c9s/perlomni.vim
+"" let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+"" 
+"" " Use other snippets
+"" " Enable snipMate compatibility feature.
+"" let g:neosnippet#enable_snipmate_compatibility = 1
+"" " Tell Neosnippet about the other snippets
+"" let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+"" 
+"" " =========================================================================="
+"" " Shougo/neocomplite.vim Configuration
+"" " =========================================================================="
+"" " Plugin key-mappings.
+"" " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+"" imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+"" smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+"" xmap <C-k>     <Plug>(neosnippet_expand_target)
+"" 
+"" " SuperTab like snippets behavior.
+"" " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+"" imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+"" "imap <expr><TAB>
+"" " \ pumvisible() ? "\<C-n>" :
+"" " \ neosnippet#expandable_or_jumpable() ?
+"" " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+"" smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+"" \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+"" 
+"" " For conceal markers.
+"" if has('conceal')
+""   set conceallevel=2 concealcursor=niv
+"" endif
 
 " =========================================================================="
 " Configuration to use jedi-vim
@@ -460,4 +459,29 @@ autocmd FileType markdown :ab todo - [ ] **TODO**
 " Command to explore actual diary
 autocmd FileType markdown map <LocalLeader>de :!diary -e ${PWD\#\#*/}<CR>
 
+" =========================================================================="
+" vim-scripts/LaTeX-Suite-aka-Vim-LaTeX Configuration                       "
+" =========================================================================="
+"  remember to add a main.latexmain file next to the main.tex file
+"  in this way it is possible to compile from other .tex files
 
+autocmd FileType tex set grepprg=grep\ -nH\ $*       " Grep always generates a file-name
+autocmd FileType tex set iskeyword+=:                " auto-completion in references by <C-n>
+" Following configuration of LaTeX-Suite needs revision
+set formatoptions=cqt
+set iskeyword+=:
+"
+" Solve problem with Latex-suite and editing formulas
+autocmd FileType tex let g:tex_conceal = ""
+autocmd FileType tex let g:Tex_DefaultTargetFormat = 'pdf'
+autocmd FileType tex let g:Tex_MultipleCompileFormats = 'pdf, aux'
+"autocmd FileType tex let g:Tex_FormatDependency_pdf = 'pdf'
+"autocmd FileType tex let g:Tex_CompileRule_pdf = 'latexmk --bibtex --pdf'
+autocmd FileType tex let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
+autocmd FileType tex let g:Tex_ViewRule_pdf = 'evince'
+autocmd FileType tex :call SetTeXTarget('pdf')
+" TODO Remap the JumpForward from <C-j> to <C-space>
+" e.g. \chapter{_}<++>
+autocmd FileType tex imap <C-g> <Plug>IMAP_JumpForward
+
+set conceallevel=0
