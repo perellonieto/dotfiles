@@ -297,6 +297,8 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
     -- Open Time Tracker
     awful.key({modkey, }, "t", function () awful.util.spawn("hamster-time-tracker overview") end),
+    -- Print Screen
+    awful.key({ }, "Print", function () awful.util.spawn("/home/maikel/bin/screenshot") end),
     -- Screensaver lock
     -- TODO revise that next line works properly
     awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("xscreensaver-command -lock") end),
