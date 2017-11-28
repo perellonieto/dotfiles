@@ -19,5 +19,5 @@ filename=${1}
 
 echo "Cleaning HSBC transactions csv file ${filename}"
 sed 's/ VIS//g' ${filename} | sed 's/ ATM//g' | sed 's/ DD//g' | \
-    sed 's/ )))//g' | tr -d '"' | tr -s ' ' | sed 's/ UK BRI,/ UK BRI/g' | \
+    sed 's/ )))//g' | tr -s ' ' | sed 's/ UK BRI,/ UK BRI/g' | \
     sed 's/ ,/,/g' > "clean${filename}"
