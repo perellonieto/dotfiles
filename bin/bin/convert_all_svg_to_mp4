@@ -1,0 +1,31 @@
+#!/bin/sh
+
+AUXFOLDER='_tmp_folder'
+
+mkdir -p ${AUXFOLDER}
+
+# depends on gs
+# sudo apt-get install gs
+
+filter=${1:-''}
+
+index=1
+for f in `ls ${filter}*.svg | sort -V`
+do
+    y=${f%.svg}
+    y="img_${index}.jpg"
+    echo "Converting file $f to $y"
+    convert $f "${AUXFOLDER}/${y}"
+    index=$(($index+1))
+done
+
+# It depends on ffmpeg
+if ! hash ffmpeg 2>/dev/null; then
+    module load ffmpeg
+fi
+
+#{ for i in `seq 20`; do ls start.jpg; done ; ls -1 0*.jpg ; } | xargs cat | \
+#    ffmpeg -f image2pipe -r 20 -vcodec mjpeg -i - -vcodec libx264 out.mp4
+#mv out.mp4 paper_face_deep_dream.mp4
+
+ffmpeg -framerate 10 -i ${AUXFOLDER}/img_%00d.jpg -s:v 1280x720 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p out.mp4
