@@ -1,7 +1,14 @@
 [user]
-	name = Miquel Perelló Nieto
-	email = perello.nieto@gmail.com
+  name = Miquel Perelló Nieto
+  email = perello.nieto@gmail.com
 [push]
-	default = matching
+  default = matching
 [github]
-	user = perellonieto
+  user = perellonieto
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = true
+  pager = true
