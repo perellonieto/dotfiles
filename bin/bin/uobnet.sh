@@ -4,6 +4,7 @@
 vpn_host=uobnet.bris.ac.uk
 vpn_port=443
 vpn_realm=UoB-Users
+loglevel=5
 
 # Generate temporary files:
 uobnet_out=$(mktemp --suffix=.out) || { echo "Failed to create temp file" ; exit 1; }
@@ -94,6 +95,7 @@ if ! openssl x509 -in ${uobnet_out} -outform der -out ${uobnet_crt} >/dev/null 2
 	exit 5
 fi
 
+echo "Starting the VPN client."
+echo "/usr/local/nc/ncsvc -h ${vpn_host} -f ${uobnet_crt} -r ${vpn_realm} -u ${vpn_user} -L ${loglevel}"
 # Start the VPN client.
-echo "Starting the VPN client"
-/usr/local/nc/ncsvc -h ${vpn_host} -f ${uobnet_crt} -r ${vpn_realm} -u ${vpn_user}
+/usr/local/nc/ncsvc -h ${vpn_host} -f ${uobnet_crt} -r ${vpn_realm} -u ${vpn_user} -L ${loglevel}
