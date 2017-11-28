@@ -185,3 +185,6 @@ function cd_last() {
     cd `ls -td ./*/ | head -1`
 }
 export -f cd_last
+
+alias webserver="python -m SimpleHTTPServer 8080"
+alias tunnel_shg_mongo="ssh -N -C -f -L 27021:localhost:27017 shg"
