@@ -64,7 +64,7 @@ while [[ $# -gt 0 ]]; do
         "bluecrystal4" | "bc4")
             mountpoint="${HOME}/remoteservers/bluecrystal4/"
             user='mp15688'
-            host='bluecrystalp4.bris.ac.uk'
+            host='bc4login.acrc.bris.ac.uk'
             ;;
         "perellonieto")
             mountpoint="${HOME}/remoteservers/perellonieto/"
@@ -75,6 +75,11 @@ while [[ $# -gt 0 ]]; do
             mountpoint="${HOME}/remoteservers/ul50vt/"
             user='maikel'
             host='ul50vt.local'
+            ;;
+        "uobdell")
+            mountpoint="${HOME}/remoteservers/uobdell/"
+            user='mp15688'
+            host='it064753.wks.bris.ac.uk'
             ;;
         "-u"|"--unmount")
             unmount=true
