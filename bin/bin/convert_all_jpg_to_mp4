@@ -9,4 +9,7 @@ fi
 #    ffmpeg -f image2pipe -r 20 -vcodec mjpeg -i - -vcodec libx264 out.mp4
 #mv out.mp4 paper_face_deep_dream.mp4
 
+# ffmpeg -framerate 25 -i image-%00d.jpg -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p output.mp4
+# ffmpeg -framerate 10 -i reliability_diagram_batch_%00d.jpg -s:v 1280x720 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p daimler_man.mp4
+
 cat ./*.jpg | ffmpeg -f image2pipe -r 20 -vcodec mjpeg -i - -vcodec libx264 out.mp4
