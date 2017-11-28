@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo mount -t cifs -o username='mp15688',uid=302373,domain='UOB' //rdsfcifs.acrc.bris.ac.uk/SPHEREIRC /home/maikel/remoteservers/SPHEREIRC
