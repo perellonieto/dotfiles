@@ -47,6 +47,7 @@ Report bugs to <bugs-diary@perellonieto.com>."
 #
 DIARY_PATH="${HOME}/Dropbox/diary"
 EDITOR="vim + "
+# EDITOR="remarkable"
 EXPLORER="sensible-browser"
 
 ADD="git add *"
@@ -128,17 +129,21 @@ function explore() {
     rm ${TEMP_FILE}
     echo "${HTML_HEAD}" > ${TEMP_FILE}
 
-    echo "<h1 id=\"TODOs\">TODOs</h1>" >> "$TEMP_FILE"
-    grep "\[ \] \*\*TODO\*\*" ./*.${EXTENSION} | \
-         awk -F':' '{print $2, "[#](#"$1")";}' | \
-         $MDTOHTML >> ${TEMP_FILE}
-    #cp "../_html/$CSS_STYLE" $TEMP_FILE
-
     if [ "$YEAR" == "all" ]; then
         FILENAME_LIST=`ls -r ./*.${EXTENSION}`
     else
         FILENAME_LIST=`ls -r ./*.${EXTENSION} | grep ${YEAR}`
     fi
+
+    echo "<h1 id=\"TODOs\">TODOs</h1>" >> "$TEMP_FILE"
+    # If filename list only contains one file, grep will not print the filename
+    # before the line. To solve that it is enough to add an additional file
+    # /dev/null that makes it believe there are multiple files
+    grep "\[ \] \*\*TODO\*\*" ${FILENAME_LIST} /dev/null | \
+         awk -F':' '{print $2, "[#](#"$1")";}' | \
+         $MDTOHTML >> ${TEMP_FILE}
+    #cp "../_html/$CSS_STYLE" $TEMP_FILE
+
 
     for FILENAME in $FILENAME_LIST
     do
