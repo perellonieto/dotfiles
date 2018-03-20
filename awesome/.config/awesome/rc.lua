@@ -81,16 +81,41 @@ end
 -- {{{
 function battery_text (widget)
     fh = assert(io.popen("acpi -a | cut -d \" \" -f 3 -", "r"))
-    local adapter_status = fh:read("*all")
+    local adapter_status = fh:read("*line")
     local color = '#FF2222' -- "red":'#FF2222'
     if string.find(adapter_status, "on", 1, true) then
         color = '#00CC00' -- "green":'#00CC00'
     end
     fh:close()
 
+    fh = assert(io.popen("acpi -b | cut -d, -f 2 | tr -d ' '%", "r"))
+    local battery_perc = fh:read("*number")
+    fh:close()
+
+    local battery_l = '?'
+    if battery_perc > 90 then
+        battery_l = '█'
+    elseif battery_perc > 80 then
+        battery_l = '▇'
+    elseif battery_perc > 70 then
+        battery_l = '▆'
+    elseif battery_perc > 60 then
+        battery_l = '▅'
+    elseif battery_perc > 50 then
+        battery_l = '▄'
+    elseif battery_perc > 40 then
+        battery_l = '▃'
+    elseif battery_perc > 30 then
+        battery_l = '▂'
+    elseif battery_perc > 20 then
+        battery_l = '▁'
+    else
+        battery_l = ' '
+    end
+
     fh = assert(io.popen("acpi -b | cut -d,  -f 2,3 | cut -d \" \" -f 2,3 | tr -d ,", "r"))
     -- battery_widget.text = " |" .. fh:read("*l") .. " | "
-    widget.text = "<b><span color=\"" .. color .. "\">|B " .. fh:read("*l") .. "|</span></b>"
+    widget.text = "<b><span color=\"" .. color .. "\">|" .. battery_l .. " " .. fh:read("*line") .. "|</span></b>"
     fh:close()
 end
 
@@ -147,7 +172,7 @@ layouts =
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 'email' }, s, layouts[1])
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8 }, s, layouts[1])
 end
 -- }}}
 
@@ -381,8 +406,15 @@ globalkeys = awful.util.table.join(
                   mypromptbox[mouse.screen].widget,
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
-              end)
-
+              end),
+    -- Rename current tag
+    awful.key({ modkey, "Shift",  }, "F2",    function ()
+                    awful.prompt.run({ prompt = "Rename tab: ", text = awful.tag.selected().name, },
+                    mypromptbox[mouse.screen].widget,
+                    function (s)
+                        awful.tag.selected().name = s
+                    end)
+            end)
 )
 
 clientkeys = awful.util.table.join(
@@ -476,9 +508,11 @@ awful.rules.rules = {
     { rule = { class = "gimp" },
       properties = { floating = false } },
     { rule = { class = "hamster-time-tracker" },
-      properties = { tag = tags[1][8] } },
+      properties = { tag = tags[1][7] } },
+    { rule = { class = "spotify" },
+      properties = { tag = tags[1][7] } },
     { rule = { class = "Thunderbird" },
-      properties = { tag = tags[1][9] } },
+      properties = { tag = tags[1][8] } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
