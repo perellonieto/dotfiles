@@ -28,4 +28,5 @@ fi
 #    ffmpeg -f image2pipe -r 20 -vcodec mjpeg -i - -vcodec libx264 out.mp4
 #mv out.mp4 paper_face_deep_dream.mp4
 
-ffmpeg -framerate 10 -i ${AUXFOLDER}/img_%00d.jpg -s:v 1280x720 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p out.mp4
+ffmpeg -y -framerate 24 -i ${AUXFOLDER}/img_%00d.jpg -s:v 1280x720 -c:v libx264 \
+       -profile:v high -pix_fmt yuv420p out.mp4

@@ -81,6 +81,17 @@ while [[ $# -gt 0 ]]; do
             user='mp15688'
             host='it064753.wks.bris.ac.uk'
             ;;
+        "tb")
+            mountpoint="${HOME}/remoteservers/tb/"
+            user='mp15688'
+            host='tb'
+            remote_dir='/home/'
+            ;;
+        "strauss")
+            mountpoint="${HOME}/remoteservers/strauss/"
+            user='mp15688'
+            host='strauss'
+            ;;
         "-u"|"--unmount")
             unmount=true
             ;;

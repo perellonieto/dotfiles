@@ -34,8 +34,8 @@ if [ -r "/home/$USER/.dbus/Xdbus" ]; then
   . "/home/$USER/.dbus/Xdbus"
 fi
 
-low_threshold=15
-critical_threshold=10
+low_threshold=10
+critical_threshold=5
 timeout=59
 shutdown_cmd='/usr/sbin/pm-suspend' # '/usr/sbin/pm-hibernate'
 
