@@ -129,6 +129,10 @@ battery_widgettimer:start()
 temp = require("temperature")
 myTempWidget = widget({type = "textbox", align = "right"})
 awful.hooks.timer.register(10, function() myTempWidget.text = temp.getTemp(60, 80) end)
+-- Memory widget:
+--mem = require("memory")
+--myMemWidget = widget({type = "textbox", align = "right"})
+--awful.hooks.timer.register(10, function() myMemWidget.text = mem.getMem(5,10) end)
 -- }}}
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
@@ -302,6 +306,8 @@ for s = 1, screen.count() do
         myseparator,
         battery_widget,
         myseparator,
+        myMemWidget,
+        myseparator,
         myTempWidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -311,9 +317,9 @@ end
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, 3, function () mymainmenu:toggle() end)
+    -- awful.button({ }, 4, awful.tag.viewnext),
+    -- awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -494,19 +500,10 @@ awful.rules.rules = {
                      border_color = beautiful.border_normal,
                      focus = true,
                      keys = clientkeys,
-                     buttons = clientbuttons } },
-    { rule = { class = "MPlayer" },
-      properties = { floating = false } },
-    { rule = { class = "Gedit" },
-      properties = { floating = false } },
-    { rule = { class = "Google-chrome" },
-      properties = { floating = false } },
-    { rule = { class = "Gedit" },
-      properties = { floating = false } },
+                     buttons = clientbuttons,
+                     floating = false} },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
-    { rule = { class = "gimp" },
-      properties = { floating = false } },
     { rule = { class = "hamster-time-tracker" },
       properties = { tag = tags[1][7] } },
     { rule = { class = "spotify" },
@@ -584,7 +581,7 @@ run_once("setxkbmap", "es")             -- Set the keyboard in Spanish
 run_once("wmname", "LG3D")              -- Allows opening JVM GUIs
 run_once("xscreensaver", "-no-splash")  -- screensaver
 -- Time tracker tool
-run_once("hamster-indicator", nil, "/usr/bin/python /usr/bin/hamster-indicator")
+--run_once("hamster-indicator", nil, "/usr/bin/python /usr/bin/hamster-indicator")
 -- run_once("hamster-time-tracker", "overview", "/usr/bin/python /usr/bin/hamster-time-tracker overview")
 -- Different screen color during day
 -- In Ubuntu install redshift and redshift-gtk
