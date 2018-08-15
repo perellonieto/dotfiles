@@ -342,9 +342,16 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioMute", function () volume("mute", volume_widget) end),
     awful.key({ }, "XF86AudioMicMute", function() awful.util.spawn("amixer set Capture toggle") end),
     -- Spotify
-    awful.key({ }, "XF86AudioPlay", function () awful.util.spawn_with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") end),
-    awful.key({ }, "XF86AudioNext", function () awful.util.spawn_with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next") end),
-    awful.key({ }, "XF86AudioPrev", function () awful.util.spawn_with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous") end),
+    awful.key({ }, "XF86AudioPlay",
+        function ()
+            awful.util.spawn_with_shell("pgrep -u $USER -x 'spotify' || (spotify)")
+            awful.util.spawn_with_shell(
+                "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+        end),
+    awful.key({ }, "XF86AudioNext", function () awful.util.spawn_with_shell(
+        "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next") end),
+    awful.key({ }, "XF86AudioPrev", function () awful.util.spawn_with_shell(
+        "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous") end),
     -- End Spotify
     awful.key({ }, "XF86Launch1", function() awful.util.spawn("XF86Launch1.sh") end),
     -- Display, projector, monitor
@@ -352,15 +359,18 @@ globalkeys = awful.util.table.join(
 
     -- Laptop Screen rotation
     -- TODO change or add position instead of rotation
-    awful.key({ modkey, "Control", "Shift"}, "Up", function () screen_rotation("HDMI1", "normal") end),
-    awful.key({ modkey, "Control", "Shift"}, "Left", function () screen_rotation("HDMI1", "left") end),
-    awful.key({ modkey, "Control", "Shift"}, "Right", function () screen_rotation("HDMI1", "right") end),
-    awful.key({ modkey, "Control", "Shift"}, "Down", function () screen_rotation("HDMI1", "inverted") end),
+    awful.key({ modkey, "Control", "Shift"}, "Up",
+              function () screen_rotation("HDMI1", "normal") end),
+    awful.key({ modkey, "Control", "Shift"}, "Left",
+              function () screen_rotation("HDMI1", "left") end),
+    awful.key({ modkey, "Control", "Shift"}, "Right",
+              function () screen_rotation("HDMI1", "right") end),
+    awful.key({ modkey, "Control", "Shift"}, "Down",
+              function () screen_rotation("HDMI1", "inverted") end),
 
     awful.key({ modkey,           }, "h",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "l",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
-
     awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx( 1)
@@ -506,10 +516,13 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "hamster-time-tracker" },
       properties = { tag = tags[1][7] } },
-    { rule = { class = "spotify" },
-      properties = { tag = tags[1][7] } },
+    { rule = { instance = "spotify" },
+      properties = { tag = tags[1][7],
+                     focus = false} },
     { rule = { class = "Thunderbird" },
       properties = { tag = tags[1][8] } },
+    { rule = { class = "Matplotlib" },
+      properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
