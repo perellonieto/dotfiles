@@ -29,6 +29,7 @@ options.
      -v, --version    Show the actual version information
      -ls              Show the name of all the diaries
      -lsl             List the name of all the diaries
+     -lt              List available templates
      -e, --explore    Open a web-browser with the content of the specified diary
      -s, --search     Searches the following sentence in the specified diary
                       (or in all the diaries if the diary name is ommited)
@@ -187,6 +188,7 @@ while [[ $# -gt 0 ]]; do
     -v|--version) printf '%s\n' "$version" || exit 2; exit;;
     -ls) ls | grep -v ^_ || exit 2; exit;;
     -lsl) ls | grep -v ^_ || exit 2; exit;;
+    -lt) ls _templates/ | sed -e 's/.markdown//g' || exit 2; exit;;
     -s|--search) search_sentence=$1; shift;;
     -e|--explore) NOTEBOOK=$1; shift;;
     -y|--year) YEAR=$1; shift;;
