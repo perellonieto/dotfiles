@@ -1,7 +1,8 @@
 #!/bin/bash
 
-filename=$1
+filename="${1}"
 without_extension="${filename%.*}"
 density=${2:-100}
 
-convert -density ${density} ${filename} ${without_extension}.png
+echo "convert -density ${density} ${filename} ${without_extension}.png"
+convert -density ${density} "${filename}" "${without_extension}.png"
