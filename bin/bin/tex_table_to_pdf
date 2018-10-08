@@ -6,12 +6,11 @@
 for f in `ls ./*.tex`
 do
     f=`basename ${f}`
+    f="${f%.tex}"
     echo "Converting file $f to pdf"
-    pdflatex -interaction nonstopmode "\documentclass[a4paper,11pt]{article}\usepackage{float}\usepackage{booktabs}\pagestyle{empty}\begin{document}\centering\input{${f}}\end{document}"
-    #pdfcrop standalone.pdf "${f}.pdf"
-    #rm -rf standalone.*
-    #mv article.pdf "${f}.pdf"
-    mv article.pdf "${f}.pdf"
-    rm article.*
+    pdflatex -interaction nonstopmode "\documentclass{standalone}\usepackage{threeparttable}\usepackage{caption}\usepackage{float}\usepackage{booktabs}\begin{document}\begin{threeparttable}\input{${f}}\end{threeparttable}\end{document}"
+    #mv standalone.pdf "${f}.pdf"
+    mv standalone.pdf "${f}.pdf"
+    rm standalone.*
 done
 
