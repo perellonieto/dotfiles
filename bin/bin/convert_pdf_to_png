@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# depends on gs
+# sudo apt-get install gs
+
+for in_file in "$@"
+do
+    out_file="${in_file%.pdf}.png"
+    echo "Converting file ${in_file} to ${out_file}"
+    echo "gs -sDEVICE=pngalpha -o ${out_file} -sDEVICE=pngalpha -r300 ${in_file}"
+    gs -sDEVICE=pngalpha -o ${out_file} -sDEVICE=pngalpha -r300 ${in_file}
+done
+
+

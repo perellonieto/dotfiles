@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# depends on inkscape
+# sudo apt-get install inkscape
+
+for in_file in "$@"
+do
+    out_file="${in_file%.pdf}.svg"
+    echo "Converting file ${in_file} to ${out_file}"
+    echo "inkscape --without-gui --file=${in_file} --export-plain-svg=${out_file}"
+    inkscape --without-gui --file="${in_file}" --export-plain-svg="${out_file}"
+done
+
