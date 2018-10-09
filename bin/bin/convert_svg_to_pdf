@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# depends on rsvg-convert
+# this binary can be found in apt package librsvg2-bin
+# sudo apt-get install librsvg2-bin
+
+for f in "$@"
+do
+    y=${f%.svg}
+    echo "Converting file $f to $y.pdf"
+    rsvg-convert -f pdf -o $y.pdf $f
+done
+
