@@ -2,8 +2,7 @@ set nocompatible                      " No compatibility with legacy vi
 autocmd! bufwritepost .vimrc source % " Automatic reloading of .vimrc
 
 " =========================================================================="
-" NeoBundle Scripts                                                         "
-" =========================================================================="
+" NeoBundle Scripts                                                         " " =========================================================================="
 
 " Note: Skip initialization for vim-tiny or vim-small.
 if 0 | endif
@@ -35,7 +34,6 @@ NeoBundle 'beloglazov/vim-online-thesaurus'     " words from thesaurus.com
 NeoBundle 'vim-latex/vim-latex' " LaTeX-Suite
 "NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
 "NeoBundle 'davidhalter/jedi-vim'                " Autocompletion library Jedi
-"NeoBundle 'Valloric/YouCompleteMe'
 "NeoBundle 'ctrlpvim/ctrlp.vim'
 "NeoBundle 'flazz/vim-colorschemes'
 "NeoBundle 'solarized'                           " Color theme
@@ -49,12 +47,14 @@ NeoBundle 'easymotion/vim-easymotion'            " easy motion <Leader>^2 s
 "NeoBundle 'jcfaria/Vim-R-plugin'
 "NeoBundle 'jalvesaq/VimCom'
 " For Python
-" TODO need to remove this package
+NeoBundle 'Valloric/YouCompleteMe'
 NeoBundle 'ervandew/screen'                " Not working in IPython >= 5
 NeoBundle 'jpalardy/vim-slime'
 NeoBundle 'nvie/vim-flake8'
+"NeoBundle 'tmhedberg/SimpylFold'        " Solves problem with multiple foldings Really sloooow
+NeoBundle 'vim-scripts/indentpython.vim' " PEP8 indentations
+"NeoBundle 'vim-syntastic/syntastic'     " Syntax analysis
 "NeoBundle 'vim-scripts/indentpython.vim'
-"NeoBundle 'Valloric/YouCompleteMe'
 " You can specify revision/branch/tag.
 "NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 "NeoBundle 'Shougo/neocomplete.vim'      " Autocomplete
@@ -62,8 +62,8 @@ NeoBundle 'nvie/vim-flake8'
 "NeoBundle 'Shougo/neocomplete'
 "NeoBundle 'Shougo/neosnippet'
 "NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'honza/vim-snippets'  " Snippets for several programming languages
-NeoBundle 'davidhalter/jedi-vim' " Snippets for Python
+"NeoBundle 'honza/vim-snippets'  " Snippets for several programming languages
+"NeoBundle 'davidhalter/jedi-vim' " Snippets for Python
 NeoBundle 'powerline/powerline'     " Better statusline
 NeoBundle 'vim-airline/vim-airline' " Better statusline
 NeoBundle 'vim-airline/vim-airline-themes'
@@ -98,10 +98,6 @@ if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
 
-" =========================================================================="
-" scrooloose/nerdtree Configuration                                         "
-" =========================================================================="
-map <F2> :NERDTreeToggle<CR>
 
 " =========================================================================="
 " My configurations                                                          "
@@ -129,6 +125,8 @@ set laststatus=2                " Show a status line
 set scrolloff=2                 " Show n lines between border and cursor
 "set fo-=t
 set spell                       " Spell checking (z= to show proposed words)
+set spelllang=en_gb             " Spell checking language
+autocmd ColorScheme * highlight SpellBad cterm=underline ctermfg=red
 
 "" White spaces
 set nowrap                      " Do not wrap lines
@@ -181,6 +179,13 @@ endfunction
 " =========================================================================="
 " Python files
 " =========================================================================="
+autocmd FileType python set tabstop=4
+autocmd FileType python set softtabstop=4
+autocmd FileType python set shiftwidth=4
+autocmd FileType python set textwidth=79
+autocmd FileType python set expandtab
+autocmd FileType python set autoindent
+autocmd FileType python set fileformat=unix
 " depends on 'ervandew/screen'
 " TODO create my own code
 " tmux display-message -p
@@ -195,6 +200,25 @@ let g:slime_target = "tmux"
 let g:slime_python_ipython=1
 let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
 let g:slime_dont_ask_default = 1
+" PEP8 indentations
+au BufNewFile,BufRead *.py
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
+" YouCompleteMe config
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" YouCompleteMe aware of Virtualenv
+"python with virtualenv support
+" Deleted previous version of python virtualenv
+let python_highlight_all=1
+syntax on
+" ignore files in NERDTree
+let NERDTreeIgnore=['\.pyc$', '\~$']
 
 function! TmuxIPython(...)
     """ Creates a new split and starts ipython
@@ -269,6 +293,11 @@ autocmd FileType python map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<
 "" " Clear screen.
 "" autocmd FileType python map <LocalLeader>pc
 ""       \ :call g:ScreenShellSend('!clear')<CR>
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+" Enable folding with the spacebar (creates problem with tabnext)
+" nnoremap <space> za
 
 " Help function for IPython
 function! s:get_visual_selection()
@@ -311,9 +340,14 @@ autocmd FileType python map <LocalLeader>le :call GetLen()<CR>
 " Search in Google the selected text
 function! GoogleSearch()
      let searchterm = getreg("g")
-     silent! exec "silent! !chromium-browser \"http://google.com/search?q=" . searchterm . "\" &"
+     exec "!google-chrome \"http://google.com/search?q=" . searchterm . "\" >/dev/null 2>&1"
 endfunction
-vnoremap <F6> "gy<Esc>:call GoogleSearch()<CR>
+
+" Search in Google Scholar the selected text
+function! GoogleScholarSearch()
+     let searchterm = getreg("g")
+     exec "!google-chrome \"https://scholar.google.es/scholar?q=" . searchterm . "\" >/dev/null 2>&1"
+endfunction
 
 
 "" Yank to clipboard
@@ -345,24 +379,24 @@ imap <Alt><Space> <Esc>
 "" let g:neocomplete#enable_smart_case = 1
 "" " Set minimum syntax keyword length.
 "" let g:neocomplete#sources#syntax#min_keyword_length = 3
-"" 
+""
 "" " Define dictionary.
 "" let g:neocomplete#sources#dictionary#dictionaries = {
 ""     \ 'default' : '',
 ""     \ 'vimshell' : $HOME.'/.vimshell_hist',
 ""     \ 'scheme' : $HOME.'/.gosh_completions'
 ""         \ }
-"" 
+""
 "" " Define keyword.
 "" if !exists('g:neocomplete#keyword_patterns')
 ""     let g:neocomplete#keyword_patterns = {}
 "" endif
 "" let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-"" 
+""
 "" " Plugin key-mappings.
 "" inoremap <expr><C-g>     neocomplete#undo_completion()
 "" inoremap <expr><C-l>     neocomplete#complete_common_string()
-"" 
+""
 "" " Recommended key-mappings.
 "" " <CR>: close popup and save indent.
 "" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -378,23 +412,23 @@ imap <Alt><Space> <Esc>
 "" inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 "" " Close popup by <Space>.
 "" "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-"" 
+""
 "" " AutoComplPop like behavior.
 "" "let g:neocomplete#enable_auto_select = 1
-"" 
+""
 "" " Shell like behavior(not recommended).
 "" "set completeopt+=longest
 "" "let g:neocomplete#enable_auto_select = 1
 "" "let g:neocomplete#disable_auto_complete = 1
 "" "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-"" 
+""
 "" " Enable omni completion.
 "" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 "" autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 "" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 "" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 "" autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-"" 
+""
 "" " Enable heavy omni completion.
 "" if !exists('g:neocomplete#sources#omni#input_patterns')
 ""   let g:neocomplete#sources#omni#input_patterns = {}
@@ -402,17 +436,17 @@ imap <Alt><Space> <Esc>
 "" "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 "" "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 "" "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-"" 
+""
 "" " For perlomni.vim setting.
 "" " https://github.com/c9s/perlomni.vim
 "" let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-"" 
+""
 "" " Use other snippets
 "" " Enable snipMate compatibility feature.
 "" let g:neosnippet#enable_snipmate_compatibility = 1
 "" " Tell Neosnippet about the other snippets
 "" let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
-"" 
+""
 "" " =========================================================================="
 "" " Shougo/neocomplite.vim Configuration
 "" " =========================================================================="
@@ -421,7 +455,7 @@ imap <Alt><Space> <Esc>
 "" imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 "" smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 "" xmap <C-k>     <Plug>(neosnippet_expand_target)
-"" 
+""
 "" " SuperTab like snippets behavior.
 "" " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
 "" imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -431,7 +465,7 @@ imap <Alt><Space> <Esc>
 "" " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 "" smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 "" \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-"" 
+""
 "" " For conceal markers.
 "" if has('conceal')
 ""   set conceallevel=2 concealcursor=niv
@@ -456,15 +490,19 @@ let g:airline_theme='bubblegum'
 " =========================================================================="
 " Abbreviations (:ab or :abbreviate)                                                            "
 autocmd FileType markdown :ab todo - [ ] **TODO**
-" Command to explore actual diary
-autocmd FileType markdown map <LocalLeader>de :!diary -e ${PWD\#\#*/}<CR>
+" Command to explore actual diary (all year)
+autocmd FileType markdown map <LocalLeader>dy :!diary -e ${PWD\#\#*/}<CR>
+" Command to explore actual diary (only opened file)
+autocmd FileType markdown map <LocalLeader>de :!diary -y '%:t' -e ${PWD\#\#*/}<CR>
+" 2 spaces instead of tabs
+autocmd FileType markdown set tabstop=4
+autocmd FileType markdown set shiftwidth=4
 
 " =========================================================================="
 " vim-scripts/LaTeX-Suite-aka-Vim-LaTeX Configuration                       "
 " =========================================================================="
 "  remember to add a main.latexmain file next to the main.tex file
 "  in this way it is possible to compile from other .tex files
-
 autocmd FileType tex set grepprg=grep\ -nH\ $*       " Grep always generates a file-name
 autocmd FileType tex set iskeyword+=:                " auto-completion in references by <C-n>
 " Following configuration of LaTeX-Suite needs revision
@@ -472,16 +510,72 @@ set formatoptions=cqt
 set iskeyword+=:
 "
 " Solve problem with Latex-suite and editing formulas
-autocmd FileType tex let g:tex_conceal = ""
-autocmd FileType tex let g:Tex_DefaultTargetFormat = 'pdf'
-autocmd FileType tex let g:Tex_MultipleCompileFormats = 'pdf, aux'
+" TODO investigate why adding autocmd FileType tex before following lines do
+" not work
+let g:tex_conceal = ""
+let g:Tex_DefaultTargetFormat = 'pdf'
+let g:Tex_MultipleCompileFormats = 'pdf, aux'
 "autocmd FileType tex let g:Tex_FormatDependency_pdf = 'pdf'
 "autocmd FileType tex let g:Tex_CompileRule_pdf = 'latexmk --bibtex --pdf'
-autocmd FileType tex let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
+"autocmd FileType tex let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
+let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode -synctex=1 $*'
 autocmd FileType tex let g:Tex_ViewRule_pdf = 'evince'
-autocmd FileType tex :call SetTeXTarget('pdf')
+autocmd FileType tex let g:Tex_IgnoredWarnings =
+    \'Underfull'."\n".
+    \'Overfull'."\n".
+    \'specifier changed to'."\n".
+    \'You have requested'."\n".
+    \'Missing number, treated as zero.'."\n".
+    \'There were undefined references'."\n".
+    \'Citation %.%# undefined'."\n".
+    \'Double space found.'."\n".
+    \'Package fmtcount Warning: \\ordinal already defined use \\FCordinal instead.'."\n".
+    \'Package tikz Warning: Snakes have been superseded by decorations.'."\n"
+let g:Tex_IgnoreLevel = 10
+" FIXME There is no function called SetTeXTarget
+"autocmd FileType tex :call SetTeXTarget('pdf')
 " TODO Remap the JumpForward from <C-j> to <C-space>
 " e.g. \chapter{_}<++>
 autocmd FileType tex imap <C-g> <Plug>IMAP_JumpForward
 
+autocmd FileType tex set tabstop=2                   " Number of spaces to visualize a Tab
+autocmd FileType tex set shiftwidth=2                " Number of spaces to visualize when indent
+autocmd FileType tex set nowrap                      " Do not wrap lines
+autocmd FileType tex set expandtab                   " use spaces instead of tabs
+
+" Avoid ussing vim-latex and just use the following line
+"map <Leader>ll :!pdflatex %:p <CR>
+
 set conceallevel=0
+
+" Create visual diff on two blocks of text (buffer a and buffer b)
+let g:diffed_buffers=[]
+function! DiffText(a, b, diffed_buffers)
+    enew
+    setlocal buftype=nowrite
+    call add(a:diffed_buffers, bufnr('%'))
+    call setline(1, split(a:a, "\n"))
+    diffthis
+    vnew
+    setlocal buftype=nowrite
+    call add(a:diffed_buffers, bufnr('%'))
+    call setline(1, split(a:b, "\n"))
+    diffthis
+endfunction
+function! WipeOutDiffs(diffed_buffers)
+    for buffer in a:diffed_buffers
+        execute 'bwipeout! '.buffer
+    endfor
+endfunction
+
+nnoremap <special> <F8> :call DiffText(@a, @b, g:diffed_buffers)<CR>
+nnoremap <special> <F9> :call WipeOutDiffs(g:diffed_buffers) & let g:diffed_buffers=[]<CR>
+
+" Function mappings Mappings
+" =========================================================================="
+" scrooloose/nerdtree Configuration                                         "
+" =========================================================================="
+map <F2> :NERDTreeToggle<CR>
+" My own functions to access google-chrome
+vnoremap <F3> "gy<Esc>:call GoogleSearch()<CR>
+vnoremap <F4> "gy<Esc>:call GoogleScholarSearch()<CR>
