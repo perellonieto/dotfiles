@@ -174,9 +174,10 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
-for s = 1, screen.count() do
+tags[1] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 'mail' }, 1, layouts[1])
+for s = 2, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8 }, s, layouts[1])
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5}, s, layouts[1])
 end
 -- }}}
 
@@ -326,6 +327,8 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 -- Use the command line xev to monitor the keys
 globalkeys = awful.util.table.join(
+    -- Open Htop
+    awful.key({modkey, "Control"}, "Delete", function () awful.util.spawn(terminal .. " -e htop") end),
     -- Open Time Tracker
     awful.key({modkey, }, "t", function () awful.util.spawn("hamster-time-tracker overview") end),
     -- Print Screen
@@ -510,19 +513,30 @@ awful.rules.rules = {
                      border_color = beautiful.border_normal,
                      focus = true,
                      keys = clientkeys,
-                     buttons = clientbuttons,
-                     floating = false} },
+                     buttons = clientbuttons} },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
+    { rule = { class = "terminal" },
+      properties = { floating = false } },
+    { rule = { instance = "mendeley" },
+      properties = { tag = tags[1][6],
+                     focus = false} },
     { rule = { class = "hamster-time-tracker" },
       properties = { tag = tags[1][7] } },
-    { rule = { instance = "spotify" },
+    { rule = { class = "Trello" },
       properties = { tag = tags[1][7],
+                     focus = false} },
+    { rule = { instance = "spotify" },
+      properties = { tag = tags[1][8],
                      focus = false} },
     { rule = { class = "Thunderbird" },
       properties = { tag = tags[1][8] } },
     { rule = { class = "Matplotlib" },
       properties = { floating = true } },
+    { rule = { class = "Thunar" },
+      properties = { floating = false } },
+    { rule = { class = "eog" },
+      properties = { floating = false } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -590,6 +604,7 @@ end
 --previous version was "pgrep -u $USER -x nm-applet > /dev/null || (nm-applet &)"
 run_once("nm-applet")                   -- Network connection tool
 run_once("thunderbird")                 -- e-mail client
+run_once("/home/maikel/Modules/trello/0.1.9/Trello")                      -- Tasks organizer
 run_once("setxkbmap", "es")             -- Set the keyboard in Spanish
 run_once("wmname", "LG3D")              -- Allows opening JVM GUIs
 run_once("xscreensaver", "-no-splash")  -- screensaver
