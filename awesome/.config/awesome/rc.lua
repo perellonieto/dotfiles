@@ -56,7 +56,7 @@ function volume (mode, widget)
         else
             volume = volume .. "M"
         end
-        widget.text = volume
+        widget.text = "<b>" .. volume .. "</b>"
     elseif mode == "up" then
         io.popen("amixer -c " .. cardid .. " set " .. channel .. " 2dB+"):read("*all")
         volume("update", widget)
@@ -121,6 +121,7 @@ end
 
 battery_widget = widget({ type = "textbox" })
 battery_widget.text = "<b>| Battery |</b>"
+battery_text(battery_widget)
 battery_widgettimer = timer({ timeout = 10 })
 battery_widgettimer:add_signal("timeout", function() battery_text(battery_widget) end)
 battery_widgettimer:start()
@@ -128,18 +129,20 @@ battery_widgettimer:start()
 -- Temperature widget:
 temp = require("temperature")
 myTempWidget = widget({type = "textbox", align = "right"})
+myTempWidget.text = temp.getTemp(60, 80)
 awful.hooks.timer.register(10, function() myTempWidget.text = temp.getTemp(60, 80) end)
 -- Memory widget:
---mem = require("memory")
---myMemWidget = widget({type = "textbox", align = "right"})
---awful.hooks.timer.register(10, function() myMemWidget.text = mem.getMem(5,10) end)
+mem = require("memory")
+myMemWidget = widget({type = "textbox", align = "right"})
+myMemWidget.text = mem.getMem(70,90)
+awful.hooks.timer.register(10, function() myMemWidget.text = mem.getMem(70,90) end)
 -- }}}
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- Pomodoro widget
-require('pomodoro')
+-- require('pomodoro')
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
@@ -302,14 +305,14 @@ for s = 1, screen.count() do
         s == 1 and mysystray or nil,
         myseparator,
         volume_widget,
-        myseparator,
-        pomodoro.widget,
+--        myseparator,
+--        pomodoro.widget,
         myseparator,
         battery_widget,
         myseparator,
-        myMemWidget,
-        myseparator,
         myTempWidget,
+        myseparator,
+        myMemWidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
