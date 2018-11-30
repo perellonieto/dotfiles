@@ -47,16 +47,15 @@ function volume (mode, widget)
               fd:close()
 
         local volume = string.match(status, "(%d?%d?%d)%%")
-        volume = string.format("V % 3d", volume)
-
+        volume = string.format("%3.d", volume)
         status = string.match(status, "%[(o[^%]]*)%]")
 
         if string.find(status, "on", 1, true) then
-            volume = volume .. "%"
+            status = "%"
         else
-            volume = volume .. "M"
+            status = "<span color='red'>M</span>"
         end
-        widget.text = "<b>" .. volume .. "</b>"
+        widget.text = "V <b>" .. volume .. "</b>" .. status
     elseif mode == "up" then
         io.popen("amixer -c " .. cardid .. " set " .. channel .. " 2dB+"):read("*all")
         volume("update", widget)
@@ -131,6 +130,11 @@ temp = require("temperature")
 myTempWidget = widget({type = "textbox", align = "right"})
 myTempWidget.text = temp.getTemp(60, 80)
 awful.hooks.timer.register(10, function() myTempWidget.text = temp.getTemp(60, 80) end)
+-- Cpu widget:
+cpu = require("cpu")
+myCpuWidget = widget({type = "textbox", align = "right"})
+myCpuWidget.text = cpu.getCpu(60, 80)
+awful.hooks.timer.register(10, function() myCpuWidget.text = cpu.getCpu(50, 75) end)
 -- Memory widget:
 mem = require("memory")
 myMemWidget = widget({type = "textbox", align = "right"})
@@ -310,9 +314,11 @@ for s = 1, screen.count() do
         myseparator,
         battery_widget,
         myseparator,
+        myMemWidget,
+        myseparator,
         myTempWidget,
         myseparator,
-        myMemWidget,
+        myCpuWidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }

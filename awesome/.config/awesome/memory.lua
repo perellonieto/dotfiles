@@ -21,7 +21,7 @@ function M.getMem(mid, high)
         color = "<b><span color='green'>"
     end
 
-    table.insert(mem_out, "Mem:" .. color .. percentage .. "%</span></b>")
+    table.insert(mem_out, "Mem " .. color .. percentage .. "%</span></b>")
     return table.concat(mem_out, "|")
 end
 

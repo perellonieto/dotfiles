@@ -24,7 +24,7 @@ function M.getTemp(mid, high)
             color = "<b><span color='cyan'>"
         end
 
-        table.insert(temp_out, "#" .. sensor_num .. ": " .. color .. sensor_temp .. "C</span></b>")
+        table.insert(temp_out, "#" .. sensor_num .. " " .. color .. sensor_temp .. "C</span></b>")
 
         line = fd:read()
     end
