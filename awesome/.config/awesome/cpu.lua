@@ -45,7 +45,7 @@ function M.getCpu(mid, high)
     elseif diff_usage>mid then
         color = 'orange'
     else
-        color = 'green'
+        color = '#00CC00' -- "green":'#00CC00'
     end
 
     table.insert(cpu_out, "<b><span color='" .. color .. "'>" .. math.floor(diff_usage) .. "%</span></b>")

@@ -10,6 +10,8 @@ require("naughty")
 -- Load Debian menu entries
 require("debian.menu")
 
+local HOME = os.getenv("HOME")
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -79,7 +81,7 @@ end
 -- Battery widget:
 -- {{{
 function battery_text (widget)
-    fh = assert(io.popen("acpi -a | cut -d \" \" -f 3 -", "r"))
+    local fh = assert(io.popen("acpi -a | cut -d \" \" -f 3 -", "r"))
     local adapter_status = fh:read("*line")
     local color = '#FF2222' -- "red":'#FF2222'
     if string.find(adapter_status, "on", 1, true) then
@@ -112,16 +114,17 @@ function battery_text (widget)
         battery_l = ' '
     end
 
-    fh = assert(io.popen("acpi -b | cut -d,  -f 2,3 | cut -d \" \" -f 2,3 | tr -d ,", "r"))
-    -- battery_widget.text = " |" .. fh:read("*l") .. " | "
-    widget.text = "<b><span color=\"" .. color .. "\">|" .. battery_l .. " " .. fh:read("*line") .. "|</span></b>"
+    fh = assert(io.popen("acpi -b | cut -d,  -f 2,3 | cut -d ' ' -f 2,3 | tr -d ,", "r"))
+	local str = fh:read("*line")
+    str = str:sub(1, 9)
+    widget.text = "<b><span color=\"" .. color .. "\">|" .. battery_l .. " " .. str .. "|</span></b>"
     fh:close()
 end
 
 battery_widget = widget({ type = "textbox" })
 battery_widget.text = "<b>| Battery |</b>"
 battery_text(battery_widget)
-battery_widgettimer = timer({ timeout = 10 })
+battery_widgettimer = timer({ timeout = 30 })
 battery_widgettimer:add_signal("timeout", function() battery_text(battery_widget) end)
 battery_widgettimer:start()
 -- }}}
@@ -129,21 +132,24 @@ battery_widgettimer:start()
 temp = require("temperature")
 myTempWidget = widget({type = "textbox", align = "right"})
 myTempWidget.text = temp.getTemp(60, 80)
-awful.hooks.timer.register(10, function() myTempWidget.text = temp.getTemp(60, 80) end)
+awful.hooks.timer.register(30, function() myTempWidget.text = temp.getTemp(60, 80) end)
+-- Load cpu widget
+--require("cpu-widget")
 -- Cpu widget:
 cpu = require("cpu")
 myCpuWidget = widget({type = "textbox", align = "right"})
 myCpuWidget.text = cpu.getCpu(60, 80)
-awful.hooks.timer.register(10, function() myCpuWidget.text = cpu.getCpu(50, 75) end)
+awful.hooks.timer.register(5, function() myCpuWidget.text = cpu.getCpu(50, 75) end)
 -- Memory widget:
 mem = require("memory")
 myMemWidget = widget({type = "textbox", align = "right"})
 myMemWidget.text = mem.getMem(70,90)
-awful.hooks.timer.register(10, function() myMemWidget.text = mem.getMem(70,90) end)
+awful.hooks.timer.register(20, function() myMemWidget.text = mem.getMem(70,90) end)
 -- }}}
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+-- beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+beautiful.init(HOME .. "/.config/awesome/themes/mine/theme.lua")
 
 -- Pomodoro widget
 -- require('pomodoro')
@@ -319,6 +325,7 @@ for s = 1, screen.count() do
         myTempWidget,
         myseparator,
         myCpuWidget,
+--        cpu_widget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -341,7 +348,7 @@ globalkeys = awful.util.table.join(
     -- Open Time Tracker
     awful.key({modkey, }, "t", function () awful.util.spawn("hamster-time-tracker overview") end),
     -- Print Screen
-    awful.key({ }, "Print", function () awful.util.spawn("/home/maikel/bin/screenshot") end),
+    awful.key({ }, "Print", function () awful.util.spawn(HOME .. "/bin/screenshot") end),
     -- Screensaver lock
     -- TODO revise that next line works properly
     awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("xscreensaver-command -lock") end),
@@ -613,7 +620,7 @@ end
 --previous version was "pgrep -u $USER -x nm-applet > /dev/null || (nm-applet &)"
 run_once("nm-applet")                   -- Network connection tool
 run_once("thunderbird")                 -- e-mail client
-run_once("/home/maikel/Modules/trello/0.1.9/Trello")                      -- Tasks organizer
+run_once(HOME .. "/Modules/trello/0.1.9/Trello")                      -- Tasks organizer
 run_once("setxkbmap", "es")             -- Set the keyboard in Spanish
 run_once("wmname", "LG3D")              -- Allows opening JVM GUIs
 run_once("xscreensaver", "-no-splash")  -- screensaver
@@ -626,7 +633,7 @@ run_once("xscreensaver", "-no-splash")  -- screensaver
 -- In Ubuntu need to install fluxgui
 run_once("fluxgui", nil, "/usr/bin/python /usr/bin/fluxgui")
 -- Dropbox daemon
-run_once("dropbox", "start", "/home/maikel/.dropbox-dist/dropbox-lnx.x86_64-30.4.22/dropbox")
+run_once("dropbox", "start", HOME .. "/.dropbox-dist/dropbox-lnx.x86_64-30.4.22/dropbox")
 -- Devmail (synchronization between Microsoft Exchange and Thunderbird)
-run_once("/bin/sh", "/home/maikel/Modules/davmail/4.8.0/davmail.sh /home/maikel/Modules/davmail/4.8.0/davmail.properties")
-run_once("/home/maikel/bin/system-low-battery-autostart")
+run_once("/bin/sh", HOME .. "/Modules/davmail/4.8.0/davmail.sh " .. HOME .. "/Modules/davmail/4.8.0/davmail.properties")
+run_once(HOME .. "/bin/system-low-battery-autostart")

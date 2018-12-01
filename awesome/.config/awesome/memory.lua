@@ -18,7 +18,7 @@ function M.getMem(mid, high)
     elseif percentage>mid then
         color = "<b><span color='orange'>"
     else
-        color = "<b><span color='green'>"
+        color = "<b><span color='#00CC00'>" -- "green":'#00CC00'
     end
 
     table.insert(mem_out, "Mem " .. color .. percentage .. "%</span></b>")

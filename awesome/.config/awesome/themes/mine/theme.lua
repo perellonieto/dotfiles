@@ -4,7 +4,8 @@
 
 theme = {}
 
-theme.font          = "sans 8"
+--theme.font          = "deja vu sans mono 8"
+theme.font          = "consolas 8"
 
 theme.bg_normal     = "#222222"
 theme.bg_focus      = "#535d6c"
@@ -18,8 +19,8 @@ theme.fg_minimize   = "#ffffff"
 
 theme.border_width  = "1"
 theme.border_normal = "#000000"
-theme.border_focus  = "#535d6c"
-theme.border_marked = "#91231c"
+theme.border_focus  = "#939d9c"
+theme.border_marked = "#939d9c"
 
 -- There are other variable sets
 -- overriding the default one when
@@ -74,8 +75,10 @@ theme.titlebar_maximized_button_normal_active = "/usr/share/awesome/themes/defau
 theme.titlebar_maximized_button_focus_active  = "/usr/share/awesome/themes/default/titlebar/maximized_focus_active.png"
 
 -- You can use your own command to set your wallpaper
-theme.wallpaper_cmd = { "awsetbg -f ./.config/awesome/themes/mine/background_screen_1.png",
-                        "awsetbg -f ./.config/awesome/themes/mine/background_screen_2.png" }
+theme.wallpaper_cmd = { "awsetbg /usr/share/awesome/themes/zenburn/zenburn-background.png" }
+-- theme.wallpaper_cmd = { "awsetbg /usr/share/awesome/themes/default/background.png" }
+--theme.wallpaper_cmd = { "awsetbg -f ./.config/awesome/themes/mine/background_screen_1.png",
+--                        "awsetbg -f ./.config/awesome/themes/mine/background_screen_2.png" }
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = "/usr/share/awesome/themes/default/layouts/fairhw.png"
