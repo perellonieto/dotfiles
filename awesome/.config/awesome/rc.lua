@@ -118,11 +118,11 @@ function battery_text (widget)
 	local str = fh:read("*line")
     str = str:sub(1, 9)
     widget.text = "<b><span color=\"" .. color .. "\">|" .. battery_l .. " " .. str .. "|</span></b>"
+	-- widget.icon:set_image("/home/maikel/.config/awesome/icons/battery_full.gif")
     fh:close()
 end
 
 battery_widget = widget({ type = "textbox" })
-battery_widget.text = "<b>| Battery |</b>"
 battery_text(battery_widget)
 battery_widgettimer = timer({ timeout = 30 })
 battery_widgettimer:add_signal("timeout", function() battery_text(battery_widget) end)
