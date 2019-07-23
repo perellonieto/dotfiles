@@ -80,6 +80,7 @@ while [[ $# -gt 0 ]]; do
             mountpoint="${HOME}/remoteservers/uobdell/"
             user='mp15688'
             host='it064753.wks.bris.ac.uk'
+            remote_dir='/'
             ;;
         "tb")
             mountpoint="${HOME}/remoteservers/tb/"
@@ -91,6 +92,18 @@ while [[ $# -gt 0 ]]; do
             mountpoint="${HOME}/remoteservers/strauss/"
             user='mp15688'
             host='strauss'
+            ;;
+        "rodan")
+            mountpoint="${HOME}/remoteservers/rodan/"
+            user='mp15688'
+            host='rodan'
+            remote_dir='/'
+            ;;
+        "titanv")
+            mountpoint="${HOME}/remoteservers/titanv/"
+            user='mp15688'
+            host='titanv'
+            remote_dir='/home/mp15688/'
             ;;
         "-u"|"--unmount")
             unmount=true

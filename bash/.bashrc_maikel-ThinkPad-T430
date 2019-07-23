@@ -1,5 +1,6 @@
-alias tunnel_shg_mongo="ssh -N -C -f -L 27021:localhost:27017 shg"
-alias tunnel_tb_mongo="ssh -N -f -L localhost:27018:localhost:27017 mp15688@989096a28a05.anet.bris.ac.uk"
+alias tunnel_shg_mongo="ssh -N -C -L 27021:localhost:27017 shg"
+alias tunnel_tb_mongo="ssh -N -L localhost:27018:localhost:27017 mp15688@989096a28a05.anet.bris.ac.uk"
+alias tunnel_tb_jupyter="ssh -N -L localhost:8000:localhost:8000 mp15688@989096a28a05.anet.bris.ac.uk"
 
 alias webserver="python -m SimpleHTTPServer 8080"
 
@@ -14,10 +15,13 @@ alias aisoy_connect="sudo ifconfig usb0 10.34.65.88 netmask 255.255.255.0"
 alias environment_ros="source ~/ros/setup.bash"
 #alias gcalcli="/usr/bin/gcalcli --pw=`cat ~/.gcalclirc-pw`"
 #alias tmux="tmux -2"
-alias tmux="TERM=screen-256color-bce tmux"
-alias diskusage="du -sch .[!.]* * | sort -h"
 
 # Load some modules
 module use ~/modulefiles
 module load robo3t
 
+alias dwarf_fortress="/home/maikel/games/dwarf_fortress/LinuxLNP-0.44.10-r01/startlnp"
+
+alias rdsf_mount="sudo mount -t cifs -o username='mp15688',uid=1000,domain='UOB',vers=3.0 //rdsfcifs.acrc.bris.ac.uk/SPHEREIRC /home/maikel/remoteservers/SPHEREIRC/"
+
+alias diskusage="du -hs ./* | sort -h"

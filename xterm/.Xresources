@@ -1,0 +1,63 @@
+xterm*font:			xft:Monospace:regular:antialias=true:size=12
+xterm*boldMode: true
+
+#define S_black         #002b36
+#define S_darkgrey      #073642
+#define S_grey          #586e75
+#define S_lightgrey     #839496
+#define S_darkwhite     #93a1a1
+#define S_white         #eee8d5
+
+#define S_darkyellow    #b58900
+#define S_yellow        #b58920
+#define S_lightyellow   #b58950
+#define S_orange        #cb4b16
+#define S_red           #dc322f
+#define S_magenta       #d33682
+#define S_violet        #6c71c4
+#define S_blue          #268bd2
+#define S_lightblue     #76dbd2
+#define S_darkcyan      #008080
+#define S_cyan          #2aa198
+#define S_lightcyan     #00bbbb
+#define S_green         #859900
+#define S_lightgreen    #859950
+
+*background:            S_black
+*foreground:            S_lightgrey
+*fadeColor:             S_black
+*cursorColor:           S_darkwhite
+*pointerColorBackground:S_grey
+*pointerColorForeground:S_darkwhite
+
+!! black dark/light
+*color0:                S_darkgrey
+*color8:                S_black
+
+!! red dark/light
+*color1:                S_red
+*color9:                S_orange
+
+!! green dark/light
+*color2:                S_green
+*color10:               S_lightgreen
+
+!! yellow dark/light
+*color3:                S_darkyellow
+*color11:               S_lightyellow
+
+!! blue dark/light
+*color4:                S_blue
+*color12:               S_lightblue
+
+!! magenta dark/light
+*color5:                S_magenta
+*color13:               S_violet
+
+!! cyan dark/light
+*color6:                S_darkcyan
+*color14:               S_lightcyan
+
+!! white dark/light
+*color7:                S_white
+*color15:               S_black

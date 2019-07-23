@@ -173,3 +173,5 @@ export -f cd_last
 if [ -f ".bashrc_${HOSTNAME}" ]; then
     source ".bashrc_${HOSTNAME}"
 fi
+
+alias tmux="TERM=screen-256color-bce tmux"

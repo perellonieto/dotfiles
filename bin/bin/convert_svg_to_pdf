@@ -8,6 +8,6 @@ for f in "$@"
 do
     y=${f%.svg}
     echo "Converting file $f to $y.pdf"
-    rsvg-convert -f pdf -o $y.pdf $f
+    rsvg-convert -f pdf -o "${y}.pdf" "${f}"
 done
 

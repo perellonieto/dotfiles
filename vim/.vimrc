@@ -1,80 +1,43 @@
-set nocompatible                      " No compatibility with legacy vi
-autocmd! bufwritepost .vimrc source % " Automatic reloading of .vimrc
+"" =========================================================================="
+"" Shougo/dein.vim configuration                                             "
+"" https://github.com/Shougo/dein.vim
+"" =========================================================================="
+if &compatible
+  set nocompatible
+endif
+" Add the dein installation directory into runtimepath
+set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
 
-" =========================================================================="
-" NeoBundle Scripts                                                         " " =========================================================================="
+if dein#load_state('~/.cache/dein')
+  call dein#begin('~/.cache/dein')
 
-" Note: Skip initialization for vim-tiny or vim-small.
-if 0 | endif
-
-if has('vim_starting')
-  if &compatible
-    set nocompatible               " Be iMproved
+  call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
+  call dein#add('Shougo/deoplete.nvim')
+  if !has('nvim')
+    call dein#add('roxma/nvim-yarp')
+    call dein#add('roxma/vim-hug-neovim-rpc')
   endif
 
-  " Required:
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  " My bundles
+  call dein#add('altercation/vim-colors-solarized') " Solarized colorscheme
+  call dein#add('scrooloose/nerdtree')              " Left folder navigator
+  call dein#add('beloglazov/vim-online-thesaurus')  " words from thesaurus.com
+  call dein#add('mhinz/vim-signify')                " Add git diffs
+  " For Python
+  call dein#add('Valloric/YouCompleteMe')           " Autocomplete
+  call dein#add('nvie/vim-flake8')
+  call dein#add('vim-scripts/indentpython.vim')     " PEP8 indentations
+  " End of My bundles
+
+  call dein#end()
+  call dein#save_state()
 endif
 
-" Required:
-call neobundle#begin(expand('~/.vim/bundle'))
-
-" Let NeoBundle manage NeoBundle
-" Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-" Add or remove your Bundles here:
-" when writting the '<url>' it is possible to ommit the https://github.com/
-"NeoBundle 'Shougo/neosnippet.vim'               " Snippets implementation
-"NeoBundle 'Shougo/neosnippet-snippets'          " Predefined snippets
-NeoBundle 'mhinz/vim-signify'                   " Add git diffs
-NeoBundle 'tpope/vim-fugitive'                  " Git calls
-NeoBundle 'scrooloose/nerdtree'                 " Left panel folder navigator
-NeoBundle 'beloglazov/vim-online-thesaurus'     " words from thesaurus.com
-NeoBundle 'vim-latex/vim-latex' " LaTeX-Suite
-"NeoBundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX' " LaTeX-Suite
-"NeoBundle 'davidhalter/jedi-vim'                " Autocompletion library Jedi
-"NeoBundle 'ctrlpvim/ctrlp.vim'
-"NeoBundle 'flazz/vim-colorschemes'
-"NeoBundle 'solarized'                           " Color theme
-"NeoBundle 'altercation/vim-colors-solarized'
-"NeoBundle 'solarized/vim-colors-solarized'
-"NeoBundle 'wellle/vim-colors-solarized'
-NeoBundle 'altercation/vim-colors-solarized'
-"NeoBundle 'akmassey/vim-codeschool'
-NeoBundle 'easymotion/vim-easymotion'            " easy motion <Leader>^2 s
-"NeoBundle 'vim-scripts/Vim-R-plugin'
-"NeoBundle 'jcfaria/Vim-R-plugin'
-"NeoBundle 'jalvesaq/VimCom'
-" For Python
-NeoBundle 'Valloric/YouCompleteMe'
-NeoBundle 'ervandew/screen'                " Not working in IPython >= 5
-NeoBundle 'jpalardy/vim-slime'
-NeoBundle 'nvie/vim-flake8'
-"NeoBundle 'tmhedberg/SimpylFold'        " Solves problem with multiple foldings Really sloooow
-NeoBundle 'vim-scripts/indentpython.vim' " PEP8 indentations
-"NeoBundle 'vim-syntastic/syntastic'     " Syntax analysis
-"NeoBundle 'vim-scripts/indentpython.vim'
-" You can specify revision/branch/tag.
-"NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
-"NeoBundle 'Shougo/neocomplete.vim'      " Autocomplete
-" Necessary snipets for neocomplete
-"NeoBundle 'Shougo/neocomplete'
-"NeoBundle 'Shougo/neosnippet'
-"NeoBundle 'Shougo/neosnippet-snippets'
-"NeoBundle 'honza/vim-snippets'  " Snippets for several programming languages
-"NeoBundle 'davidhalter/jedi-vim' " Snippets for Python
-NeoBundle 'powerline/powerline'     " Better statusline
-NeoBundle 'vim-airline/vim-airline' " Better statusline
-NeoBundle 'vim-airline/vim-airline-themes'
-
-" Required:
-call neobundle#end()
-
-" Required:
 filetype plugin indent on
-
-NeoBundleCheck
+syntax enable
+"" =========================================================================="
+"" End of Shougo/dein.vim configuration                                             "
+"" =========================================================================="
 
 " =========================================================================="
 " Shougo/neosnippet Configuration                                           "
@@ -146,9 +109,9 @@ map <Leader><Space> <esc>:%s/\s\+$//e<CR>   " Remove ending whitespaces
 "" Color and Syntax
 set t_Co=256                    " Use 256 colors
 syntax enable                   " Enable syntax highlight
-set background=dark
+"set background=dark
 "let g:solarized_termcolors=256
-colorscheme solarized           " default, desert, murphy, peachpuff, solarized
+"colorscheme solarized           " default, desert, murphy, peachpuff, solarized
 set colorcolumn=80              " Paint the column 80
 set matchtime=2                 " tenths of a second blink when matching ()
 
@@ -483,7 +446,7 @@ let g:jedi#auto_vim_configuration = 0
 " =========================================================================="
 " Configuration to use vim-airline/vim-airline
 " =========================================================================="
-let g:airline_theme='bubblegum'
+"let g:airline_theme='bubblegum'
 
 " =========================================================================="
 " MARKDOWN files
@@ -579,3 +542,36 @@ map <F2> :NERDTreeToggle<CR>
 " My own functions to access google-chrome
 vnoremap <F3> "gy<Esc>:call GoogleSearch()<CR>
 vnoremap <F4> "gy<Esc>:call GoogleScholarSearch()<CR>
+
+
+" Function to Toggle navigation on wrapped lines
+" =========================================================================="
+noremap <silent> <Leader>w :call ToggleWrap()<CR>
+function! ToggleWrap()
+  if &wrap
+    echo "Wrap OFF"
+    setlocal nowrap
+    set virtualedit=all
+    silent! nunmap <buffer> <Up>
+    silent! nunmap <buffer> <Down>
+    silent! nunmap <buffer> <Home>
+    silent! nunmap <buffer> <End>
+    silent! iunmap <buffer> <Up>
+    silent! iunmap <buffer> <Down>
+    silent! iunmap <buffer> <Home>
+    silent! iunmap <buffer> <End>
+  else
+    echo "Wrap ON"
+    setlocal wrap linebreak nolist
+    set virtualedit=
+    setlocal display+=lastline
+    noremap  <buffer> <silent> <Up>   gk
+    noremap  <buffer> <silent> <Down> gj
+    noremap  <buffer> <silent> <Home> g<Home>
+    noremap  <buffer> <silent> <End>  g<End>
+    inoremap <buffer> <silent> <Up>   <C-o>gk
+    inoremap <buffer> <silent> <Down> <C-o>gj
+    inoremap <buffer> <silent> <Home> <C-o>g<Home>
+    inoremap <buffer> <silent> <End>  <C-o>g<End>
+  endif
+endfunction

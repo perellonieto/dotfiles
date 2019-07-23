@@ -1,0 +1,3 @@
+#!/bin/sh
+
+convert_pdf_to_eps ./*.pdf

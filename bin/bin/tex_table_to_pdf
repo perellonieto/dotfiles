@@ -8,7 +8,10 @@ do
     f=`basename ${f}`
     f="${f%.tex}"
     echo "Converting file $f to pdf"
-    pdflatex -interaction nonstopmode "\documentclass{standalone}\usepackage{threeparttable}\usepackage{caption}\usepackage{float}\usepackage{booktabs}\begin{document}\begin{threeparttable}\input{${f}}\end{threeparttable}\end{document}"
+    # For some reason lmodern font keeps bold face when converting the
+    # generated pdf to svg from Inkscape
+    pdflatex -interaction nonstopmode "\documentclass{standalone}\usepackage{lmodern}\usepackage{threeparttable}\usepackage{caption}\usepackage{float}\usepackage{booktabs}\begin{document}\begin{threeparttable}\input{${f}}\end{threeparttable}\end{document}"
+    #pdflatex -interaction nonstopmode "\documentclass{standalone}\usepackage{threeparttable}\usepackage{caption}\usepackage{float}\usepackage{booktabs}\begin{document}\begin{threeparttable}\input{${f}}\end{threeparttable}\end{document}"
     #mv standalone.pdf "${f}.pdf"
     mv standalone.pdf "${f}.pdf"
     rm standalone.*

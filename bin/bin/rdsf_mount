@@ -1,3 +1,6 @@
 #!/bin/bash
 
-sudo mount -t cifs -o username='mp15688',uid=302373,domain='UOB' //rdsfcifs.acrc.bris.ac.uk/SPHEREIRC /home/maikel/remoteservers/SPHEREIRC
+echo "Mounting RDSF SPHEREIRC"
+#sudo mount -t cifs -o username='mp15688',uid=302373,domain='UOB' //rdsfcifs.acrc.bris.ac.uk/SPHEREIRC /home/maikel/remoteservers/SPHEREIRC
+#sudo mount -t cifs -o username=mp15688,domain=UOB,vers=2.0,sec=ntlm //rdsfcifs.acrc.bris.ac.uk/SPHEREIRC /home/maikel/remoteservers/SPHEREIRC
+#sudo mount  -t cifs -o username='hello',domain='UOB',ver=3.0 //not_sure_if_is_running SPHEREIRC/
