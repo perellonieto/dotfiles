@@ -23,9 +23,4 @@ http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfile
 
 ## Vim
 
-Needs NeoBundle to be installed. Run the following
-
-```Bash
-curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh > install.sh
-sh ./install.sh
-```
+Requires Shougo/dein.vim check instructions here https://github.com/Shougo/dein.vim
