@@ -1,63 +1,86 @@
-xterm*font:			xft:Monospace:regular:antialias=true:size=12
-xterm*boldMode: true
+xterm*geometry:           80x25
+xterm*faceName:           monospace:pixelsize=16
+xterm*dynamicColors:      true
+xterm*utf8:               2
+xterm*eightBitInput:      true
+xterm*saveLines:          512
+xterm*scrollKey:          true
+xterm*scrollTtyOutput:    false
+xterm*scrollBar:          true
+xterm*rightScrollBar:     true
+xterm*jumpScroll:         true
+xterm*multiScroll:        true
+xterm*toolBar:            false
+xterm*boldMode:           true
 
-#define S_black         #002b36
-#define S_darkgrey      #073642
+#define S_black         #000000
+#define S_grey_1        #002b36
+#define S_grey_2        #073642
+#define S_grey_3        #586e75
+#define S_grey_4        #657b83
+#define S_grey_5        #839496
+#define S_grey_6        #93a1a1
+#define S_grey_7        #eee8d5
+#define S_grey_8        #fdf6e3
+#define S_white_3       #ffffff
+
+#define S_black         #000000
 #define S_grey          #586e75
-#define S_lightgrey     #839496
-#define S_darkwhite     #93a1a1
-#define S_white         #eee8d5
-
-#define S_darkyellow    #b58900
-#define S_yellow        #b58920
-#define S_lightyellow   #b58950
+#define S_white         #ffffff
+#define S_yellow        #b58900
 #define S_orange        #cb4b16
 #define S_red           #dc322f
 #define S_magenta       #d33682
 #define S_violet        #6c71c4
 #define S_blue          #268bd2
-#define S_lightblue     #76dbd2
-#define S_darkcyan      #008080
 #define S_cyan          #2aa198
-#define S_lightcyan     #00bbbb
 #define S_green         #859900
-#define S_lightgreen    #859950
 
-*background:            S_black
-*foreground:            S_lightgrey
-*fadeColor:             S_black
-*cursorColor:           S_darkwhite
-*pointerColorBackground:S_grey
-*pointerColorForeground:S_darkwhite
+#define S_lightyellow   #b58950
+#define S_darkblue      #066bb2
+#define S_lightcyan     #4ac1b8
+#define S_darkgreen     #657900
+#define S_darkwhite    #eee8d5
+
+xterm*background:            S_grey_1
+xterm*foreground:            S_grey_6
+xterm*fadeColor:             S_grey_7
+xterm*cursorColor:           S_grey_4
+xterm*pointerColorBackground:S_grey_5
+xterm*pointerColorForeground:S_grey_2
 
 !! black dark/light
-*color0:                S_darkgrey
-*color8:                S_black
+xterm*color0:                S_black
+xterm*color8:                S_grey_2
 
 !! red dark/light
-*color1:                S_red
-*color9:                S_orange
+xterm*color1:                S_red
+xterm*color9:                S_orange
 
 !! green dark/light
-*color2:                S_green
-*color10:               S_lightgreen
+xterm*color2:                S_darkgreen
+xterm*color10:               S_green
 
 !! yellow dark/light
-*color3:                S_darkyellow
-*color11:               S_lightyellow
+xterm*color3:                S_yellow
+xterm*color11:               S_lightyellow
 
 !! blue dark/light
-*color4:                S_blue
-*color12:               S_lightblue
+xterm*color4:                S_darkblue
+xterm*color12:               S_blue
 
 !! magenta dark/light
-*color5:                S_magenta
-*color13:               S_violet
+xterm*color5:                S_magenta
+xterm*color13:               S_violet
 
 !! cyan dark/light
-*color6:                S_darkcyan
-*color14:               S_lightcyan
+xterm*color6:                S_cyan
+xterm*color14:               S_lightcyan
 
 !! white dark/light
-*color7:                S_white
-*color15:               S_black
+xterm*color7:                S_grey_7
+xterm*color15:               S_white
+
+xterm*VT100.Translations: #override \
+                 Ctrl Shift <Key>V:    insert-selection(CLIPBOARD) \n\
+                 Ctrl Shift <Key>C:    copy-selection(CLIPBOARD)
