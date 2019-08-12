@@ -26,6 +26,7 @@ if dein#load_state('~/.cache/dein')
   " For Python
   call dein#add('Valloric/YouCompleteMe')           " Autocomplete
   call dein#add('nvie/vim-flake8')
+  call dein#add('jpalardy/vim-slime')
   call dein#add('vim-scripts/indentpython.vim')     " PEP8 indentations
   " End of My bundles
 
@@ -65,8 +66,11 @@ endif
 " =========================================================================="
 " My configurations                                                          "
 " =========================================================================="
+let language = substitute(system('setxkbmap -query | grep layout | tr --delete \ | cut -d : -f 2'), '\n', '', 'g')
+
 set encoding=utf-8
 "" keymaps
+nmap ; :
 let mapleader = ","
 let maplocalleader = "m"
 nmap <leader>w :w!<cr>
@@ -74,7 +78,13 @@ nmap <leader>q :q<cr>
 
 map <Leader>. <esc>:tabnext<CR>     " Next tab
 map <Leader>m <esc>:tabprevious<CR> " Previous tab
-map <Leader>- <esc>:tabnew<CR>      " New tab
+map <Leader>/ <esc>:tabnew<CR>      " New tab
+
+if language == 'es'
+    map <Leader>- <esc>:tabnew<CR>      " New tab
+    nmap ñ :
+    nmap Ñ :
+endif
 
 "" Split navigations
 nnoremap <C-j> <C-w><C-j>
@@ -103,7 +113,7 @@ set backspace=indent,eol,start  " backspace through everything in insert mode
 set smarttab
 " Highligh whitespaces at the end (before Color scheme)
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-au InsertLeave * match ExtraWhitespace /\s\+$/
+"au InsertLeave * match ExtraWhitespace /\s\+$/
 map <Leader><Space> <esc>:%s/\s\+$//e<CR>   " Remove ending whitespaces
 
 "" Color and Syntax
