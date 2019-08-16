@@ -33,7 +33,7 @@ floating_modifier $mod
 bindsym $mod+Return exec i3-sensible-terminal
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+Shift+c kill
 
 # start dmenu (a program launcher)
 bindsym $mod+r exec dmenu_run
@@ -84,9 +84,6 @@ bindsym $mod+a focus parent
 bindsym $mod+i workspace prev
 bindsym $mod+o workspace next
 
-# move workspace
-bindsym $mod+m move workspace to output right
-
 # switch to workspace
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
@@ -112,7 +109,7 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+bindsym $mod+Shift+q reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
@@ -145,6 +142,12 @@ mode "resize" {
 bindsym $mod+d mode "resize"
 
 # My bindings
+# move workspace
+bindsym $mod+m move workspace to output right
+# create a new workspace
+bindsym $mod+n exec --no-startup-id ~/.config/i3/new_empty_workspace.sh
+# move container to empty workspace
+bindsym $mod+b exec --no-startup-id ~/.config/i3/move_to_empty_workspace.sh
 bindsym XF86Display exec XF86Display.sh
 bindsym XF86AudioRaiseVolume exec amixer -q set Master 2dB+ unmute
 bindsym XF86AudioLowerVolume exec amixer -q set Master 2dB- unmute
@@ -163,8 +166,26 @@ bindsym XF86Launch1 XF86Launch1.sh
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+    status_command i3status
+    bindsym button3 exec --no-startup-id jgmenu_run
 }
 
-exec --no-startup-id i3-msg 'workspace 9; exec /usr/bin/thunderbird'
+exec --no-startup-id i3-msg 'exec jgmenu --at-pointer --hide-on-startup'
+exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/thunderbird'
 #exec --no-startup-id i3-msg 'exec xrdb -load ~/.Xresources'
+
+# Prompt shutdown options in the i3status bar
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id ~/.config/i3/i3exit.sh lock, mode "default"
+    bindsym e exec --no-startup-id ~/.config/i3/i3exit.sh logout, mode "default"
+    bindsym s exec --no-startup-id ~/.config/i3/i3exit.sh suspend, mode "default"
+    bindsym h exec --no-startup-id ~/.config/i3/i3exit.sh hibernate, mode "default"
+    bindsym r exec --no-startup-id ~/.config/i3/i3exit.sh reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id ~/.config/i3/i3exit.sh shutdown, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Escape mode "$mode_system"
