@@ -11,13 +11,14 @@ general {
         interval = 5
 }
 
-order += "ipv6"
+order += "load"
+order += "cpu_temperature 0"
 order += "disk /"
+order += "battery all"
+order += "ipv6"
 order += "wireless _first_"
 order += "ethernet _first_"
-order += "battery all"
 order += "volume master"
-order += "load"
 order += "tztime local"
 
 wireless _first_ {
@@ -44,17 +45,22 @@ tztime local {
 }
 
 load {
-    format = "%1min"
+    format = "load:%1min"
 }
 
 disk "/" {
-    format = "%avail"
+    format = "disk:%avail"
+}
+
+cpu_temperature 0 {
+    format = "%degrees°C"
 }
 
 volume master {
-        format = "♪: %volume"
-        format_muted = "♪: muted (%volume)"
-        device = "default"
-        mixer = "Master"
-        mixer_idx = 0
+    format = "♪: %volume"
+    # Check issue with Master + speaker muted
+    format_muted = "♪: muted (%volume)"
+    device = "default"
+    mixer = "Master"
+    mixer_idx = 0
 }

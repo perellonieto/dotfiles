@@ -30,7 +30,7 @@ font pango:monospace 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec xterm
 
 # kill focused window
 bindsym $mod+Shift+c kill
@@ -148,6 +148,7 @@ bindsym $mod+m move workspace to output right
 bindsym $mod+n exec --no-startup-id ~/.config/i3/new_empty_workspace.sh
 # move container to empty workspace
 bindsym $mod+b exec --no-startup-id ~/.config/i3/move_to_empty_workspace.sh
+bindsym XF86ScreenSaver exec i3lock
 bindsym XF86Display exec XF86Display.sh
 bindsym XF86AudioRaiseVolume exec amixer -q set Master 2dB+ unmute
 bindsym XF86AudioLowerVolume exec amixer -q set Master 2dB- unmute
@@ -171,8 +172,11 @@ bar {
 }
 
 exec --no-startup-id i3-msg 'exec jgmenu --at-pointer --hide-on-startup'
-exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/thunderbird'
-#exec --no-startup-id i3-msg 'exec xrdb -load ~/.Xresources'
+exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/evolution'
+#exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/thunderbird'
+exec --no-startup-id i3-msg 'workspace 1; exec nm-applet'
+exec --no-startup-id i3-msg 'exec dropbox start'
+exec --no-startup-id i3-msg 'exec xrdb -load ~/.Xresources'
 
 # Prompt shutdown options in the i3status bar
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
