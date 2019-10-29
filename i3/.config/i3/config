@@ -150,10 +150,10 @@ bindsym $mod+n exec --no-startup-id ~/.config/i3/new_empty_workspace.sh
 bindsym $mod+b exec --no-startup-id ~/.config/i3/move_to_empty_workspace.sh
 bindsym XF86ScreenSaver exec i3lock
 bindsym XF86Display exec XF86Display.sh
-bindsym XF86AudioRaiseVolume exec amixer -q set Master 2dB+ unmute
-bindsym XF86AudioLowerVolume exec amixer -q set Master 2dB- unmute
-bindsym XF86AudioMute exec amixer -q set Master toggle
-bindsym XF86AudioMicMute exec amixer set Capture toggle
+bindsym XF86AudioRaiseVolume exec amixer -q set Master 1dB+ unmute
+bindsym XF86AudioLowerVolume exec amixer -q set Master 1dB- unmute
+bindsym XF86AudioMute exec amixer -D pulse set Master 1+ toggle
+bindsym XF86AudioMicMute exec amixer -D pulse set Capture 1+ toggle
 # Spotify
 bindsym XF86AudioPlay exec (pgrep -u $USER -x 'spotify' || (spotify)) && dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
 bindsym XF86AudioNext exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next
