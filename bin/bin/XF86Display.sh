@@ -15,13 +15,14 @@ Automatically adjustes an externally connected monitor.
 
      -h, --help       Show the help
      -v, --version    Show the actual version information
-     -p, --position   Position of the external screen
+     -p, --position   Position of the external screen (--left-of, --right-of,
+                      --above, --below)
      -r, --rotation   Rotation of the external screen (normal, left, right or
                       inverted)
 
 Report bugs to <perello.nieto@gmail.com>."
+PRI="LVDS-1"
 
-PRI="LVDS1"
 connectedOutputs=$(xrandr | grep " connected" | sed -e "s/\([A-Z0-9]\+\) connected.*/\1/" | grep -v ${PRI})
 
 EXT=${connectedOutputs[0]}
