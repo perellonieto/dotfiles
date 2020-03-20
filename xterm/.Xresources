@@ -40,7 +40,9 @@ xterm*boldMode:           true
 #define S_darkblue      #066bb2
 #define S_lightcyan     #4ac1b8
 #define S_darkgreen     #657900
-#define S_darkwhite    #eee8d5
+#define S_darkwhite     #eee8d5
+#define S_darkorange    #6b2b06
+#define S_darkred       #6c120f
 
 xterm*background:            S_grey_1
 xterm*foreground:            S_grey_6
@@ -55,7 +57,7 @@ xterm*color8:                S_grey_2
 
 !! red dark/light
 xterm*color1:                S_red
-xterm*color9:                S_orange
+xterm*color9:                S_darkorange
 
 !! green dark/light
 xterm*color2:                S_darkgreen
