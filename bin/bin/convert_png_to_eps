@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# depends on convert
+
+INPUT_EXT='png'
+
+for f in "$@"
+do
+    if [ ${f##*.} != $INPUT_EXT ]; then
+        continue
+    fi
+    y=${f%.png}
+    echo "Converting file $f to $y.eps"
+    convert "${f}" eps3:"${y}.eps"
+done
+

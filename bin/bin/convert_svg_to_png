@@ -3,10 +3,15 @@
 # depends on gs
 # sudo apt-get install gs
 
+INPUT_EXT='svg'
+
 for f in "$@"
 do
+    if [ ${f##*.} != $INPUT_EXT ]; then
+        continue
+    fi
     y=${f%.svg}
     echo "Converting file $f to $y.png"
-    rsvg-convert -f png -o $y.png $f
+    rsvg-convert --dpi-x 600 --dpi-y 600 -f png -o $y.png $f
 done
 

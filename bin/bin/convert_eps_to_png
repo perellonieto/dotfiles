@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# depends on convert
+echo "Requires disabling the file /etc/ImageMagick-6/policy.xml"
+
+INPUT_EXT='eps'
+
+for f in "$@"
+do
+    if [ ${f##*.} != $INPUT_EXT ]; then
+        continue
+    fi
+    y=${f%.eps}
+    echo "Converting file $f to $y.png"
+    convert -density 900 "${f}" -density 900 "${y}.png"
+done
+
