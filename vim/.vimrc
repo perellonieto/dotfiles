@@ -2,40 +2,54 @@
 "" Shougo/dein.vim configuration                                             "
 "" https://github.com/Shougo/dein.vim
 "" =========================================================================="
+"dein Scripts-----------------------------
 if &compatible
-  set nocompatible
+  set nocompatible               " Be iMproved
 endif
-" Add the dein installation directory into runtimepath
-set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
 
-if dein#load_state('~/.cache/dein')
-  call dein#begin('~/.cache/dein')
+" Required:
+set runtimepath+=/home/miquel/.cache/dein/repos/github.com/Shougo/dein.vim
 
-  call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
-  call dein#add('Shougo/deoplete.nvim')
-  if !has('nvim')
-    call dein#add('roxma/nvim-yarp')
-    call dein#add('roxma/vim-hug-neovim-rpc')
-  endif
+" Required:
+if dein#load_state('/home/miquel/.cache/dein')
+  call dein#begin('/home/miquel/.cache/dein')
 
+  " Let dein manage dein
+  " Required:
+  call dein#add('/home/miquel/.cache/dein/repos/github.com/Shougo/dein.vim')
+
+  " Add or remove your plugins here like this:
+  "call dein#add('Shougo/neosnippet.vim')
+  "call dein#add('Shougo/neosnippet-snippets')
   " My bundles
   call dein#add('altercation/vim-colors-solarized') " Solarized colorscheme
   call dein#add('scrooloose/nerdtree')              " Left folder navigator
   call dein#add('beloglazov/vim-online-thesaurus')  " words from thesaurus.com
   call dein#add('mhinz/vim-signify')                " Add git diffs
   " For Python
-  call dein#add('Valloric/YouCompleteMe')           " Autocomplete
-  call dein#add('nvie/vim-flake8')
+  call dein#add('ycm-core/YouCompleteMe')           " Autocomplete
+  call dein#add('nvie/vim-flake8')                  " Test for PEP8
   call dein#add('jpalardy/vim-slime')
   call dein#add('vim-scripts/indentpython.vim')     " PEP8 indentations
+  " call dein#add('davidhalter/jedi-vim')           " Autocomplete for Python
   " End of My bundles
 
+  " Required:
   call dein#end()
   call dein#save_state()
 endif
 
+" Required:
 filetype plugin indent on
 syntax enable
+
+" If you want to install not installed plugins on startup.
+"if dein#check_install()
+"  call dein#install()
+"endif
+
+"End dein Scripts-------------------------
+"
 "" =========================================================================="
 "" End of Shougo/dein.vim configuration                                             "
 "" =========================================================================="
@@ -150,15 +164,8 @@ function! DiffAgainstFileOnDisk()
 endfunction
 
 " =========================================================================="
-" Python files
+" Python files: see also .vim/ftplugin/python.vim
 " =========================================================================="
-autocmd FileType python set tabstop=4
-autocmd FileType python set softtabstop=4
-autocmd FileType python set shiftwidth=4
-autocmd FileType python set textwidth=79
-autocmd FileType python set expandtab
-autocmd FileType python set autoindent
-autocmd FileType python set fileformat=unix
 " depends on 'ervandew/screen'
 " TODO create my own code
 " tmux display-message -p
@@ -224,18 +231,6 @@ endfunction
 
 command! TmuxIPython :call TmuxIPython()
 command! TmuxIPythonQuit :call TmuxIPythonQuit()
-
-autocmd FileType python map <LocalLeader>pf :TmuxIPython<CR>
-autocmd FileType python map <LocalLeader>pq :TmuxIPythonQuit<CR>
-
-" Send pharagraph
-autocmd FileType python map <LocalLeader>sp <Plug>SlimeParagraphSend
-" Send line
-autocmd FileType python map <LocalLeader>sl V<Plug>SlimeRegionSend
-" Send visual selection to python.
-autocmd FileType python map <LocalLeader>se <Plug>SlimeRegionSend
-" Send all file
-autocmd FileType python map <LocalLeader>sa ggVG<Plug>SlimeRegionSend
 
 "autocmd FileType python map <LocalLeader>f :Newfunction()<CR>
 " Tags navigation
@@ -314,6 +309,13 @@ autocmd FileType python map <LocalLeader>le :call GetLen()<CR>
 function! GoogleSearch()
      let searchterm = getreg("g")
      exec "!google-chrome \"http://google.com/search?q=" . searchterm . "\" >/dev/null 2>&1"
+endfunction
+
+" Add hyperlink to Google Search
+function! GoogleSearchLink()
+    let searchterm = getreg("g")
+    let searchlink = 'http:\/\/google.com\/search?q=' . searchterm
+    :execute 'substitute/' . searchterm . '/[' . searchterm . ']' . '(' . searchlink . ')/'
 endfunction
 
 " Search in Google Scholar the selected text
@@ -461,15 +463,16 @@ let g:jedi#auto_vim_configuration = 0
 " =========================================================================="
 " MARKDOWN files
 " =========================================================================="
-" Abbreviations (:ab or :abbreviate)                                                            "
-autocmd FileType markdown :ab todo - [ ] **TODO**
-" Command to explore actual diary (all year)
-autocmd FileType markdown map <LocalLeader>dy :!diary -e ${PWD\#\#*/}<CR>
-" Command to explore actual diary (only opened file)
-autocmd FileType markdown map <LocalLeader>de :!diary -y '%:t' -e ${PWD\#\#*/}<CR>
-" 2 spaces instead of tabs
-autocmd FileType markdown set tabstop=4
-autocmd FileType markdown set shiftwidth=4
+" See .vim/ftplugins/markdown.vim
+" " Abbreviations (:ab or :abbreviate)                                                            "
+" autocmd FileType markdown :ab todo - [ ] **TODO**
+" " Command to explore actual diary (all year)
+" autocmd FileType markdown map <LocalLeader>dy :!diary -e ${PWD\#\#*/}<CR>
+" " Command to explore actual diary (only opened file)
+" autocmd FileType markdown map <LocalLeader>de :!diary -y '%:t' -e ${PWD\#\#*/}<CR>
+" " 2 spaces instead of tabs
+" autocmd FileType markdown set tabstop=4
+" autocmd FileType markdown set shiftwidth=4
 
 " =========================================================================="
 " vim-scripts/LaTeX-Suite-aka-Vim-LaTeX Configuration                       "
@@ -552,6 +555,7 @@ map <F2> :NERDTreeToggle<CR>
 " My own functions to access google-chrome
 vnoremap <F3> "gy<Esc>:call GoogleSearch()<CR>
 vnoremap <F4> "gy<Esc>:call GoogleScholarSearch()<CR>
+vnoremap <Leader><F3> "gy<Esc>:call GoogleSearchLink()<CR>
 
 
 " Function to Toggle navigation on wrapped lines
