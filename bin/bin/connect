@@ -93,10 +93,22 @@ while [[ $# -gt 0 ]]; do
             user='mp15688'
             host='strauss'
             ;;
+        "thales")
+            mountpoint="${HOME}/remoteservers/thales/"
+            user='mp15688'
+            host='thales'
+            remote_dir='/'
+            ;;
         "rodan")
             mountpoint="${HOME}/remoteservers/rodan/"
             user='mp15688'
             host='rodan'
+            remote_dir='/'
+            ;;
+        "vimaik")
+            mountpoint="${HOME}/remoteservers/vimaik/"
+            user='virginia'
+            host='vimaik'
             remote_dir='/'
             ;;
         "titanv")

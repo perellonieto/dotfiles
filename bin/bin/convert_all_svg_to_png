@@ -7,6 +7,6 @@ for f in *.svg
 do
     y=${f%.svg}
     echo "Converting file $f to $y.png"
-    rsvg-convert -f png -o $y.png $f
+    rsvg-convert -f png -o $y.png --dpi-x 300 --dpi-y 300 $f
 done
 

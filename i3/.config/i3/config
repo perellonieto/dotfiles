@@ -34,6 +34,7 @@ bindsym $mod+Return exec xterm
 
 # kill focused window
 bindsym $mod+Shift+c kill
+bindsym $mod+BackSpace kill
 
 # start dmenu (a program launcher)
 bindsym $mod+r exec dmenu_run
@@ -81,8 +82,8 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # cycle workspaces
-bindsym $mod+i workspace prev
-bindsym $mod+o workspace next
+bindsym $mod+i workspace prev_on_output
+bindsym $mod+o workspace next_on_output
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -148,12 +149,14 @@ bindsym $mod+m move workspace to output right
 bindsym $mod+n exec --no-startup-id ~/.config/i3/new_empty_workspace.sh
 # move container to empty workspace
 bindsym $mod+b exec --no-startup-id ~/.config/i3/move_to_empty_workspace.sh
-bindsym XF86ScreenSaver exec i3lock
+bindsym $mod+Shift+g exec energy_save.sh
+bindsym XF86ScreenSaver exec i3lock --color=272d2d --show-failed-attempts --ignore-empty-password
 bindsym XF86Display exec XF86Display.sh
+bindsym XF86TouchpadToggle exec XF86Display.sh
 bindsym XF86AudioRaiseVolume exec amixer -q set Master 1dB+ unmute
 bindsym XF86AudioLowerVolume exec amixer -q set Master 1dB- unmute
 bindsym XF86AudioMute exec amixer -D pulse set Master 1+ toggle
-bindsym XF86AudioMicMute exec amixer -D pulse set Capture 1+ toggle
+bindsym XF86AudioMicMute exec ~/.config/i3/lenovo-mutemic.sh
 # Spotify
 bindsym XF86AudioPlay exec (pgrep -u $USER -x 'spotify' || (spotify)) && dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
 bindsym XF86AudioNext exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next
@@ -172,11 +175,12 @@ bar {
 }
 
 exec --no-startup-id i3-msg 'exec jgmenu --at-pointer --hide-on-startup'
-exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/evolution'
-#exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/thunderbird'
+#exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/evolution'
+exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/thunderbird'
 exec --no-startup-id i3-msg 'workspace 1; exec nm-applet'
 exec --no-startup-id i3-msg 'exec dropbox start'
 exec --no-startup-id i3-msg 'exec xrdb -load ~/.Xresources'
+exec --no-startup-id i3-msg "exec xautolock -time 5 -locker 'i3lock --color=272d2d --show-failed-attempts --ignore-empty-password' -corners +00- -notify 20 -notifier 'xset dpms force off'"
 
 # Prompt shutdown options in the i3status bar
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
@@ -194,3 +198,5 @@ mode "$mode_system" {
 }
 bindsym $mod+Escape mode "$mode_system"
 bindsym --release Print exec "~/bin/screenshot"
+# Calendar
+bindsym $mod+c exec zenity --calendar

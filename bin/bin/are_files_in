@@ -1,0 +1,20 @@
+#!/bin/bash
+
+init_folder=`pwd -P`
+origin=`readlink -f "${1}"`
+destin=`readlink -f "${2}"` 
+
+echo "Inspecting origin ${origin}"
+cd "${origin}"
+find . -type f -print0 | xargs -0 stat -c "%n %s" | sort > "${init_folder}/_tmp_origin_files_list.txt"
+echo "Inspecting destination ${destin}"
+cd "${destin}"
+find . -type f -print0 | xargs -0 stat -c "%n %s" | sort > "${init_folder}/_tmp_destin_files_list.txt"
+
+cd "${init_folder}"
+echo "The following files are not in the destination"
+comm -2 -3 _tmp_origin_files_list.txt _tmp_destin_files_list.txt
+rm _tmp_origin_files_list.txt _tmp_destin_files_list.txt
+
+# Test empty files
+# find . -type f -size 0

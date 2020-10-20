@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# todo change location of bib_clean.rsc
+
+bibtool -r ~/bin/bib_clean.rsc $1 -o $1
