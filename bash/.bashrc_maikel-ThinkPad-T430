@@ -17,11 +17,24 @@ alias environment_ros="source ~/ros/setup.bash"
 #alias tmux="tmux -2"
 
 # Load some modules
-module use ~/modulefiles
-module load robo3t
+#module use ~/modulefiles
+#module load robo3t
 
 alias dwarf_fortress="/home/maikel/games/dwarf_fortress/LinuxLNP-0.44.10-r01/startlnp"
 
 alias rdsf_mount="sudo mount -t cifs -o username='mp15688',uid=1000,domain='UOB',vers=3.0 //rdsfcifs.acrc.bris.ac.uk/SPHEREIRC /home/maikel/remoteservers/SPHEREIRC/"
 
 alias diskusage="du -hs ./* | sort -h"
+
+alias xterm="xterm -ls -xrm 'XTerm*selectToClipboard: true'&" 
+
+xrdb -merge ~/.Xresources
+
+# For i3 but not currently working
+export TERMINAL=xterm
+
+#alias uobnet="/usr/local/pulse/PulseClient_x86_64.sh -h uobnet.bris.ac.uk -u mp15688 -U  https://uobnet.bris.ac.uk -r UoB-Users"
+#alias uobnet_status="/usr/local/pulse/PulseClient_x86_64.sh -S"
+#alias uobnet_kill="/usr/local/pulse/PulseClient_x86_64.sh -K"
+alias docker_spotify="kdocker -q -o -l -i /usr/share/spotify/icons/spotify-linux-16.png spotify %U"
+alias docker_thunderbird="kdocker -i /usr/lib/thunderbird/chrome/icons/default/default16.png thunderbird"
