@@ -59,12 +59,12 @@ while [[ $# -gt 0 ]]; do
         "bluecrystal3" | "bc3")
             mountpoint="${HOME}/remoteservers/bluecrystal3/"
             user='mp15688'
-            host='bluecrystalp3.bris.ac.uk'
+            host='bc3'
             ;;
         "bluecrystal4" | "bc4")
             mountpoint="${HOME}/remoteservers/bluecrystal4/"
             user='mp15688'
-            host='bc4login.acrc.bris.ac.uk'
+            host='bc4'
             ;;
         "perellonieto")
             mountpoint="${HOME}/remoteservers/perellonieto/"
