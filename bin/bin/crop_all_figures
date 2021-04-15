@@ -1,0 +1,8 @@
+#!/bin/sh
+
+for f in *.PNG *.png *.jpg *.JPG *.jpeg *.JPEG
+do
+    echo "Croping file $f"
+    convert $f -trim +repage $f
+done
+
