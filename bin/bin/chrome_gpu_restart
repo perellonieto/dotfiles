@@ -1,0 +1,4 @@
+#!/bin/bash
+# Restarts the GPU process in google chrome
+
+pkill -f 'chrome \-\-type=gpu-process'
