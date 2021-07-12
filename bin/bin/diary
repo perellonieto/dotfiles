@@ -40,6 +40,11 @@ options.
      -push            Push all the changes to a repository
      -pull            Pull all the changes from a repository
 
+Requirements
+
+sudo aptitude install python3-pygraphviz
+sudo aptitude install python3-pandocfilters
+
 Report bugs to <bugs-diary@perellonieto.com>."
 
 # TODO add Jekyll support
@@ -62,7 +67,7 @@ VALID_PROJECT_NAME='^0-9a-zA-Z+$'
 EXTENSION="markdown"
 TEMP_FILE="._tmp_file_markdown.html"
 CSS_STYLE="style.css"
-MDTOHTML="pandoc --filter ${HOME}/bin/graphviz.py --smart --mathjax --highlight-style pygments --columns=200"
+MDTOHTML="pandoc --filter ${HOME}/bin/graphviz.py -f markdown+smart --mathjax --highlight-style pygments --columns=200"
 YEAR=`date +%Y`
 LAST="all"
 
