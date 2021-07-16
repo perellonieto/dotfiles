@@ -18,6 +18,7 @@ set zoom-min 10
 set guioptions "hv"
 
 # zathurarc-dark
+# invert colors with Ctrl+r
 
 set font "inconsolata 15"
 set default-bg "#000000" #00

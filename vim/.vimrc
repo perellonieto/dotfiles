@@ -1,47 +1,55 @@
-"" =========================================================================="
-"" Shougo/dein.vim configuration                                             "
-"" https://github.com/Shougo/dein.vim
-"" =========================================================================="
-"dein Scripts-----------------------------
-if &compatible
-  set nocompatible               " Be iMproved
-endif
+""" =========================================================================="
+""" Shougo/dein.vim configuration                                             "
+""" https://github.com/Shougo/dein.vim
+""" =========================================================================="
+""dein Scripts-----------------------------
+"if &compatible
+"  set nocompatible
+"endif
+"" Add the dein installation directory into runtimepath
+"set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
+"
+"" Required:
+"call dein#begin('~/.cache/dein')
+"
+"" Let dein manage dein
+"" Required:
+"call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
+"
+"" Add or remove your plugins here like this:
+"call dein#add('Shougo/deoplete.nvim')
+"if !has('nvim')
+"call dein#add('roxma/nvim-yarp')
+"call dein#add('roxma/vim-hug-neovim-rpc')
+"endif
+"" My bundles
+"call dein#add('altercation/vim-colors-solarized') " Solarized colorscheme
+"call dein#add('scrooloose/nerdtree')              " Left folder navigator
+"call dein#add('beloglazov/vim-online-thesaurus')  " words from thesaurus.com
+"call dein#add('mhinz/vim-signify')                " Add git diffs
+"" For Python
+"call dein#add('ycm-core/YouCompleteMe')           " Autocomplete
+"call dein#add('nvie/vim-flake8')                  " Test for PEP8
+"call dein#add('jpalardy/vim-slime')
+"call dein#add('vim-scripts/indentpython.vim')     " PEP8 indentations
+"" call dein#add('davidhalter/jedi-vim')           " Autocomplete for Python
+"call dein#add('lervag/vimtex')                    " VimTex
+"call dein#add('xuhdev/vim-latex-live-preview')    " Latex live preview
+"" End of My bundles
+"
+"" If you want to install not installed plugins on startup.
+"if dein#check_install()
+"  call dein#install()
+"endif
+"
+"" Required:
+"call dein#end()
+"" Required:
+"filetype plugin indent on
+"syntax enable
 
-" Required:
-set runtimepath+=/home/miquel/.cache/dein/repos/github.com/Shougo/dein.vim
-
-" Required:
-if dein#load_state('/home/miquel/.cache/dein')
-  call dein#begin('/home/miquel/.cache/dein')
-
-  " Let dein manage dein
-  " Required:
-  call dein#add('/home/miquel/.cache/dein/repos/github.com/Shougo/dein.vim')
-
-  " Add or remove your plugins here like this:
-  "call dein#add('Shougo/neosnippet.vim')
-  "call dein#add('Shougo/neosnippet-snippets')
-  " My bundles
-  call dein#add('altercation/vim-colors-solarized') " Solarized colorscheme
-  call dein#add('scrooloose/nerdtree')              " Left folder navigator
-  call dein#add('beloglazov/vim-online-thesaurus')  " words from thesaurus.com
-  call dein#add('mhinz/vim-signify')                " Add git diffs
-  " For Python
-  call dein#add('ycm-core/YouCompleteMe')           " Autocomplete
-  call dein#add('nvie/vim-flake8')                  " Test for PEP8
-  call dein#add('jpalardy/vim-slime')
-  call dein#add('vim-scripts/indentpython.vim')     " PEP8 indentations
-  " call dein#add('davidhalter/jedi-vim')           " Autocomplete for Python
-  " End of My bundles
-
-  " Required:
-  call dein#end()
-  call dein#save_state()
-endif
-
-" Required:
-filetype plugin indent on
-syntax enable
+" Legacy:
+" call dein#save_state()
 
 " If you want to install not installed plugins on startup.
 "if dein#check_install()
@@ -57,6 +65,63 @@ syntax enable
 " =========================================================================="
 " Shougo/neosnippet Configuration                                           "
 " =========================================================================="
+"
+" set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+" Plugin 'L9'
+" Git plugin not hosted on GitHub
+Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+"Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+" Plugin 'ascenator/L9', {'name': 'newL9'}
+
+" All of your Plugins must be added before the following line
+"" My bundles
+Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
+Plugin 'scrooloose/nerdtree'              " Left folder navigator
+Plugin 'beloglazov/vim-online-thesaurus'  " words from thesaurus.com
+Plugin 'mhinz/vim-signify'                " Add git diffs
+"" For Python
+Plugin 'ycm-core/YouCompleteMe'           " Autocomplete
+Plugin 'nvie/vim-flake8'                  " Test for PEP8
+Plugin 'jpalardy/vim-slime'
+Plugin 'vim-scripts/indentpython.vim'     " PEP8 indentations
+Plugin 'lervag/vimtex'                    " VimTex
+Plugin 'xuhdev/vim-latex-live-preview'    " Latex live preview
+"" End of My bundles
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
 
 " Plugin key-mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -484,6 +549,8 @@ autocmd FileType tex set iskeyword+=:                " auto-completion in refere
 " Following configuration of LaTeX-Suite needs revision
 set formatoptions=cqt
 set iskeyword+=:
+" Vimtex
+let g:vimtex_view_method = 'zathura'
 "
 " Solve problem with Latex-suite and editing formulas
 " TODO investigate why adding autocmd FileType tex before following lines do
@@ -520,7 +587,7 @@ autocmd FileType tex set nowrap                      " Do not wrap lines
 autocmd FileType tex set expandtab                   " use spaces instead of tabs
 
 " Avoid ussing vim-latex and just use the following line
-"map <Leader>ll :!pdflatex %:p <CR>
+map <Leader>ll :!pdflatex %:p <CR>
 
 set conceallevel=0
 
@@ -589,3 +656,9 @@ function! ToggleWrap()
     inoremap <buffer> <silent> <End>  <C-o>g<End>
   endif
 endfunction
+
+let g:ycm_always_populate_location_list = 1
+
+" Debug purposes only. Comment
+let g:ycm_server_keep_logfiles = 1
+let g:ycm_server_log_level = 'debug'
