@@ -101,11 +101,14 @@ Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
 Plugin 'scrooloose/nerdtree'              " Left folder navigator
 Plugin 'beloglazov/vim-online-thesaurus'  " words from thesaurus.com
 Plugin 'mhinz/vim-signify'                " Add git diffs
+Plugin 'SirVer/ultisnips'                 " Create snippets
+Plugin 'honza/vim-snippets'               " Repository with plenty of snipptets
 "" For Python
 Plugin 'ycm-core/YouCompleteMe'           " Autocomplete
 Plugin 'nvie/vim-flake8'                  " Test for PEP8
 Plugin 'jpalardy/vim-slime'
 Plugin 'vim-scripts/indentpython.vim'     " PEP8 indentations
+"" For LaTeX
 Plugin 'lervag/vimtex'                    " VimTex
 Plugin 'xuhdev/vim-latex-live-preview'    " Latex live preview
 "" End of My bundles
@@ -662,3 +665,13 @@ let g:ycm_always_populate_location_list = 1
 " Debug purposes only. Comment
 let g:ycm_server_keep_logfiles = 1
 let g:ycm_server_log_level = 'debug'
+
+"" Ultisnips configuration
+" Trigger configuration. You need to change this to something other than <tab>
+" if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+let g:UltiSnipsExpandTrigger="`"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+set runtimepath+=~/.vim/bundle/vim-snippets/UltiSnips

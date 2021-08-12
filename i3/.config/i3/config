@@ -209,3 +209,7 @@ bindsym $mod+Ctrl+Right resize shrink width 1 px or 1 ppt
 bindsym $mod+Ctrl+Up resize grow height 1 px or 1 ppt
 bindsym $mod+Ctrl+Down resize shrink height 1 px or 1 ppt
 bindsym $mod+Ctrl+Left resize grow width 1 px or 1 ppt
+
+# Change keyboard layout
+bindsym $mod+Ctrl+g exec "setxkbmap gb"
+bindsym $mod+Ctrl+e exec "setxkbmap es"
