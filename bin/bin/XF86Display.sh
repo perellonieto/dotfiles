@@ -20,12 +20,21 @@ Automatically adjustes an externally connected monitor.
      -r, --rotation   Rotation of the external screen (normal, left, right or
                       inverted)
 
+
 Report bugs to <perello.nieto@gmail.com>."
-PRI="LVDS-1"
 
-connectedOutputs=$(xrandr | grep " connected" | sed -e "s/\([A-Z0-9]\+\) connected.*/\1/" | grep -v ${PRI})
+connectedOutputs=$(xrandr | grep " connected" | sed -e "s/\([A-Z0-9]\+\) connected.*/\1/")
+SAVEIFS=$IFS
+IFS=$'\n'
+connected_list=($connectedOutputs)
+IFS=$SAVEIFS
+PRI="${connected_list[0]}"
+EXT="${connected_list[1]}"
 
-EXT=${connectedOutputs[0]}
+echo "From all available screens ids:"
+echo "${connected_list[@]}"
+echo "Primary screen id: ${PRI}"
+echo "External screen id: ${EXT}"
 
 position='--left-of' # '--above' # --right-of
 rotation='normal'

@@ -54,7 +54,7 @@ while [[ $# -gt 0 ]]; do
         "bluecrystal2" | "bc2")
             mountpoint="${HOME}/remoteservers/bluecrystal2/"
             user='mp15688'
-            host='bluecrystalp2.bris.ac.uk'
+            host='bc2'
             ;;
         "bluecrystal3" | "bc3")
             mountpoint="${HOME}/remoteservers/bluecrystal3/"
@@ -79,13 +79,13 @@ while [[ $# -gt 0 ]]; do
         "uobdell")
             mountpoint="${HOME}/remoteservers/uobdell/"
             user='mp15688'
-            host='it064753.wks.bris.ac.uk'
+            host='uobdell'
             remote_dir='/'
             ;;
         "tb")
             mountpoint="${HOME}/remoteservers/tb/"
             user='mp15688'
-            host='tb'
+            host='thebeast'
             remote_dir='/home/'
             ;;
         "strauss")
