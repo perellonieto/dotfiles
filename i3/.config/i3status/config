@@ -7,12 +7,16 @@
 # If the above line is not correctly displayed, fix your editor first!
 
 general {
-        colors = true
-        interval = 5
+    colors = true
+    interval = 5
+    color_good =    "#77CC55"
+    color_degraded ="#DDAA55"
+    color_bad =     "#FF4444"
 }
 
 order += "load"
 order += "cpu_temperature 0"
+order += "memory"
 order += "disk /"
 order += "battery all"
 order += "ipv6"
@@ -23,7 +27,7 @@ order += "volume master"
 order += "tztime local"
 
 wireless _first_ {
-        format_up = "W: (%quality at %essid) %ip"
+        format_up = "W: %ip %quality at %essid %bitrate"
         format_down = "W: down"
 }
 
@@ -35,10 +39,10 @@ ethernet _first_ {
 
 battery all {
     format = "%status %percentage %remaining"
-    status_chr = "⚡ CHR"
-    status_bat = "🔋 BAT"
-    status_unk = "? UNK"
-    status_full = "☻ FULL"
+    status_chr = "bat: chr"
+    status_bat = "bat:"
+    status_unk = "bat: unk"
+    status_full = "bat: full"
 }
 
 tztime local {
@@ -51,6 +55,13 @@ load {
 
 disk "/" {
     format = "disk:%avail"
+    low_threshold = 10
+}
+
+memory {
+    format = "RAM: %available"
+    threshold_degraded = "3G"
+    threshold_critical = "1G"
 }
 
 cpu_temperature 0 {
