@@ -213,3 +213,10 @@ bindsym $mod+Ctrl+Left resize grow width 1 px or 1 ppt
 # Change keyboard layout
 bindsym $mod+Ctrl+g exec "setxkbmap gb"
 bindsym $mod+Ctrl+e exec "setxkbmap es"
+
+# Forge Of Empires
+bindsym $mod+Ctrl+Shift+h exec "xdotool mousemove `shuf -i 710-790 -n 1` `shuf -i 610-690 -n 1` && xdotool click 1"
+bindsym $mod+Ctrl+Shift+j exec "xdotool mousemove `shuf -i 690-850 -n 1` `shuf -i 835-845 -n 1` && xdotool click 1"
+bindsym $mod+Ctrl+Shift+k exec "xdotool mousemove `shuf -i 760-920 -n 1` `shuf -i 835-845 -n 1` && xdotool click 1"
+bindsym $mod+Ctrl+Shift+l exec "xdotool mousemove `shuf -i 770-910 -n 1` `shuf -i 840-855 -n 1` && xdotool click 1"
+
