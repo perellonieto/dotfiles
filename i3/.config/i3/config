@@ -168,6 +168,9 @@ bindsym XF86AudioPrev exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2
 # End Spotify
 bindsym XF86Launch1 XF86Launch1.sh
 # Configure networks with nmtui
+# Configure brightness
+bindsym XF86MonBrightnessDown exec bright Down
+bindsym XF86MonBrightnessUp exec bright Up
 
 # Configure i3status is in .config/i3status/config
 
@@ -180,7 +183,7 @@ bar {
 
 exec --no-startup-id i3-msg 'exec jgmenu --at-pointer --hide-on-startup'
 #exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/evolution'
-exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/thunderbird'
+# exec --no-startup-id i3-msg 'workspace 1; exec /usr/bin/thunderbird'
 exec --no-startup-id i3-msg 'workspace 1; exec nm-applet'
 exec --no-startup-id i3-msg 'exec dropbox start'
 exec --no-startup-id i3-msg 'exec xrdb -load ~/.Xresources'
