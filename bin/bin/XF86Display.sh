@@ -19,6 +19,8 @@ Automatically adjustes an externally connected monitor.
                       --above, --below)
      -r, --rotation   Rotation of the external screen (normal, left, right or
                       inverted)
+     -sp, --scale-primary  Scaling of the primary screen (default 1x1)
+     -se, --scale-external Scaling of the external screen (default 1x1)
 
 
 Report bugs to <perello.nieto@gmail.com>."
@@ -38,6 +40,8 @@ echo "External screen id: ${EXT}"
 
 position='--left-of' # '--above' # --right-of
 rotation='normal'
+scalep='1x1'
+scalee='1x1'
 
 while [[ $# -gt 0 ]]; do
     opt="$1"
@@ -47,6 +51,8 @@ while [[ $# -gt 0 ]]; do
     -v|--version) printf '%s\n' "$version" || exit 2; exit;;
     -p|--position) position=$1; shift;;
     -r|--rotation) rotation=$1; shift;;
+    -sp|--scale-primary)  scalep=$1; shift;;
+    -se|--scale-external) scalee=$1; shift;;
     *)
       if [[ $# -eq 0 ]]; then
           diary=${opt}
@@ -63,5 +69,15 @@ then
 else
     echo "Position = ${position}"
     echo "Rotation = ${rotation}"
-    xrandr --output $PRI --auto --primary --output $EXT --rotate ${rotation} --auto ${position} $PRI
+    echo "Scale primary = ${scalep}"
+    echo "Scale external = ${scalee}"
+    xrandr \
+        --output $PRI \
+            --auto \
+            --scale ${scalep} \
+            --primary \
+        --output $EXT \
+            --rotate ${rotation} \
+            --scale ${scalee} \
+            --auto ${position} $PRI
 fi

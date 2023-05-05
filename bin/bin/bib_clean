@@ -1,23 +1,24 @@
 #!/bin/bash
 
 
-if [ $# == 1 ]; then
-   input_file=$1
-   output_file=$1
-elif [ $# == 2 ]; then
-   input_file=$1
-   output_file=$2
-elif [ $# -ne 1 ] && [ $# -ne 2 ]; then
+if [ "${#}" == 1 ]; then
+   input_file="${1}"
+   output_file="${1}"
+elif [ "${#}" == 2 ]; then
+   input_file="${1}"
+   output_file="${2}"
+elif [ "${#}" -ne 1 ] && [ "${#}" -ne 2 ]; then
    echo "Requires one or two arguments"
    exit
 fi
 
 # A resource file can be used instead bib_clean.rsc
-instructions="delete.field = { abstract annote file }"
+instructions="delete.field = { abstract annote file mendeley-groups keywords
+language}"
 
 # -s Enable sorting of entries
 # -d Find and mark (or delete) entries with identical sort keys.
 # -r rsc_file Immediately evaluate the instructions from the resource file rsc_file
 # -- rsc_command Immediately evaluate the instructions from the command
 #bibtool -s -d -r ~/bin/bib_clean.rsc $1 -o $1
-bibtool -s -d -i $input_file -o $output_file -- "$instructions"
+bibtool -s -d -i "${input_file}" -o "${output_file}" -- "$instructions"
