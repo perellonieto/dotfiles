@@ -45,7 +45,7 @@ do
        if [ -e "$configfile" ]; then
            echo "The configuration file exists"
            echo "Loading configuration file"
-           exec $configfile 
+           exec $configfile && exit 1
        else
            echo "The configuration file does not exist"
        fi
@@ -53,3 +53,7 @@ do
        echo "Does not coincide"
    fi
 done
+
+echo "No configuration found, setting automatic configuration"
+echo "xrandr --auto"
+xrandr --auto
