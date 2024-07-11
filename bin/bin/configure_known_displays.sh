@@ -18,18 +18,19 @@
 #       OPTIONS:  ---
 #  REQUIREMENTS:  ---
 #          BUGS:  ---
-#         NOTES:  ---
+#         NOTES:  Version 1.1 fixed issue with the order of the screens
 #        AUTHOR:  Miquel Perello Nieto, perello.nieto@gmail.com
 #       COMPANY:  ---
-#       VERSION:  1.0
+#       VERSION:  1.1
 #       CREATED:  02/07/2024 09:52:01 BST
-#      REVISION:  ---
+#      REVISION:  11/07/2024 11:22:01 BST
 #===============================================================================
 
 currentedid=`xrandr --prop | grep -A2 EDID`
 echo "Current display edid"
 echo $currentedid
 echo
+sortedcurrentedid=$(echo "$currentedid" | sort)
 
 filenamelist=`ls ~/.screenlayout/*.txt`
 for filename in $filenamelist
@@ -37,7 +38,8 @@ do
    echo "Checking edid of $filename\n"
    edid=`cat $filename`
    echo $edid
-   if [ "$currentedid" = "$edid" ]; then
+   sortededid=$(echo "$edid" | sort)
+   if [ "$sortedcurrentedid" = "$sortededid" ]; then
        echo "Current EDID coincides"
        echo "Searching corresponding configuration file"
        configfile="${filename%.*}.sh"
