@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #===============================================================================
 #
 #          FILE:  configure_known_displays.sh
@@ -27,13 +27,57 @@
 #         TODOS:  - Add option to save current configuration.
 #===============================================================================
 
+configfolder="${HOME}/.screenlayout"
+
+version="$0 1.1
+Copyright (C) 2024
+This is free software.  You may redistribute copies of it under the terms of
+the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Miquel Perello Nieto."
+
+
+usage="Usage: $0 [OPTION]
+Configures the connected displays based on previously saved configurations for
+the currently connected screens.
+
+    OPTIONs
+
+     -h, --help       Show the help
+     -v, --version    Show the version
+     -s, --save       WARNING: Under development. Save current configuration
+     -l, --list       List all the files in the configuration folder
+"
+
+Save()
+{
+    echo "WARNING: This option is under development"
+    echo "Saving current configuration in ${configfolder}/${configname}.txt"
+}
+
+
+while [[ $# -gt 0 ]]; do
+    option="$1"
+    shift
+    case "$option" in
+    -h|-\?|--help) printf '%s\n' "${usage}" || exit 2; exit;;
+    -v|--version) printf '%s\n' "$version" || exit 2; exit;;
+    -l|--list) ls -l "${configfolder}/" || exit 2; exit;;
+    -s|--save) configname=$1; Save || exit 2; exit;;
+    *)
+      printf '%s\n' "${usage}" || exit 2; exit;
+      ;;
+    esac
+done
+
 currentedid=`xrandr --prop | grep -A2 EDID`
 echo "Current display edid"
 echo $currentedid
 echo
 sortedcurrentedid=$(echo "$currentedid" | sort)
 
-filenamelist=`ls ~/.screenlayout/*.txt`
+filenamelist=`ls "${configfolder}/"*.txt`
 for filename in $filenamelist
 do
    echo "Checking edid of $filename\n"

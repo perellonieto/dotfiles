@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ## title          :diary
 ## description    :Script to manage diary annotations of different projects
 ##                 or personal notes. It allows to search sentences in all the
