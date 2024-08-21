@@ -24,6 +24,7 @@
 #       VERSION:  1.1
 #       CREATED:  02/07/2024 09:52:01 BST
 #      REVISION:  11/07/2024 11:22:01 BST
+#         TODOS:  - Add option to save current configuration.
 #===============================================================================
 
 currentedid=`xrandr --prop | grep -A2 EDID`
