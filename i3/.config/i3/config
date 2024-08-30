@@ -156,6 +156,7 @@ bindsym $mod+n exec --no-startup-id ~/.config/i3/new_empty_workspace.sh
 bindsym $mod+Shift+g exec energy_save.sh
 bindsym XF86ScreenSaver exec i3lock --color=272d2d --show-failed-attempts --ignore-empty-password
 bindsym XF86Display exec XF86Display.sh && ~/.fehbg
+bindsym $mod+F1 exec XF86Display.sh && ~/.fehbg
 bindsym XF86HomePage exec XF86Display.sh && ~/.fehbg
 bindsym XF86AudioRaiseVolume exec amixer -q set Master 1dB+ unmute
 bindsym XF86AudioLowerVolume exec amixer -q set Master 1dB- unmute
@@ -225,3 +226,12 @@ bindsym $mod+Ctrl+Shift+l exec "xdotool mousemove `shuf -i 770-910 -n 1` `shuf -
 
 # Set wallpaper
 exec --no-startup-id ~/.fehbg
+
+# Floatting windows to avoid pop ups and other dialogs to take all the screen
+#
+for_window [window_role="pop-up"]                       floating enable
+for_window [window_role="bubble"]                       floating enable
+for_window [window_role="task_dialog"]                  floating enable
+for_window [window_role="Preferences"]                  floating enable
+for_window [window_type="dialog"]                       floating enable
+for_window [window_type="menu"]                         floating enable
